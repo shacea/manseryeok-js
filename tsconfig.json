@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["ES2020"],
     "declaration": true,
     "declarationMap": true,
@@ -11,11 +12,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "jsx": "react"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "__tests__"]
+  "exclude": ["node_modules", "dist", "__tests__"],
+  "ts-node": {
+    "esm": true
+  }
 }

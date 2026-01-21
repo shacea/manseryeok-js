@@ -1,7 +1,8 @@
 {
   "name": "@urstory/manseryeok",
   "version": "1.0.0",
-  "description": "Korean Lunar Calendar (만세력) JavaScript Library - 1000~2050년 지원, DB 없는 순수 JavaScript 구현",
+  "type": "module",
+  "description": "Korean Lunar Calendar (만세력) JavaScript Library - 1900~2050년 지원, DB 없는 순수 JavaScript 구현",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",

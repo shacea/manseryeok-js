@@ -4,12 +4,26 @@ Korean Lunar Calendar (만세력) JavaScript Library
 
 한국 음력(만세력) 데이터를 제공하는 순수 JavaScript/TypeScript 라이브러리입니다.
 
+## 왜 이 라이브러리인가?
+
+이 라이브러리는 **한국천문연구원(KASI)**의 [음양력변환계산](https://astro.kasi.re.kr/life/pageView/8) 데이터를 기반으로 구축된 데이터베이스를 사용합니다.
+
+기존에 중국에서 개발된 음력 라이브러리들을 사용할 수 있지만, **한국 음력과 중국 음력은 차이가 있습니다**:
+
+- **윤달(閏月) 위치가 다릅니다**: 한국과 중국은 같은 음력 체계를 사용하지만, 윤달이 들어가는 위치가 서로 다른 경우가 많습니다.
+- **시간대 차이**: 한국 표준시(KST)를 기준으로 계산합니다.
+- **절기 계산 방식**: 한국천문연구원의 정확한 천문 계산법을 사용합니다.
+
+따라서 정확한 한국 사주팔자/운세 계산을 위해서는 한국 음력 데이터를 사용하는 것이 필수적입니다.
+
+이 라이브러리는 데이터베이스에 의존하지 않고 모든 데이터를 JavaScript 코드에 내장하여 **빠른 성능**과 **간편한 사용**을 제공합니다.
+
 ## 특징
 
-- ✅ **1000년 ~ 2050년 지원** - 1000년 이상의 한국 음력 데이터
+- ✅ **1900년 ~ 2050년 지원** - 150년 이상의 한국 음력 데이터
 - ✅ **DB 없는 순수 JavaScript** - 별도의 데이터베이스 설치 불필요
 - ✅ **TypeScript 완전 지원** - 타입 안전성과 자동완성
-- ✅ **빠른 조회 성능** - 바이너리 서치로 최적화된 인덱싱
+- ✅ **빠른 조회 성능** - 월별 인덱싱으로 최적화된 조회
 - ✅ **트리 쉐이킹 지원** - 필요한 기능만 가져가기 가능
 - ✅ **KASI 데이터 기반** - 한국천문연구원 정확한 데이터
 
@@ -63,32 +77,6 @@ console.log(gapja.yearPillar);      // '갑자'
 console.log(gapja.yearPillarHanja); // '甲子'
 ```
 
-### 절기 조회
-
-```ts
-import { getSolarTerms } from '@urstory/manseryeok';
-
-const terms = getSolarTerms(2024);
-console.log(terms[0]);
-// {
-//   name: '입춘',
-//   index: 0,
-//   longitude: 315,
-//   type: 'jeolgi',
-//   sajuMonth: 2,
-//   datetime: 2024-02-04T16:27:00.000Z
-// }
-```
-
-### 사주 월 계산
-
-```ts
-import { getSajuMonth } from '@urstory/manseryeok';
-
-const sajuMonth = getSajuMonth(2024, 2, 10);
-console.log(sajuMonth); // 2 (인월)
-```
-
 ## API 문서
 
 ### `solarToLunar(solarYear, solarMonth, solarDay)`
@@ -129,41 +117,25 @@ console.log(sajuMonth); // 2 (인월)
 
 **반환값:** `GapjaResult`
 
-### `getSolarTerms(year)`
-
-특정 연도의 24절기를 조회합니다.
-
-**매개변수:**
-- `year`: 양력 년
-
-**반환값:** `SolarTermInfo[]` (24개 절기)
-
-### `getSajuMonth(solarYear, solarMonth, solarDay)`
-
-절기 기준 사주 월을 계산합니다.
-
-**매개변수:**
-- `solarYear`: 양력 년
-- `solarMonth`: 양력 월
-- `solarDay`: 양력 일
-
-**반환값:** `number` (1~12)
-
 ## 지원 범위
 
 | 항목 | 범위 |
 |------|------|
-| 연도 | 1000년 ~ 2050년 |
-| 양력 | 1000-01-01 ~ 2050-12-31 |
-| 음력 | 1000-01-01 ~ 2050-12-31 (윤달 포함) |
+| 연도 | 1900년 ~ 2050년 |
+| 양력 | 1900-01-01 ~ 2050-12-31 |
+| 음력 | 1900-01-01 ~ 2050-12-31 (윤달 포함) |
 
 ## 번들 크기
 
+모든 만세력 데이터를 코드에 내장하고 있어 번들 크기가 큽니다:
+
 | 포맷 | 크기 |
 |------|------|
-| ESM | ~1 MB |
-| CJS | ~1 MB |
-| Gzip | ~250 KB |
+| ESM | ~16 MB |
+| CJS | ~16 MB |
+| Gzip | ~4 MB |
+
+번들 크기가 큰 이유는 1900년~2050년의 모든 음력 데이터와 60갑자 정보를 포함하고 있기 때문입니다.
 
 ## 성능
 

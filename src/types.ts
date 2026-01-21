@@ -84,6 +84,16 @@ export interface SolarTermInfo {
 }
 
 /**
+ * 양력 → 음력 변환 인덱스 엔트리 (내부용)
+ */
+export interface SolarToLunarEntry {
+  jd: number;
+  solar: { year: number; month: number; day: number };
+  lunar: { year: number; month: number; day: number; isLeap: boolean };
+  gapja: { yearPillarId: number; monthPillarId: number; dayPillarId: number };
+}
+
+/**
  * 유효하지 않은 날짜 에러
  */
 export class InvalidDateError extends Error {
@@ -98,7 +108,7 @@ export class InvalidDateError extends Error {
  */
 export class OutOfRangeError extends Error {
   constructor(year: number) {
-    super(`Year ${year} is out of supported range (1000~2050)`);
+    super(`Year ${year} is out of supported range (1900~2050)`);
     this.name = 'OutOfRangeError';
   }
 }
