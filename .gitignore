@@ -14,3 +14,6 @@ coverage/
 scripts/*extract*.cjs
 scripts/*dump*.ts
 scripts/*convert*.ts
+
+# Examples with personal data
+birth-examples.js

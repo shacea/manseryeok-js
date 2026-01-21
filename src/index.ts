@@ -42,6 +42,16 @@ export { isSupportedYear, getSupportedRange } from './utils/range';
 export { solarToLunar, lunarToSolar, getGapja } from './core/solar-lunar-converter';
 
 // ============================================
+// Saju (사주팔자)
+// ============================================
+export {
+  calculateSaju,
+  calculateSajuSimple,
+  type SajuResult,
+  type SajuOptions,
+} from './core/saju';
+
+// ============================================
 // Solar Terms (절기)
 // ============================================
 export {

@@ -119,30 +119,72 @@ console.log('1984년 2월 2일 (입춘 전):', gapja2.yearPillar, '년');
 // 참고: 한국 사주에서 년주는 입춘(2월 3-4일 경)에 변경됩니다
 ```
 
-### 내 생일의 사주팔자 구하기
+### 사주팔자 계산 (시주 포함)
 
 ```ts
-import { getGapja } from '@fullstackfamily/manseryeok';
+import { calculateSaju } from '@fullstackfamily/manseryeok';
 
-function getMySaju(birthYear: number, birthMonth: number, birthDay: number, birthHour: number = 0) {
-  const gapja = getGapja(birthYear, birthMonth, birthDay);
+// 사주팔자 계산 (시간 보정 자동 적용)
+const saju = calculateSaju(1990, 5, 15, 14, 30); // 1990년 5월 15일 14시 30분생
 
-  console.log('=== 사주팔자 ===');
-  console.log(`년주: ${gapja.yearPillar} (${gapja.yearPillarHanja})`);
-  console.log(`월주: ${gapja.monthPillar} (${gapja.monthPillarHanja})`);
-  console.log(`일주: ${gapja.dayPillar} (${gapja.dayPillarHanja})`);
-  // 시주는 출생시간을 기준으로 별도 계산이 필요합니다
+console.log('=== 사주팔자 ===');
+console.log(`년주: ${saju.yearPillar} (${saju.yearPillarHanja})`);
+console.log(`월주: ${saju.monthPillar} (${saju.monthPillarHanja})`);
+console.log(`일주: ${saju.dayPillar} (${saju.dayPillarHanja})`);
+console.log(`시주: ${saju.hourPillar} (${saju.hourPillarHanja})`);
 
-  return gapja;
+// 시간 보정 정보
+if (saju.isTimeCorrected) {
+  console.log(`시간 보정: ${saju.correctedTime!.hour}시 ${saju.correctedTime!.minute}분 (진태양시)`);
 }
 
-// 예시: 1984년 2월 2일생
-getMySaju(1984, 2, 2);
+// 출력:
 // === 사주팔자 ===
-// 년주: 계해 (癸亥)
-// 월주: 갑인 (甲寅)
-// 일주: 갑인 (甲寅)
+// 년주: 경오 (庚午)
+// 월주: 신사 (辛巳)
+// 일주: 병진 (丙辰)
+// 시주: 을사 (乙巳)
+// 시간 보정: 14시 -2분 (진태양시)
 ```
+
+### 시간 보정 없이 간단 계산
+
+```ts
+import { calculateSajuSimple } from '@fullstackfamily/manseryeok';
+
+// 시간 보정 없이 계산
+const saju = calculateSajuSimple(1984, 2, 2, 2);
+
+console.log(`사주: ${saju.yearPillar}년 ${saju.monthPillar}월 ${saju.dayPillar}일 ${saju.hourPillar}시`);
+// 사주: 계해년 갑인월 갑인일 축시
+```
+
+### 시간 보정 및 경도 설정
+
+```ts
+import { calculateSaju } from '@fullstackfamily/manseryeok';
+
+// 부산 (경도 129도)에서 태어난 경우
+const saju = calculateSaju(1990, 5, 15, 14, 0, {
+  longitude: 129, // 부산 경도
+  applyTimeCorrection: true,
+});
+
+// 시간 보정 자동 계산:
+// - 표준 자오선: 135도 (UTC+9)
+// - 부산 경도: 129도
+// - 경도 차이: 6도 = 24분 보정
+// - 14시 0분 → 13시 36분 (진태양시)
+```
+
+**시간 보정이 필요한 이유:**
+사주의 시주(時柱)를 정확히 계산하기 위해서는 **진태양시(True Solar Time)**를 사용해야 합니다. 한국은 표준자오선(135도)을 기준으로 시간을 정하지만, 실제 태양의 위치는 지역의 경도에 따라 다릅니다.
+
+- **서울 (127°)**: -32분 보정
+- **부산 (129°)**: -24분 보정
+- **강릉 (128°)**: -28분 보정
+
+시간 보정을 하지 않으면 시주가 1시간 차이로 바뀔 수 있습니다.
 
 ### 양력/음력 달력 만들기
 
@@ -393,6 +435,43 @@ console.log('절기 데이터 지원 연도:', supportedYears.join(', '));
 - `solarDay`: 양력 일
 
 **반환값:** `GapjaResult`
+
+### `calculateSaju(solarYear, solarMonth, solarDay, solarHour?, solarMinute?, options?)`
+
+사주팔자(년주, 월주, 일주, 시주)를 계산합니다. 시간 보정을 자동으로 적용합니다.
+
+**매개변수:**
+- `solarYear`: 양력 년
+- `solarMonth`: 양력 월 (1~12)
+- `solarDay`: 양력 일 (1~31)
+- `solarHour`: 양력 시 (0~23, 선택사항)
+- `solarMinute`: 양력 분 (0~59, 기본값: 0)
+- `options`: 사주 계산 옵션
+  - `longitude`: 경도 (기본값: 127 - 서울)
+  - `applyTimeCorrection`: 시간 보정 적용 여부 (기본값: true)
+
+**반환값:** `SajuResult`
+
+**예시:**
+```ts
+const saju = calculateSaju(1990, 5, 15, 14, 30);
+console.log(saju.yearPillar); // '경오'
+console.log(saju.hourPillar); // '을사'
+console.log(saju.isTimeCorrected); // true
+console.log(saju.correctedTime); // { hour: 13, minute: 58 }
+```
+
+### `calculateSajuSimple(solarYear, solarMonth, solarDay, solarHour?)`
+
+시간 보정 없이 사주팔자를 계산합니다.
+
+**매개변수:**
+- `solarYear`: 양력 년
+- `solarMonth`: 양력 월 (1~12)
+- `solarDay`: 양력 일 (1~31)
+- `solarHour`: 양력 시 (0~23, 선택사항)
+
+**반환값:** `SajuResult`
 
 ### `getAllSolarTerms()`
 

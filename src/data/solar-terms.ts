@@ -33,7 +33,7 @@ export const SOLAR_TERM_NAMES: Array<{
   // 봄 (春)
   { name: '입춘', hanja: '立春', longitude: 315, type: 'jeolgi', sajuMonth: 2 },   // 양력 2월 4일경
   { name: '우수', hanja: '雨水', longitude: 330, type: 'junggi', sajuMonth: 2 },    // 양력 2월 19일경
-  { name: '경침', hanja: '驚蟄', longitude: 345, type: 'jeolgi', sajuMonth: 3 },   // 양력 3월 6일경
+  { name: '경칩', hanja: '驚蟄', longitude: 345, type: 'jeolgi', sajuMonth: 3 },   // 양력 3월 6일경
   { name: '춘분', hanja: '春分', longitude: 0, type: 'junggi', sajuMonth: 3 },     // 양력 3월 21일경
   { name: '청명', hanja: '清明', longitude: 15, type: 'jeolgi', sajuMonth: 4 },    // 양력 4월 5일경
   { name: '곡우', hanja: '穀雨', longitude: 30, type: 'junggi', sajuMonth: 4 },     // 양력 4월 20일경

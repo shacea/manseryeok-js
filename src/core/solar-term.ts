@@ -87,7 +87,7 @@ export function getSolarTermsByYear(year: number): SolarTermWithDate[] {
     result.push({
       name: baseInfo.name,
       nameHanja: baseInfo.hanja,
-      index: baseInfo.index,
+      index: SOLAR_TERM_NAMES.indexOf(baseInfo),
       longitude: baseInfo.longitude,
       type: baseInfo.type,
       sajuMonth: baseInfo.sajuMonth,
@@ -124,7 +124,7 @@ export function getSolarTermForDate(year: number, month: number, day: number): S
       return {
         name: baseInfo.name,
         nameHanja: baseInfo.hanja,
-        index: baseInfo.index,
+        index: SOLAR_TERM_NAMES.indexOf(baseInfo),
         longitude: baseInfo.longitude,
         type: baseInfo.type,
         sajuMonth: baseInfo.sajuMonth,
@@ -163,7 +163,7 @@ export function getSolarTermsByMonth(year: number, month: number): SolarTermWith
     result.push({
       name: baseInfo.name,
       nameHanja: baseInfo.hanja,
-      index: baseInfo.index,
+      index: SOLAR_TERM_NAMES.indexOf(baseInfo),
       longitude: baseInfo.longitude,
       type: baseInfo.type,
       sajuMonth: baseInfo.sajuMonth,
