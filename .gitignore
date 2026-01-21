@@ -9,3 +9,8 @@ raw-data/
 coverage/
 .npm
 .esmcache
+
+# Scripts that may contain sensitive data
+scripts/*extract*.cjs
+scripts/*dump*.ts
+scripts/*convert*.ts
