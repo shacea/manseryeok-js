@@ -35,22 +35,22 @@ npm install @fullstackfamily/manseryeok
 
 ## 사용법
 
-### 양력 → 음력 변환 (2024년 설날 예시)
+### 양력 → 음력 변환 (2026년 설날 예시)
 
 ```ts
 import { solarToLunar } from '@fullstackfamily/manseryeok';
 
-const result = solarToLunar(2024, 2, 10);
+const result = solarToLunar(2026, 2, 17);
 console.log('양력:', result.solar.year, '년', result.solar.month, '월', result.solar.day, '일');
 console.log('음력:', result.lunar.year, '년', result.lunar.month, '월', result.lunar.day, '일');
 console.log('윤달:', result.lunar.isLeapMonth ? '예' : '아니오');
 console.log('갑자:', result.gapja.yearPillar, '년', result.gapja.monthPillar, '월', result.gapja.dayPillar, '일');
 
 // 출력:
-// 양력: 2024 년 2 월 10 일
-// 음력: 2024 년 1 월 1 일
+// 양력: 2026 년 2 월 17 일
+// 음력: 2026 년 1 월 1 일
 // 윤달: 아니오
-// 갑자: 갑진 년 병인 월 갑진 일
+// 갑자: 병오 년 경인 월 임술 일
 ```
 
 ### 생일날 음력과 갑자 알아보기
