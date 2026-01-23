@@ -306,6 +306,11 @@ const found = getPillarByHangul('갑자');
 console.log('갑자의 ID:', found?.id); // 0
 console.log('갑자의 오행:', found?.element); // 목
 console.log('갑자의 음양:', found?.yinYang); // 양
+
+// 로마자 표기 (romanization) 조회
+console.log('천간 로마자:', pillar.tiangan.romanization); // Gap
+console.log('지지 로마자:', pillar.dizhi.romanization); // Ja
+console.log('합친 로마자:', pillar.combined.romanization); // Gapja
 ```
 
 ### 24절기 정보 조회
