@@ -19,7 +19,7 @@ export interface SixtyPillar {
     hangul: string;       // 자, 축, 인, ...
     hanja: string;        // 子, 丑, 寅, ...
     romanization?: string; // Ja, Chuk, In, ... (optional for backward compatibility)
-    animal: string;       // 띠, 소, 호끼, ...
+    animal: string;       // 쥐, 소, 호랑이, ...
     element: string;      // 오행
   };
   combined: {
@@ -99,7 +99,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '인',
       hanja: '寅',
       romanization: 'In',
-      animal: '호끼',
+      animal: '호랑이',
       element: '목'
     },
     combined: {
@@ -274,7 +274,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '유',
       hanja: '酉',
       romanization: 'Yu',
-      animal: '원숭이',
+      animal: '닭',
       element: '금'
     },
     combined: {
@@ -299,7 +299,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '술',
       hanja: '戌',
       romanization: 'Sul',
-      animal: '닭',
+      animal: '개',
       element: '금'
     },
     combined: {
@@ -399,7 +399,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '인',
       hanja: '寅',
       romanization: 'In',
-      animal: '호끼',
+      animal: '호랑이',
       element: '목'
     },
     combined: {
@@ -574,7 +574,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '유',
       hanja: '酉',
       romanization: 'Yu',
-      animal: '원숭이',
+      animal: '닭',
       element: '금'
     },
     combined: {
@@ -599,7 +599,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '술',
       hanja: '戌',
       romanization: 'Sul',
-      animal: '닭',
+      animal: '개',
       element: '금'
     },
     combined: {
@@ -699,7 +699,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '인',
       hanja: '寅',
       romanization: 'In',
-      animal: '호끼',
+      animal: '호랑이',
       element: '목'
     },
     combined: {
@@ -874,7 +874,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '유',
       hanja: '酉',
       romanization: 'Yu',
-      animal: '원숭이',
+      animal: '닭',
       element: '금'
     },
     combined: {
@@ -899,7 +899,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '술',
       hanja: '戌',
       romanization: 'Sul',
-      animal: '닭',
+      animal: '개',
       element: '금'
     },
     combined: {
@@ -999,7 +999,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '인',
       hanja: '寅',
       romanization: 'In',
-      animal: '호끼',
+      animal: '호랑이',
       element: '목'
     },
     combined: {
@@ -1174,7 +1174,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '유',
       hanja: '酉',
       romanization: 'Yu',
-      animal: '원숭이',
+      animal: '닭',
       element: '금'
     },
     combined: {
@@ -1199,7 +1199,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '술',
       hanja: '戌',
       romanization: 'Sul',
-      animal: '닭',
+      animal: '개',
       element: '금'
     },
     combined: {
@@ -1299,7 +1299,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '인',
       hanja: '寅',
       romanization: 'In',
-      animal: '호끼',
+      animal: '호랑이',
       element: '목'
     },
     combined: {
@@ -1474,7 +1474,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '유',
       hanja: '酉',
       romanization: 'Yu',
-      animal: '원숭이',
+      animal: '닭',
       element: '금'
     },
     combined: {
@@ -1499,7 +1499,7 @@ export const SIXTY_PILLARS: readonly SixtyPillar[] = [
       hangul: '술',
       hanja: '戌',
       romanization: 'Sul',
-      animal: '닭',
+      animal: '개',
       element: '금'
     },
     combined: {
