@@ -27,6 +27,7 @@ Korean Lunar Calendar (만세력) JavaScript Library
 - ✅ **트리 쉐이킹 지원** - 필요한 기능만 가져가기 가능
 - ✅ **KASI 데이터 기반** - 한국천문연구원 정확한 데이터
 - ✅ **정확한 12지지 띠 정보** - 올바른 동물 매핑 (v1.0.4)
+- ✅ **정확한 24절기 사주월 매핑** - 한로~대한 오류 수정 (v1.0.5)
 
 ## 설치
 
@@ -586,6 +587,16 @@ console.log(saju.correctedTime); // { hour: 13, minute: 58 }
 | 절기 조회 (연도) | < 1ms |
 
 ## 변경 이력
+
+### v1.0.5 (2026-02-11)
+
+- **버그 수정**: 24절기 sajuMonth 매핑 오류 수정 (PR [#2](https://github.com/urstory/manseryeok-js/pull/2) by [@Youshin](https://github.com/Youshin))
+  - 한로~대한(7개 절기)의 sajuMonth가 1씩 밀려있던 off-by-one 오류 수정
+  - 수정 전: sajuMonth=9에 절기 3개, sajuMonth=1에 절기 0개 (비정상)
+  - 수정 후: 모든 sajuMonth(1~12)에 절기 2개(절기+중기)씩 정상 매핑
+- **테스트 추가**: 24절기 sajuMonth 매핑 및 사주월 계산 회귀 테스트 (33개)
+- **문서 수정**: README 예시 결과값을 실제 라이브러리 출력과 일치하도록 수정
+  - 사주 계산 결과 오류, 윤년 판별 오류, 지원 범위 표기, 오타 등
 
 ### v1.0.4 (2026-02-02)
 
