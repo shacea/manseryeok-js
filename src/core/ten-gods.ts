@@ -70,11 +70,7 @@ export function getTenGodByBranch(dayStem: string, targetBranch: string): TenGod
 /**
  * 오행 관계와 음양으로 십성을 결정합니다.
  */
-function determineTenGod(
-  dayElement: FiveElement,
-  targetElement: FiveElement,
-  samePolarity: boolean
-): TenGod {
+function determineTenGod(dayElement: FiveElement, targetElement: FiveElement, samePolarity: boolean): TenGod {
   // 같은 오행 → 비견/겁재
   if (dayElement === targetElement) {
     return samePolarity ? '비견' : '겁재';
@@ -124,7 +120,7 @@ export function calculateAllTenGods(
   yearBranch: string,
   monthBranch: string,
   dayBranch: string,
-  hourBranch: string | null
+  hourBranch: string | null,
 ): {
   stem: { year: TenGod; month: TenGod; day: '비견'; hour: TenGod | null };
   branch: { year: TenGod; month: TenGod; day: TenGod; hour: TenGod | null };

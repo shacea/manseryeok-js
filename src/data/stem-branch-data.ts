@@ -19,23 +19,53 @@ export type FiveElement = '목' | '화' | '토' | '금' | '수';
 
 /** 오행 한자 매핑 */
 export const ELEMENT_HANJA: Record<FiveElement, string> = {
-  목: '木', 화: '火', 토: '土', 금: '金', 수: '水',
+  목: '木',
+  화: '火',
+  토: '土',
+  금: '金',
+  수: '水',
 };
 
 /** 오행 영문 매핑 */
 export const ELEMENT_ENGLISH: Record<FiveElement, string> = {
-  목: 'wood', 화: 'fire', 토: 'earth', 금: 'metal', 수: 'water',
+  목: 'wood',
+  화: 'fire',
+  토: 'earth',
+  금: 'metal',
+  수: 'water',
 };
 
 /** 천간 → 오행 매핑 (갑을=목, 병정=화, 무기=토, 경신=금, 임계=수) */
-export const STEM_ELEMENT: readonly FiveElement[] = ['목', '목', '화', '화', '토', '토', '금', '금', '수', '수'] as const;
+export const STEM_ELEMENT: readonly FiveElement[] = [
+  '목',
+  '목',
+  '화',
+  '화',
+  '토',
+  '토',
+  '금',
+  '금',
+  '수',
+  '수',
+] as const;
 
 /** 천간 → 음양 매핑 (짝수 index=양, 홀수=음) */
-export const STEM_YINYANG: readonly ('양' | '음')[] = ['양', '음', '양', '음', '양', '음', '양', '음', '양', '음'] as const;
+export const STEM_YINYANG: readonly ('양' | '음')[] = [
+  '양',
+  '음',
+  '양',
+  '음',
+  '양',
+  '음',
+  '양',
+  '음',
+  '양',
+  '음',
+] as const;
 
 /** 천간 인덱스 조회 */
 export function stemIndex(stem: string): number {
-  const idx = STEMS.indexOf(stem as typeof STEMS[number]);
+  const idx = STEMS.indexOf(stem as (typeof STEMS)[number]);
   if (idx === -1) throw new Error(`Invalid stem: ${stem}`);
   return idx;
 }
@@ -51,17 +81,56 @@ export const BRANCHES = ['자', '축', '인', '묘', '진', '사', '오', '미',
 export const BRANCHES_HANJA = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'] as const;
 
 /** 12지지 동물 (띠) */
-export const BRANCH_ANIMALS = ['쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지'] as const;
+export const BRANCH_ANIMALS = [
+  '쥐',
+  '소',
+  '호랑이',
+  '토끼',
+  '용',
+  '뱀',
+  '말',
+  '양',
+  '원숭이',
+  '닭',
+  '개',
+  '돼지',
+] as const;
 
 /** 지지 → 오행 매핑 */
-export const BRANCH_ELEMENT: readonly FiveElement[] = ['수', '토', '목', '목', '토', '화', '화', '토', '금', '금', '토', '수'] as const;
+export const BRANCH_ELEMENT: readonly FiveElement[] = [
+  '수',
+  '토',
+  '목',
+  '목',
+  '토',
+  '화',
+  '화',
+  '토',
+  '금',
+  '금',
+  '토',
+  '수',
+] as const;
 
 /** 지지 → 음양 매핑 */
-export const BRANCH_YINYANG: readonly ('양' | '음')[] = ['양', '음', '양', '음', '양', '음', '양', '음', '양', '음', '양', '음'] as const;
+export const BRANCH_YINYANG: readonly ('양' | '음')[] = [
+  '양',
+  '음',
+  '양',
+  '음',
+  '양',
+  '음',
+  '양',
+  '음',
+  '양',
+  '음',
+  '양',
+  '음',
+] as const;
 
 /** 지지 인덱스 조회 */
 export function branchIndex(branch: string): number {
-  const idx = BRANCHES.indexOf(branch as typeof BRANCHES[number]);
+  const idx = BRANCHES.indexOf(branch as (typeof BRANCHES)[number]);
   if (idx === -1) throw new Error(`Invalid branch: ${branch}`);
   return idx;
 }
@@ -72,12 +141,20 @@ export function branchIndex(branch: string): number {
 
 /** 오행 상생 (生): 목→화→토→금→수→목 */
 export const ELEMENT_GENERATES: Record<FiveElement, FiveElement> = {
-  목: '화', 화: '토', 토: '금', 금: '수', 수: '목',
+  목: '화',
+  화: '토',
+  토: '금',
+  금: '수',
+  수: '목',
 };
 
 /** 오행 상극 (剋): 목→토→수→화→금→목 */
 export const ELEMENT_CONTROLS: Record<FiveElement, FiveElement> = {
-  목: '토', 화: '금', 토: '수', 금: '목', 수: '화',
+  목: '토',
+  화: '금',
+  토: '수',
+  금: '목',
+  수: '화',
 };
 
 /** A가 B를 생하는지 */
@@ -95,20 +172,20 @@ export function controls(a: FiveElement, b: FiveElement): boolean {
 // ============================================================
 
 /** 십성 이름 */
-export type TenGod =
-  | '비견' | '겁재'
-  | '식신' | '상관'
-  | '편재' | '정재'
-  | '편관' | '정관'
-  | '편인' | '정인';
+export type TenGod = '비견' | '겁재' | '식신' | '상관' | '편재' | '정재' | '편관' | '정관' | '편인' | '정인';
 
 /** 십성 한자 */
 export const TEN_GOD_HANJA: Record<TenGod, string> = {
-  비견: '比肩', 겁재: '劫財',
-  식신: '食神', 상관: '傷官',
-  편재: '偏財', 정재: '正財',
-  편관: '偏官', 정관: '正官',
-  편인: '偏印', 정인: '正印',
+  비견: '比肩',
+  겁재: '劫財',
+  식신: '食神',
+  상관: '傷官',
+  편재: '偏財',
+  정재: '正財',
+  편관: '偏官',
+  정관: '正官',
+  편인: '偏印',
+  정인: '正印',
 };
 
 // ============================================================
@@ -116,12 +193,38 @@ export const TEN_GOD_HANJA: Record<TenGod, string> = {
 // ============================================================
 
 /** 12운성 이름 배열 (순서: 장생부터) */
-export const TWELVE_STATES = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'] as const;
+export const TWELVE_STATES = [
+  '장생',
+  '목욕',
+  '관대',
+  '건록',
+  '제왕',
+  '쇠',
+  '병',
+  '사',
+  '묘',
+  '절',
+  '태',
+  '양',
+] as const;
 
 /** 12운성 한자 */
-export const TWELVE_STATES_HANJA = ['長生', '沐浴', '冠帶', '建祿', '帝旺', '衰', '病', '死', '墓', '絶', '胎', '養'] as const;
+export const TWELVE_STATES_HANJA = [
+  '長生',
+  '沐浴',
+  '冠帶',
+  '建祿',
+  '帝旺',
+  '衰',
+  '病',
+  '死',
+  '墓',
+  '絶',
+  '胎',
+  '養',
+] as const;
 
-export type TwelveState = typeof TWELVE_STATES[number];
+export type TwelveState = (typeof TWELVE_STATES)[number];
 
 // ============================================================
 // 유틸리티

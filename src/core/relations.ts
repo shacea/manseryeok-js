@@ -4,7 +4,7 @@
  * 사주팔자의 천간/지지 관계를 분석합니다.
  */
 
-import { stemIndex, branchIndex, STEMS, BRANCHES, type FiveElement } from '../data/stem-branch-data';
+import { stemIndex, branchIndex, BRANCHES, type FiveElement } from '../data/stem-branch-data';
 
 // ============================================================
 // 천간합 (天干合)
@@ -15,11 +15,11 @@ import { stemIndex, branchIndex, STEMS, BRANCHES, type FiveElement } from '../da
  * 갑+기=토, 을+경=금, 병+신=수, 정+임=목, 무+계=화
  */
 const STEM_HARMONY_PAIRS: [number, number, FiveElement][] = [
-  [0, 5, '토'],  // 갑+기 → 토
-  [1, 6, '금'],  // 을+경 → 금
-  [2, 7, '수'],  // 병+신 → 수
-  [3, 8, '목'],  // 정+임 → 목
-  [4, 9, '화'],  // 무+계 → 화
+  [0, 5, '토'], // 갑+기 → 토
+  [1, 6, '금'], // 을+경 → 금
+  [2, 7, '수'], // 병+신 → 수
+  [3, 8, '목'], // 정+임 → 목
+  [4, 9, '화'], // 무+계 → 화
 ];
 
 /**
@@ -46,10 +46,10 @@ export function getStemHarmony(stem1: string, stem2: string): FiveElement | null
  * 갑↔경, 을↔신, 병↔임, 정↔계 (무↔기는 같은 토이므로 충 없음)
  */
 const STEM_CLASH_PAIRS: [number, number][] = [
-  [0, 6],  // 갑↔경
-  [1, 7],  // 을↔신
-  [2, 8],  // 병↔임
-  [3, 9],  // 정↔계
+  [0, 6], // 갑↔경
+  [1, 7], // 을↔신
+  [2, 8], // 병↔임
+  [3, 9], // 정↔계
 ];
 
 /**
@@ -70,12 +70,12 @@ export function isStemClash(stem1: string, stem2: string): boolean {
  * 자+축=토, 인+해=목, 묘+술=화, 진+유=금, 사+신=수, 오+미=화
  */
 const BRANCH_SIXHARMONY_PAIRS: [number, number, FiveElement][] = [
-  [0, 1, '토'],   // 자+축 → 토
-  [2, 11, '목'],  // 인+해 → 목
-  [3, 10, '화'],  // 묘+술 → 화
-  [4, 9, '금'],   // 진+유 → 금
-  [5, 8, '수'],   // 사+신 → 수
-  [6, 7, '화'],   // 오+미 → 화 (午未合化火)
+  [0, 1, '토'], // 자+축 → 토
+  [2, 11, '목'], // 인+해 → 목
+  [3, 10, '화'], // 묘+술 → 화
+  [4, 9, '금'], // 진+유 → 금
+  [5, 8, '수'], // 사+신 → 수
+  [6, 7, '화'], // 오+미 → 화 (午未合化火)
 ];
 
 /**
@@ -102,10 +102,10 @@ export function getBranchSixHarmony(branch1: string, branch2: string): FiveEleme
  * 신자진=수, 해묘미=목, 인오술=화, 사유축=금
  */
 const BRANCH_TRIPLE_HARMONY: [number, number, number, FiveElement][] = [
-  [8, 0, 4, '수'],   // 신+자+진 → 수국
-  [11, 3, 7, '목'],  // 해+묘+미 → 목국
-  [2, 6, 10, '화'],  // 인+오+술 → 화국
-  [5, 9, 1, '금'],   // 사+유+축 → 금국
+  [8, 0, 4, '수'], // 신+자+진 → 수국
+  [11, 3, 7, '목'], // 해+묘+미 → 목국
+  [2, 6, 10, '화'], // 인+오+술 → 화국
+  [5, 9, 1, '금'], // 사+유+축 → 금국
 ];
 
 /**
@@ -126,7 +126,9 @@ export function getBranchTripleHarmony(b1: string, b2: string, b3: string): Five
 /**
  * 사주의 지지들에서 삼합 조합을 찾습니다.
  */
-export function findTripleHarmonies(branches: string[]): { branches: [string, string, string]; element: FiveElement }[] {
+export function findTripleHarmonies(
+  branches: string[],
+): { branches: [string, string, string]; element: FiveElement }[] {
   const results: { branches: [string, string, string]; element: FiveElement }[] = [];
   for (let i = 0; i < branches.length; i++) {
     for (let j = i + 1; j < branches.length; j++) {
@@ -150,10 +152,10 @@ export function findTripleHarmonies(branches: string[]): { branches: [string, st
  * 인묘진=동방목, 사오미=남방화, 신유술=서방금, 해자축=북방수
  */
 const BRANCH_DIRECTIONAL_HARMONY: [number, number, number, FiveElement][] = [
-  [2, 3, 4, '목'],    // 인+묘+진 → 동방 목
-  [5, 6, 7, '화'],    // 사+오+미 → 남방 화
-  [8, 9, 10, '금'],   // 신+유+술 → 서방 금
-  [11, 0, 1, '수'],   // 해+자+축 → 북방 수
+  [2, 3, 4, '목'], // 인+묘+진 → 동방 목
+  [5, 6, 7, '화'], // 사+오+미 → 남방 화
+  [8, 9, 10, '금'], // 신+유+술 → 서방 금
+  [11, 0, 1, '수'], // 해+자+축 → 북방 수
 ];
 
 /**
@@ -197,20 +199,20 @@ export function isBranchClash(branch1: string, branch2: string): boolean {
  */
 const BRANCH_PUNISHMENT_PAIRS: [number, number][] = [
   // 인사신 삼형 (양방향 쌍으로 표현)
-  [2, 5],   // 인 → 사
-  [5, 8],   // 사 → 신
-  [8, 2],   // 신 → 인
+  [2, 5], // 인 → 사
+  [5, 8], // 사 → 신
+  [8, 2], // 신 → 인
   // 축술미 삼형
-  [1, 10],  // 축 → 술
-  [10, 7],  // 술 → 미
-  [7, 1],   // 미 → 축
+  [1, 10], // 축 → 술
+  [10, 7], // 술 → 미
+  [7, 1], // 미 → 축
   // 자묘 상형
-  [0, 3],   // 자 → 묘
-  [3, 0],   // 묘 → 자
+  [0, 3], // 자 → 묘
+  [3, 0], // 묘 → 자
   // 자형
-  [4, 4],   // 진 → 진
-  [6, 6],   // 오 → 오
-  [9, 9],   // 유 → 유
+  [4, 4], // 진 → 진
+  [6, 6], // 오 → 오
+  [9, 9], // 유 → 유
   [11, 11], // 해 → 해
 ];
 
@@ -232,12 +234,12 @@ export function isBranchPunishment(branch1: string, branch2: string): boolean {
  * 자↔유, 축↔진, 인↔해, 묘↔오, 사↔신, 미↔술
  */
 const BRANCH_DESTRUCTION_PAIRS: [number, number][] = [
-  [0, 9],   // 자↔유
-  [1, 4],   // 축↔진
-  [2, 11],  // 인↔해
-  [3, 6],   // 묘↔오
-  [5, 8],   // 사↔신
-  [7, 10],  // 미↔술
+  [0, 9], // 자↔유
+  [1, 4], // 축↔진
+  [2, 11], // 인↔해
+  [3, 6], // 묘↔오
+  [5, 8], // 사↔신
+  [7, 10], // 미↔술
 ];
 
 /**
@@ -254,12 +256,12 @@ export function isBranchDestruction(branch1: string, branch2: string): boolean {
 // ============================================================
 
 const BRANCH_HARM_PAIRS: [number, number][] = [
-  [0, 7],   // 자↔미
-  [1, 6],   // 축↔오
-  [2, 5],   // 인↔사
-  [3, 4],   // 묘↔진
-  [8, 11],  // 신↔해
-  [9, 10],  // 유↔술
+  [0, 7], // 자↔미
+  [1, 6], // 축↔오
+  [2, 5], // 인↔사
+  [3, 4], // 묘↔진
+  [8, 11], // 신↔해
+  [9, 10], // 유↔술
 ];
 
 export function isBranchHarm(branch1: string, branch2: string): boolean {
@@ -273,12 +275,12 @@ export function isBranchHarm(branch1: string, branch2: string): boolean {
 // ============================================================
 
 const BRANCH_WONJIN_PAIRS: [number, number][] = [
-  [0, 7],   // 자↔미
-  [1, 6],   // 축↔오
-  [2, 9],   // 인↔유
-  [3, 8],   // 묘↔신
-  [4, 11],  // 진↔해
-  [5, 10],  // 사↔술
+  [0, 7], // 자↔미
+  [1, 6], // 축↔오
+  [2, 9], // 인↔유
+  [3, 8], // 묘↔신
+  [4, 11], // 진↔해
+  [5, 10], // 사↔술
 ];
 
 export function isBranchWonjin(branch1: string, branch2: string): boolean {
@@ -352,15 +354,17 @@ export interface PillarRelations {
  * 사주 전체의 합충형파해 관계를 분석합니다.
  */
 export function analyzeRelations(
-  yearStem: string, monthStem: string, dayStem: string, hourStem: string | null,
-  yearBranch: string, monthBranch: string, dayBranch: string, hourBranch: string | null
+  yearStem: string,
+  monthStem: string,
+  dayStem: string,
+  hourStem: string | null,
+  yearBranch: string,
+  monthBranch: string,
+  dayBranch: string,
+  hourBranch: string | null,
 ): PillarRelations {
-  const stems = hourStem
-    ? [yearStem, monthStem, dayStem, hourStem]
-    : [yearStem, monthStem, dayStem];
-  const branches = hourBranch
-    ? [yearBranch, monthBranch, dayBranch, hourBranch]
-    : [yearBranch, monthBranch, dayBranch];
+  const stems = hourStem ? [yearStem, monthStem, dayStem, hourStem] : [yearStem, monthStem, dayStem];
+  const branches = hourBranch ? [yearBranch, monthBranch, dayBranch, hourBranch] : [yearBranch, monthBranch, dayBranch];
 
   const pillarNames = ['년', '월', '일', '시'];
 

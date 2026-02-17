@@ -44,12 +44,7 @@ export { solarToLunar, lunarToSolar, getGapja } from './core/solar-lunar-convert
 // ============================================
 // Saju (사주팔자)
 // ============================================
-export {
-  calculateSaju,
-  calculateSajuSimple,
-  type SajuResult,
-  type SajuOptions,
-} from './core/saju';
+export { calculateSaju, calculateSajuSimple, type SajuResult, type SajuOptions } from './core/saju';
 
 // ============================================
 // Solar Terms (절기)
@@ -115,20 +110,12 @@ export {
 // ============================================
 // Ten Gods (십성)
 // ============================================
-export {
-  getTenGodByStem,
-  getTenGodByBranch,
-  calculateAllTenGods,
-} from './core/ten-gods';
+export { getTenGodByStem, getTenGodByBranch, calculateAllTenGods } from './core/ten-gods';
 
 // ============================================
 // Twelve States (12운성)
 // ============================================
-export {
-  getTwelveState,
-  getAllTwelveStates,
-  calculateAllTwelveStates,
-} from './core/twelve-states';
+export { getTwelveState, getAllTwelveStates, calculateAllTwelveStates } from './core/twelve-states';
 
 // ============================================
 // Hidden Stems (지장간)
@@ -203,22 +190,12 @@ export {
 // ============================================
 // Palace (궁성/육친)
 // ============================================
-export {
-  getPalaces,
-  getSixRelation,
-  analyzeSixRelations,
-  type PalaceInfo,
-  type SixRelation,
-} from './core/palace';
+export { getPalaces, getSixRelation, analyzeSixRelations, type PalaceInfo, type SixRelation } from './core/palace';
 
 // ============================================
 // Integrated Manseryeok (통합 만세력)
 // ============================================
-export {
-  calculateManseryeok,
-  type ManseryeokResult,
-  type ManseryeokOptions,
-} from './core/manseryeok';
+export { calculateManseryeok, type ManseryeokResult, type ManseryeokOptions } from './core/manseryeok';
 
 // ============================================
 // Stem-Branch Data (천간/지지 기초 데이터)

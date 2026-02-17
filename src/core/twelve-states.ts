@@ -28,16 +28,16 @@ import { stemIndex, branchIndex, type TwelveState, TWELVE_STATES } from '../data
  * - 계(癸, 음수): 장생=묘(卯, 3)
  */
 const CHANGSHENG_START: readonly number[] = [
-  11,  // 갑(甲): 해(亥)
-  6,   // 을(乙): 오(午)
-  2,   // 병(丙): 인(寅)
-  9,   // 정(丁): 유(酉)
-  2,   // 무(戊): 인(寅)
-  9,   // 기(己): 유(酉)
-  5,   // 경(庚): 사(巳)
-  0,   // 신(辛): 자(子)
-  8,   // 임(壬): 신(申)
-  3,   // 계(癸): 묘(卯)
+  11, // 갑(甲): 해(亥)
+  6, // 을(乙): 오(午)
+  2, // 병(丙): 인(寅)
+  9, // 정(丁): 유(酉)
+  2, // 무(戊): 인(寅)
+  9, // 기(己): 유(酉)
+  5, // 경(庚): 사(巳)
+  0, // 신(辛): 자(子)
+  8, // 임(壬): 신(申)
+  3, // 계(癸): 묘(卯)
 ] as const;
 
 /**
@@ -91,7 +91,7 @@ export function calculateAllTwelveStates(
   yearBranch: string,
   monthBranch: string,
   dayBranch: string,
-  hourBranch: string | null
+  hourBranch: string | null,
 ): {
   year: TwelveState;
   month: TwelveState;

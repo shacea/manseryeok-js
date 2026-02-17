@@ -440,11 +440,8 @@ describe('PDF 검증: 박정은 1981/08/23 16:00 여 인천(126.5°)', () => {
   });
 
   test('대운 간지', () => {
-    const pillars = result.majorFortune!.fortunes.map(f => f.pillar);
-    expect(pillars).toEqual([
-      '정유', '무술', '기해', '경자', '신축',
-      '임인', '계묘', '갑진', '을사', '병오',
-    ]);
+    const pillars = result.majorFortune!.fortunes.map((f) => f.pillar);
+    expect(pillars).toEqual(['정유', '무술', '기해', '경자', '신축', '임인', '계묘', '갑진', '을사', '병오']);
   });
 });
 

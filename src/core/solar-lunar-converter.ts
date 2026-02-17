@@ -16,16 +16,9 @@ const MONTH_PILLAR_CORRECTIONS: Array<{
   fromDay: number;
   toDay: number;
   correctMonthPillarId: number;
-}> = [
-  { year: 1996, month: 1, fromDay: 6, toDay: 19, correctMonthPillarId: 25 },
-];
+}> = [{ year: 1996, month: 1, fromDay: 6, toDay: 19, correctMonthPillarId: 25 }];
 
-function getCorrectMonthPillarId(
-  year: number,
-  month: number,
-  day: number,
-  originalId: number
-): number {
+function getCorrectMonthPillarId(year: number, month: number, day: number, originalId: number): number {
   for (const correction of MONTH_PILLAR_CORRECTIONS) {
     if (
       correction.year === year &&
@@ -49,18 +42,13 @@ function getCorrectMonthPillarId(
  * @throws {OutOfRangeError} 지원 범위 밖 연도
  * @throws {InvalidDateError} 유효하지 않은 날짜
  */
-export function solarToLunar(
-  solarYear: number,
-  solarMonth: number,
-  solarDay: number
-): SolarToLunarResult {
+export function solarToLunar(solarYear: number, solarMonth: number, solarDay: number): SolarToLunarResult {
   // 1. 범위 검증
   if (!isSupportedYear(solarYear)) {
     throw new OutOfRangeError(solarYear);
   }
 
   // 2. 월별 인덱스 조회
-  const monthKey = `${solarYear}-${String(solarMonth).padStart(2, '0')}`;
   const monthIndex = getMonthlyIndex(solarYear, solarMonth);
 
   if (!monthIndex) {
@@ -69,7 +57,7 @@ export function solarToLunar(
 
   // 3. 월 내에서 해당 날짜 찾기
   const entry = monthIndex.entries.find(
-    e => e.solar.year === solarYear && e.solar.month === solarMonth && e.solar.day === solarDay
+    (e) => e.solar.year === solarYear && e.solar.month === solarMonth && e.solar.day === solarDay,
   );
 
   if (!entry) {
@@ -77,17 +65,8 @@ export function solarToLunar(
   }
 
   // 4. 갑자 계산
-  const correctedMonthPillarId = getCorrectMonthPillarId(
-    solarYear,
-    solarMonth,
-    solarDay,
-    entry.gapja.monthPillarId
-  );
-  const gapja = formatGapjaByIds(
-    entry.gapja.yearPillarId,
-    correctedMonthPillarId,
-    entry.gapja.dayPillarId
-  );
+  const correctedMonthPillarId = getCorrectMonthPillarId(solarYear, solarMonth, solarDay, entry.gapja.monthPillarId);
+  const gapja = formatGapjaByIds(entry.gapja.yearPillarId, correctedMonthPillarId, entry.gapja.dayPillarId);
 
   // 5. 결과 반환
   return {
@@ -117,7 +96,7 @@ export function lunarToSolar(
   lunarYear: number,
   lunarMonth: number,
   lunarDay: number,
-  isLeapMonth: boolean = false
+  isLeapMonth: boolean = false,
 ): LunarToSolarResult {
   // 1. 범위 검증
   if (!isSupportedYear(lunarYear)) {
@@ -131,10 +110,11 @@ export function lunarToSolar(
     if (!monthIndex) continue;
 
     const entry = monthIndex.entries.find(
-      e => e.lunar.year === lunarYear &&
-           e.lunar.month === lunarMonth &&
-           e.lunar.day === lunarDay &&
-           e.lunar.isLeap === isLeapMonth
+      (e) =>
+        e.lunar.year === lunarYear &&
+        e.lunar.month === lunarMonth &&
+        e.lunar.day === lunarDay &&
+        e.lunar.isLeap === isLeapMonth,
     );
 
     if (entry) {
@@ -143,13 +123,9 @@ export function lunarToSolar(
         entry.solar.year,
         entry.solar.month,
         entry.solar.day,
-        entry.gapja.monthPillarId
+        entry.gapja.monthPillarId,
       );
-      const gapja = formatGapjaByIds(
-        entry.gapja.yearPillarId,
-        correctedMonthPillarId,
-        entry.gapja.dayPillarId
-      );
+      const gapja = formatGapjaByIds(entry.gapja.yearPillarId, correctedMonthPillarId, entry.gapja.dayPillarId);
 
       return {
         lunar: { year: lunarYear, month: lunarMonth, day: lunarDay, isLeapMonth },
@@ -163,7 +139,9 @@ export function lunarToSolar(
     }
   }
 
-  throw new InvalidDateError(`Invalid lunar date: ${lunarYear}-${lunarMonth}-${lunarDay}${isLeapMonth ? ' (leap)' : ''}`);
+  throw new InvalidDateError(
+    `Invalid lunar date: ${lunarYear}-${lunarMonth}-${lunarDay}${isLeapMonth ? ' (leap)' : ''}`,
+  );
 }
 
 /**
@@ -173,11 +151,7 @@ export function lunarToSolar(
  * @param solarDay 양력 일
  * @returns 갑자 정보
  */
-export function getGapja(
-  solarYear: number,
-  solarMonth: number,
-  solarDay: number
-): import('../types').GapjaResult {
+export function getGapja(solarYear: number, solarMonth: number, solarDay: number): import('../types').GapjaResult {
   const result = solarToLunar(solarYear, solarMonth, solarDay);
   return {
     yearPillar: result.gapja.yearPillar,

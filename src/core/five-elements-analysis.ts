@@ -80,10 +80,14 @@ export function analyzeFiveElements(
   yearBranch: string,
   monthBranch: string,
   dayBranch: string,
-  hourBranch: string | null
+  hourBranch: string | null,
 ): FiveElementAnalysis {
   const counts: Record<FiveElement, number> = {
-    목: 0, 화: 0, 토: 0, 금: 0, 수: 0,
+    목: 0,
+    화: 0,
+    토: 0,
+    금: 0,
+    수: 0,
   };
 
   // 천간 오행 카운팅
@@ -139,13 +143,9 @@ export function analyzeTenGods(
   yearBranch: string,
   monthBranch: string,
   dayBranch: string,
-  hourBranch: string | null
+  hourBranch: string | null,
 ): TenGodAnalysis {
-  const allTenGods: TenGod[] = [
-    '비견', '겁재', '식신', '상관',
-    '편재', '정재', '편관', '정관',
-    '편인', '정인',
-  ];
+  const allTenGods: TenGod[] = ['비견', '겁재', '식신', '상관', '편재', '정재', '편관', '정관', '편인', '정인'];
 
   const counts = {} as Record<TenGod, number>;
   for (const tg of allTenGods) counts[tg] = 0;

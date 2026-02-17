@@ -6,7 +6,6 @@
 
 import { SOLAR_TERM_NAMES } from '../data/solar-terms';
 import { SOLAR_TERMS_DATA, SUPPORTED_SOLAR_TERM_YEARS } from '../data/solar-terms-data';
-import type { SolarTermDateTime } from '../types';
 
 /**
  * 절기 시각 정보 (날짜 포함)
@@ -51,7 +50,7 @@ export function getSolarTermInfoByIndex(index: number) {
  * @returns 절기 기본 정보 또는 undefined
  */
 export function getSolarTermInfoByName(name: string) {
-  return SOLAR_TERM_NAMES.find(t => t.name === name);
+  return SOLAR_TERM_NAMES.find((t) => t.name === name);
 }
 
 /**
@@ -63,7 +62,7 @@ export function getSolarTermsBySajuMonth(sajuMonth: number): typeof SOLAR_TERM_N
   if (sajuMonth < 1 || sajuMonth > 12) {
     throw new RangeError(`Saju month must be 1~12, got ${sajuMonth}`);
   }
-  return SOLAR_TERM_NAMES.filter(term => term.sajuMonth === sajuMonth);
+  return SOLAR_TERM_NAMES.filter((term) => term.sajuMonth === sajuMonth);
 }
 
 /**
@@ -79,9 +78,9 @@ export function getSolarTermsByYear(year: number): SolarTermWithDate[] {
   const yearData = SOLAR_TERMS_DATA[year];
   const result: SolarTermWithDate[] = [];
 
-  yearData.forEach((termData, i) => {
+  yearData.forEach((termData) => {
     // 절기 이름으로 기본 정보 찾기
-    const baseInfo = SOLAR_TERM_NAMES.find(t => t.name === termData.name);
+    const baseInfo = SOLAR_TERM_NAMES.find((t) => t.name === termData.name);
     if (!baseInfo) return;
 
     result.push({
@@ -118,7 +117,7 @@ export function getSolarTermForDate(year: number, month: number, day: number): S
 
   for (const termData of yearData) {
     if (termData.month === month && Math.abs(termData.day - day) <= 1) {
-      const baseInfo = SOLAR_TERM_NAMES.find(t => t.name === termData.name);
+      const baseInfo = SOLAR_TERM_NAMES.find((t) => t.name === termData.name);
       if (!baseInfo) continue;
 
       return {
@@ -157,7 +156,7 @@ export function getSolarTermsByMonth(year: number, month: number): SolarTermWith
   yearData.forEach((termData) => {
     if (termData.month !== month) return;
 
-    const baseInfo = SOLAR_TERM_NAMES.find(t => t.name === termData.name);
+    const baseInfo = SOLAR_TERM_NAMES.find((t) => t.name === termData.name);
     if (!baseInfo) return;
 
     result.push({

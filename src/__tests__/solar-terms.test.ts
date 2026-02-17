@@ -18,58 +18,70 @@ describe('SOLAR_TERM_NAMES sajuMonth 매핑', () => {
 
   test('모든 sajuMonth(1~12)에 절기가 2개씩 존재', () => {
     for (let month = 1; month <= 12; month++) {
-      const terms = SOLAR_TERM_NAMES.filter(t => t.sajuMonth === month);
+      const terms = SOLAR_TERM_NAMES.filter((t) => t.sajuMonth === month);
       expect(terms).toHaveLength(2);
     }
   });
 
   test('각 sajuMonth에 절기(jeolgi)와 중기(junggi)가 하나씩 존재', () => {
     for (let month = 1; month <= 12; month++) {
-      const terms = SOLAR_TERM_NAMES.filter(t => t.sajuMonth === month);
-      const types = terms.map(t => t.type).sort();
+      const terms = SOLAR_TERM_NAMES.filter((t) => t.sajuMonth === month);
+      const types = terms.map((t) => t.type).sort();
       expect(types).toEqual(['jeolgi', 'junggi']);
     }
   });
 
   test('한로(寒露)는 술월(sajuMonth=10)', () => {
-    const hanro = SOLAR_TERM_NAMES.find(t => t.name === '한로');
+    const hanro = SOLAR_TERM_NAMES.find((t) => t.name === '한로');
     expect(hanro?.sajuMonth).toBe(10);
   });
 
   test('입동(立冬)은 해월(sajuMonth=11)', () => {
-    const ipdong = SOLAR_TERM_NAMES.find(t => t.name === '입동');
+    const ipdong = SOLAR_TERM_NAMES.find((t) => t.name === '입동');
     expect(ipdong?.sajuMonth).toBe(11);
   });
 
   test('대설(大雪)은 자월(sajuMonth=12)', () => {
-    const daeseol = SOLAR_TERM_NAMES.find(t => t.name === '대설');
+    const daeseol = SOLAR_TERM_NAMES.find((t) => t.name === '대설');
     expect(daeseol?.sajuMonth).toBe(12);
   });
 
   test('소한(小寒)은 축월(sajuMonth=1)', () => {
-    const sohan = SOLAR_TERM_NAMES.find(t => t.name === '소한');
+    const sohan = SOLAR_TERM_NAMES.find((t) => t.name === '소한');
     expect(sohan?.sajuMonth).toBe(1);
   });
 
   test('대한(大寒)은 축월(sajuMonth=1)', () => {
-    const daehan = SOLAR_TERM_NAMES.find(t => t.name === '대한');
+    const daehan = SOLAR_TERM_NAMES.find((t) => t.name === '대한');
     expect(daehan?.sajuMonth).toBe(1);
   });
 
   test('절기-월 매핑 전체 검증', () => {
     const expected: Record<string, number> = {
-      '소한': 1, '대한': 1,
-      '입춘': 2, '우수': 2,
-      '경칩': 3, '춘분': 3,
-      '청명': 4, '곡우': 4,
-      '입하': 5, '소만': 5,
-      '망종': 6, '하지': 6,
-      '소서': 7, '대서': 7,
-      '입추': 8, '처서': 8,
-      '백로': 9, '추분': 9,
-      '한로': 10, '상강': 10,
-      '입동': 11, '소설': 11,
-      '대설': 12, '동지': 12,
+      소한: 1,
+      대한: 1,
+      입춘: 2,
+      우수: 2,
+      경칩: 3,
+      춘분: 3,
+      청명: 4,
+      곡우: 4,
+      입하: 5,
+      소만: 5,
+      망종: 6,
+      하지: 6,
+      소서: 7,
+      대서: 7,
+      입추: 8,
+      처서: 8,
+      백로: 9,
+      추분: 9,
+      한로: 10,
+      상강: 10,
+      입동: 11,
+      소설: 11,
+      대설: 12,
+      동지: 12,
     };
 
     for (const term of SOLAR_TERM_NAMES) {
@@ -124,27 +136,27 @@ describe('getSolarTermInfoByIndex', () => {
 describe('getSolarTermsBySajuMonth', () => {
   test('sajuMonth=1 → 소한, 대한', () => {
     const terms = getSolarTermsBySajuMonth(1);
-    expect(terms.map(t => t.name)).toEqual(['소한', '대한']);
+    expect(terms.map((t) => t.name)).toEqual(['소한', '대한']);
   });
 
   test('sajuMonth=2 → 입춘, 우수', () => {
     const terms = getSolarTermsBySajuMonth(2);
-    expect(terms.map(t => t.name)).toEqual(['입춘', '우수']);
+    expect(terms.map((t) => t.name)).toEqual(['입춘', '우수']);
   });
 
   test('sajuMonth=10 → 한로, 상강', () => {
     const terms = getSolarTermsBySajuMonth(10);
-    expect(terms.map(t => t.name)).toEqual(['한로', '상강']);
+    expect(terms.map((t) => t.name)).toEqual(['한로', '상강']);
   });
 
   test('sajuMonth=11 → 입동, 소설', () => {
     const terms = getSolarTermsBySajuMonth(11);
-    expect(terms.map(t => t.name)).toEqual(['입동', '소설']);
+    expect(terms.map((t) => t.name)).toEqual(['입동', '소설']);
   });
 
   test('sajuMonth=12 → 대설, 동지', () => {
     const terms = getSolarTermsBySajuMonth(12);
-    expect(terms.map(t => t.name)).toEqual(['대설', '동지']);
+    expect(terms.map((t) => t.name)).toEqual(['대설', '동지']);
   });
 
   test('범위 밖 (0)', () => {

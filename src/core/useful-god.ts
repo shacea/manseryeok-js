@@ -100,10 +100,7 @@ export interface UsefulGodResult {
  * @param bodyStrength 신강/신약 계산 결과
  * @returns 용신 결정 결과
  */
-export function determineUsefulGod(
-  dayStem: string,
-  bodyStrength: BodyStrengthResult
-): UsefulGodResult {
+export function determineUsefulGod(dayStem: string, bodyStrength: BodyStrengthResult): UsefulGodResult {
   const dayIdx = stemIndex(dayStem);
   const dayElement = STEM_ELEMENT[dayIdx];
   const strengthLevel = getBodyStrengthLevel(bodyStrength.selfRatio);
@@ -114,7 +111,11 @@ export function determineUsefulGod(
 
   // 각 그룹별 오행 분류
   const byGroup: Record<TenGodGroup, FiveElement[]> = {
-    비겁: [], 식상: [], 재성: [], 관성: [], 인성: [],
+    비겁: [],
+    식상: [],
+    재성: [],
+    관성: [],
+    인성: [],
   };
   for (const el of elements) {
     byGroup[groupMap[el]].push(el);
@@ -128,16 +129,13 @@ export function determineUsefulGod(
   let followElement: FiveElement | undefined;
   let description: string;
 
-  const isStrongByLevel =
-    strengthLevel === '극강' ||
-    strengthLevel === '태강' ||
-    strengthLevel === '중화신강';
+  const isStrongByLevel = strengthLevel === '극강' || strengthLevel === '태강' || strengthLevel === '중화신강';
 
   if (isStrongByLevel) {
     // ── 신강(身强): 억제가 필요 ──
-    const foodScores = byGroup['식상'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-    const wealthScores = byGroup['재성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-    const officialScores = byGroup['관성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+    const foodScores = byGroup['식상'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
+    const wealthScores = byGroup['재성'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
+    const officialScores = byGroup['관성'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
 
     if (strengthLevel === '중화신강') {
       if (officialScores.length > 0) {
@@ -165,7 +163,7 @@ export function determineUsefulGod(
 
     // 희신: 용신을 생하는 오행 (용신의 인성)
     favorableElement = (Object.keys(ELEMENT_GENERATES) as FiveElement[]).find(
-      el => ELEMENT_GENERATES[el] === usefulElement
+      (el) => ELEMENT_GENERATES[el] === usefulElement,
     )!;
 
     // 기신: 용신을 극하는 오행 (비겁 또는 인성)
@@ -173,17 +171,16 @@ export function determineUsefulGod(
 
     // 구신: 기신을 생하는 오행
     adverseElement = (Object.keys(ELEMENT_GENERATES) as FiveElement[]).find(
-      el => ELEMENT_GENERATES[el] === unfavorableElement
+      (el) => ELEMENT_GENERATES[el] === unfavorableElement,
     )!;
 
     description = `신강(${strengthLevel}) → 억부용신: ${usefulGroup}(${usefulElement}) | 희신: ${favorableElement} | 기신: ${unfavorableElement}(비겁)`;
-
   } else {
     // ── 신약(身弱): 부조가 필요 ──
     // 우선순위: 인성 > 비겁
 
-    const printScores = byGroup['인성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-    const siblingScores = byGroup['비겁'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+    const printScores = byGroup['인성'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
+    const siblingScores = byGroup['비겁'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
 
     const preferSiblingFirst = strengthLevel === '태약' || strengthLevel === '중화신약';
 
@@ -200,25 +197,26 @@ export function determineUsefulGod(
 
     // 희신: 용신을 생하는 오행
     favorableElement = (Object.keys(ELEMENT_GENERATES) as FiveElement[]).find(
-      el => ELEMENT_GENERATES[el] === usefulElement
+      (el) => ELEMENT_GENERATES[el] === usefulElement,
     )!;
 
     // 기신: 용신을 극하는 오행 (재성 또는 관성)
     // 신약일 때 기신 = 재성(일간이 극하는 오행) 또는 관성(일간을 극하는 오행)
     // 관성이 더 직접적으로 일간을 극하므로 관성을 기신으로
     const officialEls = byGroup['관성'];
-    unfavorableElement = officialEls.length > 0
-      ? officialEls.sort((a, b) => bodyStrength.elementScores[b] - bodyStrength.elementScores[a])[0]
-      : (byGroup['재성'][0] ?? dayElement);
+    unfavorableElement =
+      officialEls.length > 0
+        ? officialEls.sort((a, b) => bodyStrength.elementScores[b] - bodyStrength.elementScores[a])[0]
+        : (byGroup['재성'][0] ?? dayElement);
 
     // 구신: 기신을 생하는 오행
     adverseElement = (Object.keys(ELEMENT_GENERATES) as FiveElement[]).find(
-      el => ELEMENT_GENERATES[el] === unfavorableElement
+      (el) => ELEMENT_GENERATES[el] === unfavorableElement,
     )!;
 
     if (strengthLevel === '극약') {
       followElement = elements
-        .map(el => ({ el, score: bodyStrength.elementScores[el] }))
+        .map((el) => ({ el, score: bodyStrength.elementScores[el] }))
         .sort((a, b) => b.score - a.score)[0].el;
     }
 
@@ -245,10 +243,7 @@ export function determineUsefulGod(
  */
 export type GodType = '용신' | '희신' | '기신' | '구신' | '한신';
 
-export function classifyElement(
-  element: FiveElement,
-  usefulGod: UsefulGodResult
-): GodType {
+export function classifyElement(element: FiveElement, usefulGod: UsefulGodResult): GodType {
   if (element === usefulGod.usefulElement) return '용신';
   if (element === usefulGod.favorableElement) return '희신';
   if (element === usefulGod.unfavorableElement) return '기신';

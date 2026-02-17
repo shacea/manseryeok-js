@@ -19,6 +19,10 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"web/index.html\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"web/index.html\"",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build && npm test",
     "dump-data": "ts-node scripts/dump-mysql-data.ts",
@@ -46,18 +50,23 @@
   },
   "homepage": "https://github.com/urstory/manseryeok-js#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-typescript": "^11.1.0",
     "@types/jest": "^29.5.0",
     "@types/node": "^20.0.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
     "jest": "^29.5.0",
+    "prettier": "^3.8.1",
     "rollup": "^3.20.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.0",
     "tslib": "^2.5.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.56.0"
   },
   "exports": {
     ".": {

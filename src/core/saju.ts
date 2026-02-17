@@ -62,12 +62,9 @@ export function calculateSaju(
   solarDay: number,
   solarHour?: number,
   solarMinute: number = 0,
-  options: SajuOptions = {}
+  options: SajuOptions = {},
 ): SajuResult {
-  const {
-    longitude = 127,
-    applyTimeCorrection = true,
-  } = options;
+  const { longitude = 127, applyTimeCorrection = true } = options;
 
   // 갑자 계산 (년주, 월주, 일주)
   const gapja = getGapja(solarYear, solarMonth, solarDay);
@@ -88,8 +85,7 @@ export function calculateSaju(
       const degreesDiff = standardMeridian - longitude;
       const longitudeCorrection = Math.round(degreesDiff * 4); // 1도 = 4분
 
-      calcMinute = solarMinute - longitudeCorrection;
-      calcHour = solarHour;
+      calcMinute -= longitudeCorrection;
 
       if (calcMinute < 0) {
         calcMinute += 60;
@@ -155,15 +151,15 @@ export function calculateSaju(
 function getHourStemStart(dayStem: string): number {
   const stemMap: { [key: string]: number } = {
     갑: 0,
-    기: 0,  // 갑/기 → 자시부터 갑자 (갑=0)
+    기: 0, // 갑/기 → 자시부터 갑자 (갑=0)
     을: 2,
-    경: 2,  // 을/경 → 자시부터 병자 (병=2)
+    경: 2, // 을/경 → 자시부터 병자 (병=2)
     병: 4,
-    신: 4,  // 병/신 → 자시부터 무자 (무=4)
+    신: 4, // 병/신 → 자시부터 무자 (무=4)
     정: 6,
-    임: 6,  // 정/임 → 자시부터 경자 (경=6)
+    임: 6, // 정/임 → 자시부터 경자 (경=6)
     무: 8,
-    계: 8,  // 무/계 → 자시부터 임자 (임=8)
+    계: 8, // 무/계 → 자시부터 임자 (임=8)
   };
 
   return stemMap[dayStem] ?? 0;
@@ -182,7 +178,7 @@ export function calculateSajuSimple(
   solarYear: number,
   solarMonth: number,
   solarDay: number,
-  solarHour?: number
+  solarHour?: number,
 ): SajuResult {
   return calculateSaju(solarYear, solarMonth, solarDay, solarHour, 0, {
     applyTimeCorrection: false,

@@ -100,12 +100,21 @@ export function getPalaces(): {
  * 육친 이름
  */
 export type SixRelation =
-  | '형제' | '자매'
-  | '아버지' | '어머니' | '편모'
-  | '아내' | '남편'
-  | '아들' | '딸'
-  | '연인' | '시어머니' | '장모' | '조모'
-  | '조부' | '조모(부)'
+  | '형제'
+  | '자매'
+  | '아버지'
+  | '어머니'
+  | '편모'
+  | '아내'
+  | '남편'
+  | '아들'
+  | '딸'
+  | '연인'
+  | '시어머니'
+  | '장모'
+  | '조모'
+  | '조부'
+  | '조모(부)'
   | '자기자신';
 
 /**
@@ -161,7 +170,7 @@ export function getSixRelation(tenGod: TenGod, isMale: boolean): SixRelation {
 export function analyzeSixRelations(
   stemTenGods: { year: TenGod; month: TenGod; hour: TenGod | null },
   branchTenGods: { year: TenGod; month: TenGod; day: TenGod; hour: TenGod | null },
-  isMale: boolean
+  isMale: boolean,
 ): {
   stem: { year: SixRelation; month: SixRelation; day: '자기자신'; hour: SixRelation | null };
   branch: { year: SixRelation; month: SixRelation; day: SixRelation; hour: SixRelation | null };

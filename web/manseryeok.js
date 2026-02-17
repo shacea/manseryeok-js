@@ -191,7 +191,7 @@ var manseryeok = (function (exports) {
                 hangul: '갑',
                 hanja: '甲',
                 romanization: 'Gap',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 0,
@@ -199,15 +199,15 @@ var manseryeok = (function (exports) {
                 hanja: '子',
                 romanization: 'Ja',
                 animal: '쥐',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '갑자',
                 hanja: '甲子',
-                romanization: 'Gapja'
+                romanization: 'Gapja',
             },
             element: '목',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 1,
@@ -216,7 +216,7 @@ var manseryeok = (function (exports) {
                 hangul: '을',
                 hanja: '乙',
                 romanization: 'Eul',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 1,
@@ -224,15 +224,15 @@ var manseryeok = (function (exports) {
                 hanja: '丑',
                 romanization: 'Chuk',
                 animal: '소',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '을축',
                 hanja: '乙丑',
-                romanization: 'Eulchuk'
+                romanization: 'Eulchuk',
             },
             element: '목',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 2,
@@ -241,7 +241,7 @@ var manseryeok = (function (exports) {
                 hangul: '병',
                 hanja: '丙',
                 romanization: 'Byeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 2,
@@ -249,15 +249,15 @@ var manseryeok = (function (exports) {
                 hanja: '寅',
                 romanization: 'In',
                 animal: '호랑이',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '병인',
                 hanja: '丙寅',
-                romanization: 'Byeongin'
+                romanization: 'Byeongin',
             },
             element: '화',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 3,
@@ -266,7 +266,7 @@ var manseryeok = (function (exports) {
                 hangul: '정',
                 hanja: '丁',
                 romanization: 'Jeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 3,
@@ -274,15 +274,15 @@ var manseryeok = (function (exports) {
                 hanja: '卯',
                 romanization: 'Myo',
                 animal: '토끼',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '정묘',
                 hanja: '丁卯',
-                romanization: 'Jeongmyo'
+                romanization: 'Jeongmyo',
             },
             element: '화',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 4,
@@ -291,7 +291,7 @@ var manseryeok = (function (exports) {
                 hangul: '무',
                 hanja: '戊',
                 romanization: 'Mu',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 4,
@@ -299,15 +299,15 @@ var manseryeok = (function (exports) {
                 hanja: '辰',
                 romanization: 'Jin',
                 animal: '용',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '무진',
                 hanja: '戊辰',
-                romanization: 'Mujin'
+                romanization: 'Mujin',
             },
             element: '토',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 5,
@@ -316,7 +316,7 @@ var manseryeok = (function (exports) {
                 hangul: '기',
                 hanja: '己',
                 romanization: 'Gi',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 5,
@@ -324,15 +324,15 @@ var manseryeok = (function (exports) {
                 hanja: '巳',
                 romanization: 'Sa',
                 animal: '뱀',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '기사',
                 hanja: '己巳',
-                romanization: 'Gisa'
+                romanization: 'Gisa',
             },
             element: '토',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 6,
@@ -341,7 +341,7 @@ var manseryeok = (function (exports) {
                 hangul: '경',
                 hanja: '庚',
                 romanization: 'Gyeong',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 6,
@@ -349,15 +349,15 @@ var manseryeok = (function (exports) {
                 hanja: '午',
                 romanization: 'O',
                 animal: '말',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '경오',
                 hanja: '庚午',
-                romanization: 'Gyeongo'
+                romanization: 'Gyeongo',
             },
             element: '금',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 7,
@@ -366,7 +366,7 @@ var manseryeok = (function (exports) {
                 hangul: '신',
                 hanja: '辛',
                 romanization: 'Sin',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 7,
@@ -374,15 +374,15 @@ var manseryeok = (function (exports) {
                 hanja: '未',
                 romanization: 'Mi',
                 animal: '양',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '신미',
                 hanja: '辛未',
-                romanization: 'Sinmi'
+                romanization: 'Sinmi',
             },
             element: '금',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 8,
@@ -391,7 +391,7 @@ var manseryeok = (function (exports) {
                 hangul: '임',
                 hanja: '壬',
                 romanization: 'Im',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 8,
@@ -399,15 +399,15 @@ var manseryeok = (function (exports) {
                 hanja: '申',
                 romanization: 'Sin',
                 animal: '원숭이',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '임신',
                 hanja: '壬申',
-                romanization: 'Imsin'
+                romanization: 'Imsin',
             },
             element: '수',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 9,
@@ -416,7 +416,7 @@ var manseryeok = (function (exports) {
                 hangul: '계',
                 hanja: '癸',
                 romanization: 'Gye',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 9,
@@ -424,15 +424,15 @@ var manseryeok = (function (exports) {
                 hanja: '酉',
                 romanization: 'Yu',
                 animal: '닭',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '계유',
                 hanja: '癸酉',
-                romanization: 'Gyeyu'
+                romanization: 'Gyeyu',
             },
             element: '수',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 10,
@@ -441,7 +441,7 @@ var manseryeok = (function (exports) {
                 hangul: '갑',
                 hanja: '甲',
                 romanization: 'Gap',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 10,
@@ -449,15 +449,15 @@ var manseryeok = (function (exports) {
                 hanja: '戌',
                 romanization: 'Sul',
                 animal: '개',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '갑술',
                 hanja: '甲戌',
-                romanization: 'Gapsul'
+                romanization: 'Gapsul',
             },
             element: '목',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 11,
@@ -466,7 +466,7 @@ var manseryeok = (function (exports) {
                 hangul: '을',
                 hanja: '乙',
                 romanization: 'Eul',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 11,
@@ -474,15 +474,15 @@ var manseryeok = (function (exports) {
                 hanja: '亥',
                 romanization: 'Hae',
                 animal: '돼지',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '을해',
                 hanja: '乙亥',
-                romanization: 'Eulhae'
+                romanization: 'Eulhae',
             },
             element: '목',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 12,
@@ -491,7 +491,7 @@ var manseryeok = (function (exports) {
                 hangul: '병',
                 hanja: '丙',
                 romanization: 'Byeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 0,
@@ -499,15 +499,15 @@ var manseryeok = (function (exports) {
                 hanja: '子',
                 romanization: 'Ja',
                 animal: '쥐',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '병자',
                 hanja: '丙子',
-                romanization: 'Byeongja'
+                romanization: 'Byeongja',
             },
             element: '화',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 13,
@@ -516,7 +516,7 @@ var manseryeok = (function (exports) {
                 hangul: '정',
                 hanja: '丁',
                 romanization: 'Jeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 1,
@@ -524,15 +524,15 @@ var manseryeok = (function (exports) {
                 hanja: '丑',
                 romanization: 'Chuk',
                 animal: '소',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '정축',
                 hanja: '丁丑',
-                romanization: 'Jeongchuk'
+                romanization: 'Jeongchuk',
             },
             element: '화',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 14,
@@ -541,7 +541,7 @@ var manseryeok = (function (exports) {
                 hangul: '무',
                 hanja: '戊',
                 romanization: 'Mu',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 2,
@@ -549,15 +549,15 @@ var manseryeok = (function (exports) {
                 hanja: '寅',
                 romanization: 'In',
                 animal: '호랑이',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '무인',
                 hanja: '戊寅',
-                romanization: 'Muin'
+                romanization: 'Muin',
             },
             element: '토',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 15,
@@ -566,7 +566,7 @@ var manseryeok = (function (exports) {
                 hangul: '기',
                 hanja: '己',
                 romanization: 'Gi',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 3,
@@ -574,15 +574,15 @@ var manseryeok = (function (exports) {
                 hanja: '卯',
                 romanization: 'Myo',
                 animal: '토끼',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '기묘',
                 hanja: '己卯',
-                romanization: 'Gimyo'
+                romanization: 'Gimyo',
             },
             element: '토',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 16,
@@ -591,7 +591,7 @@ var manseryeok = (function (exports) {
                 hangul: '경',
                 hanja: '庚',
                 romanization: 'Gyeong',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 4,
@@ -599,15 +599,15 @@ var manseryeok = (function (exports) {
                 hanja: '辰',
                 romanization: 'Jin',
                 animal: '용',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '경진',
                 hanja: '庚辰',
-                romanization: 'Gyeongjin'
+                romanization: 'Gyeongjin',
             },
             element: '금',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 17,
@@ -616,7 +616,7 @@ var manseryeok = (function (exports) {
                 hangul: '신',
                 hanja: '辛',
                 romanization: 'Sin',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 5,
@@ -624,15 +624,15 @@ var manseryeok = (function (exports) {
                 hanja: '巳',
                 romanization: 'Sa',
                 animal: '뱀',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '신사',
                 hanja: '辛巳',
-                romanization: 'Sinsa'
+                romanization: 'Sinsa',
             },
             element: '금',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 18,
@@ -641,7 +641,7 @@ var manseryeok = (function (exports) {
                 hangul: '임',
                 hanja: '壬',
                 romanization: 'Im',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 6,
@@ -649,15 +649,15 @@ var manseryeok = (function (exports) {
                 hanja: '午',
                 romanization: 'O',
                 animal: '말',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '임오',
                 hanja: '壬午',
-                romanization: 'Imo'
+                romanization: 'Imo',
             },
             element: '수',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 19,
@@ -666,7 +666,7 @@ var manseryeok = (function (exports) {
                 hangul: '계',
                 hanja: '癸',
                 romanization: 'Gye',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 7,
@@ -674,15 +674,15 @@ var manseryeok = (function (exports) {
                 hanja: '未',
                 romanization: 'Mi',
                 animal: '양',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '계미',
                 hanja: '癸未',
-                romanization: 'Gyemi'
+                romanization: 'Gyemi',
             },
             element: '수',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 20,
@@ -691,7 +691,7 @@ var manseryeok = (function (exports) {
                 hangul: '갑',
                 hanja: '甲',
                 romanization: 'Gap',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 8,
@@ -699,15 +699,15 @@ var manseryeok = (function (exports) {
                 hanja: '申',
                 romanization: 'Sin',
                 animal: '원숭이',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '갑신',
                 hanja: '甲申',
-                romanization: 'Gapsin'
+                romanization: 'Gapsin',
             },
             element: '목',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 21,
@@ -716,7 +716,7 @@ var manseryeok = (function (exports) {
                 hangul: '을',
                 hanja: '乙',
                 romanization: 'Eul',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 9,
@@ -724,15 +724,15 @@ var manseryeok = (function (exports) {
                 hanja: '酉',
                 romanization: 'Yu',
                 animal: '닭',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '을유',
                 hanja: '乙酉',
-                romanization: 'Eulyu'
+                romanization: 'Eulyu',
             },
             element: '목',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 22,
@@ -741,7 +741,7 @@ var manseryeok = (function (exports) {
                 hangul: '병',
                 hanja: '丙',
                 romanization: 'Byeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 10,
@@ -749,15 +749,15 @@ var manseryeok = (function (exports) {
                 hanja: '戌',
                 romanization: 'Sul',
                 animal: '개',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '병술',
                 hanja: '丙戌',
-                romanization: 'Byeongsul'
+                romanization: 'Byeongsul',
             },
             element: '화',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 23,
@@ -766,7 +766,7 @@ var manseryeok = (function (exports) {
                 hangul: '정',
                 hanja: '丁',
                 romanization: 'Jeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 11,
@@ -774,15 +774,15 @@ var manseryeok = (function (exports) {
                 hanja: '亥',
                 romanization: 'Hae',
                 animal: '돼지',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '정해',
                 hanja: '丁亥',
-                romanization: 'Jeonghae'
+                romanization: 'Jeonghae',
             },
             element: '화',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 24,
@@ -791,7 +791,7 @@ var manseryeok = (function (exports) {
                 hangul: '무',
                 hanja: '戊',
                 romanization: 'Mu',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 0,
@@ -799,15 +799,15 @@ var manseryeok = (function (exports) {
                 hanja: '子',
                 romanization: 'Ja',
                 animal: '쥐',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '무자',
                 hanja: '戊子',
-                romanization: 'Muja'
+                romanization: 'Muja',
             },
             element: '토',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 25,
@@ -816,7 +816,7 @@ var manseryeok = (function (exports) {
                 hangul: '기',
                 hanja: '己',
                 romanization: 'Gi',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 1,
@@ -824,15 +824,15 @@ var manseryeok = (function (exports) {
                 hanja: '丑',
                 romanization: 'Chuk',
                 animal: '소',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '기축',
                 hanja: '己丑',
-                romanization: 'Gichuk'
+                romanization: 'Gichuk',
             },
             element: '토',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 26,
@@ -841,7 +841,7 @@ var manseryeok = (function (exports) {
                 hangul: '경',
                 hanja: '庚',
                 romanization: 'Gyeong',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 2,
@@ -849,15 +849,15 @@ var manseryeok = (function (exports) {
                 hanja: '寅',
                 romanization: 'In',
                 animal: '호랑이',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '경인',
                 hanja: '庚寅',
-                romanization: 'Gyeongin'
+                romanization: 'Gyeongin',
             },
             element: '금',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 27,
@@ -866,7 +866,7 @@ var manseryeok = (function (exports) {
                 hangul: '신',
                 hanja: '辛',
                 romanization: 'Sin',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 3,
@@ -874,15 +874,15 @@ var manseryeok = (function (exports) {
                 hanja: '卯',
                 romanization: 'Myo',
                 animal: '토끼',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '신묘',
                 hanja: '辛卯',
-                romanization: 'Sinmyo'
+                romanization: 'Sinmyo',
             },
             element: '금',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 28,
@@ -891,7 +891,7 @@ var manseryeok = (function (exports) {
                 hangul: '임',
                 hanja: '壬',
                 romanization: 'Im',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 4,
@@ -899,15 +899,15 @@ var manseryeok = (function (exports) {
                 hanja: '辰',
                 romanization: 'Jin',
                 animal: '용',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '임진',
                 hanja: '壬辰',
-                romanization: 'Imjin'
+                romanization: 'Imjin',
             },
             element: '수',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 29,
@@ -916,7 +916,7 @@ var manseryeok = (function (exports) {
                 hangul: '계',
                 hanja: '癸',
                 romanization: 'Gye',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 5,
@@ -924,15 +924,15 @@ var manseryeok = (function (exports) {
                 hanja: '巳',
                 romanization: 'Sa',
                 animal: '뱀',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '계사',
                 hanja: '癸巳',
-                romanization: 'Gyesa'
+                romanization: 'Gyesa',
             },
             element: '수',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 30,
@@ -941,7 +941,7 @@ var manseryeok = (function (exports) {
                 hangul: '갑',
                 hanja: '甲',
                 romanization: 'Gap',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 6,
@@ -949,15 +949,15 @@ var manseryeok = (function (exports) {
                 hanja: '午',
                 romanization: 'O',
                 animal: '말',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '갑오',
                 hanja: '甲午',
-                romanization: 'Gapo'
+                romanization: 'Gapo',
             },
             element: '목',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 31,
@@ -966,7 +966,7 @@ var manseryeok = (function (exports) {
                 hangul: '을',
                 hanja: '乙',
                 romanization: 'Eul',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 7,
@@ -974,15 +974,15 @@ var manseryeok = (function (exports) {
                 hanja: '未',
                 romanization: 'Mi',
                 animal: '양',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '을미',
                 hanja: '乙未',
-                romanization: 'Eulmi'
+                romanization: 'Eulmi',
             },
             element: '목',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 32,
@@ -991,7 +991,7 @@ var manseryeok = (function (exports) {
                 hangul: '병',
                 hanja: '丙',
                 romanization: 'Byeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 8,
@@ -999,15 +999,15 @@ var manseryeok = (function (exports) {
                 hanja: '申',
                 romanization: 'Sin',
                 animal: '원숭이',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '병신',
                 hanja: '丙申',
-                romanization: 'Byeongsin'
+                romanization: 'Byeongsin',
             },
             element: '화',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 33,
@@ -1016,7 +1016,7 @@ var manseryeok = (function (exports) {
                 hangul: '정',
                 hanja: '丁',
                 romanization: 'Jeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 9,
@@ -1024,15 +1024,15 @@ var manseryeok = (function (exports) {
                 hanja: '酉',
                 romanization: 'Yu',
                 animal: '닭',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '정유',
                 hanja: '丁酉',
-                romanization: 'Jeongyu'
+                romanization: 'Jeongyu',
             },
             element: '화',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 34,
@@ -1041,7 +1041,7 @@ var manseryeok = (function (exports) {
                 hangul: '무',
                 hanja: '戊',
                 romanization: 'Mu',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 10,
@@ -1049,15 +1049,15 @@ var manseryeok = (function (exports) {
                 hanja: '戌',
                 romanization: 'Sul',
                 animal: '개',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '무술',
                 hanja: '戊戌',
-                romanization: 'Musul'
+                romanization: 'Musul',
             },
             element: '토',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 35,
@@ -1066,7 +1066,7 @@ var manseryeok = (function (exports) {
                 hangul: '기',
                 hanja: '己',
                 romanization: 'Gi',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 11,
@@ -1074,15 +1074,15 @@ var manseryeok = (function (exports) {
                 hanja: '亥',
                 romanization: 'Hae',
                 animal: '돼지',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '기해',
                 hanja: '己亥',
-                romanization: 'Gihae'
+                romanization: 'Gihae',
             },
             element: '토',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 36,
@@ -1091,7 +1091,7 @@ var manseryeok = (function (exports) {
                 hangul: '경',
                 hanja: '庚',
                 romanization: 'Gyeong',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 0,
@@ -1099,15 +1099,15 @@ var manseryeok = (function (exports) {
                 hanja: '子',
                 romanization: 'Ja',
                 animal: '쥐',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '경자',
                 hanja: '庚子',
-                romanization: 'Gyeongja'
+                romanization: 'Gyeongja',
             },
             element: '금',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 37,
@@ -1116,7 +1116,7 @@ var manseryeok = (function (exports) {
                 hangul: '신',
                 hanja: '辛',
                 romanization: 'Sin',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 1,
@@ -1124,15 +1124,15 @@ var manseryeok = (function (exports) {
                 hanja: '丑',
                 romanization: 'Chuk',
                 animal: '소',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '신축',
                 hanja: '辛丑',
-                romanization: 'Sinchuk'
+                romanization: 'Sinchuk',
             },
             element: '금',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 38,
@@ -1141,7 +1141,7 @@ var manseryeok = (function (exports) {
                 hangul: '임',
                 hanja: '壬',
                 romanization: 'Im',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 2,
@@ -1149,15 +1149,15 @@ var manseryeok = (function (exports) {
                 hanja: '寅',
                 romanization: 'In',
                 animal: '호랑이',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '임인',
                 hanja: '壬寅',
-                romanization: 'Imin'
+                romanization: 'Imin',
             },
             element: '수',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 39,
@@ -1166,7 +1166,7 @@ var manseryeok = (function (exports) {
                 hangul: '계',
                 hanja: '癸',
                 romanization: 'Gye',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 3,
@@ -1174,15 +1174,15 @@ var manseryeok = (function (exports) {
                 hanja: '卯',
                 romanization: 'Myo',
                 animal: '토끼',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '계묘',
                 hanja: '癸卯',
-                romanization: 'Gyemyo'
+                romanization: 'Gyemyo',
             },
             element: '수',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 40,
@@ -1191,7 +1191,7 @@ var manseryeok = (function (exports) {
                 hangul: '갑',
                 hanja: '甲',
                 romanization: 'Gap',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 4,
@@ -1199,15 +1199,15 @@ var manseryeok = (function (exports) {
                 hanja: '辰',
                 romanization: 'Jin',
                 animal: '용',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '갑진',
                 hanja: '甲辰',
-                romanization: 'Gapjin'
+                romanization: 'Gapjin',
             },
             element: '목',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 41,
@@ -1216,7 +1216,7 @@ var manseryeok = (function (exports) {
                 hangul: '을',
                 hanja: '乙',
                 romanization: 'Eul',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 5,
@@ -1224,15 +1224,15 @@ var manseryeok = (function (exports) {
                 hanja: '巳',
                 romanization: 'Sa',
                 animal: '뱀',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '을사',
                 hanja: '乙巳',
-                romanization: 'Eulsa'
+                romanization: 'Eulsa',
             },
             element: '목',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 42,
@@ -1241,7 +1241,7 @@ var manseryeok = (function (exports) {
                 hangul: '병',
                 hanja: '丙',
                 romanization: 'Byeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 6,
@@ -1249,15 +1249,15 @@ var manseryeok = (function (exports) {
                 hanja: '午',
                 romanization: 'O',
                 animal: '말',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '병오',
                 hanja: '丙午',
-                romanization: 'Byeongo'
+                romanization: 'Byeongo',
             },
             element: '화',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 43,
@@ -1266,7 +1266,7 @@ var manseryeok = (function (exports) {
                 hangul: '정',
                 hanja: '丁',
                 romanization: 'Jeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 7,
@@ -1274,15 +1274,15 @@ var manseryeok = (function (exports) {
                 hanja: '未',
                 romanization: 'Mi',
                 animal: '양',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '정미',
                 hanja: '丁未',
-                romanization: 'Jeongmi'
+                romanization: 'Jeongmi',
             },
             element: '화',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 44,
@@ -1291,7 +1291,7 @@ var manseryeok = (function (exports) {
                 hangul: '무',
                 hanja: '戊',
                 romanization: 'Mu',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 8,
@@ -1299,15 +1299,15 @@ var manseryeok = (function (exports) {
                 hanja: '申',
                 romanization: 'Sin',
                 animal: '원숭이',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '무신',
                 hanja: '戊申',
-                romanization: 'Musin'
+                romanization: 'Musin',
             },
             element: '토',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 45,
@@ -1316,7 +1316,7 @@ var manseryeok = (function (exports) {
                 hangul: '기',
                 hanja: '己',
                 romanization: 'Gi',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 9,
@@ -1324,15 +1324,15 @@ var manseryeok = (function (exports) {
                 hanja: '酉',
                 romanization: 'Yu',
                 animal: '닭',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '기유',
                 hanja: '己酉',
-                romanization: 'Giyu'
+                romanization: 'Giyu',
             },
             element: '토',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 46,
@@ -1341,7 +1341,7 @@ var manseryeok = (function (exports) {
                 hangul: '경',
                 hanja: '庚',
                 romanization: 'Gyeong',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 10,
@@ -1349,15 +1349,15 @@ var manseryeok = (function (exports) {
                 hanja: '戌',
                 romanization: 'Sul',
                 animal: '개',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '경술',
                 hanja: '庚戌',
-                romanization: 'Gyeongsul'
+                romanization: 'Gyeongsul',
             },
             element: '금',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 47,
@@ -1366,7 +1366,7 @@ var manseryeok = (function (exports) {
                 hangul: '신',
                 hanja: '辛',
                 romanization: 'Sin',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 11,
@@ -1374,15 +1374,15 @@ var manseryeok = (function (exports) {
                 hanja: '亥',
                 romanization: 'Hae',
                 animal: '돼지',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '신해',
                 hanja: '辛亥',
-                romanization: 'Sinhae'
+                romanization: 'Sinhae',
             },
             element: '금',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 48,
@@ -1391,7 +1391,7 @@ var manseryeok = (function (exports) {
                 hangul: '임',
                 hanja: '壬',
                 romanization: 'Im',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 0,
@@ -1399,15 +1399,15 @@ var manseryeok = (function (exports) {
                 hanja: '子',
                 romanization: 'Ja',
                 animal: '쥐',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '임자',
                 hanja: '壬子',
-                romanization: 'Imja'
+                romanization: 'Imja',
             },
             element: '수',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 49,
@@ -1416,7 +1416,7 @@ var manseryeok = (function (exports) {
                 hangul: '계',
                 hanja: '癸',
                 romanization: 'Gye',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 1,
@@ -1424,15 +1424,15 @@ var manseryeok = (function (exports) {
                 hanja: '丑',
                 romanization: 'Chuk',
                 animal: '소',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '계축',
                 hanja: '癸丑',
-                romanization: 'Gyechuk'
+                romanization: 'Gyechuk',
             },
             element: '수',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 50,
@@ -1441,7 +1441,7 @@ var manseryeok = (function (exports) {
                 hangul: '갑',
                 hanja: '甲',
                 romanization: 'Gap',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 2,
@@ -1449,15 +1449,15 @@ var manseryeok = (function (exports) {
                 hanja: '寅',
                 romanization: 'In',
                 animal: '호랑이',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '갑인',
                 hanja: '甲寅',
-                romanization: 'Gapin'
+                romanization: 'Gapin',
             },
             element: '목',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 51,
@@ -1466,7 +1466,7 @@ var manseryeok = (function (exports) {
                 hangul: '을',
                 hanja: '乙',
                 romanization: 'Eul',
-                element: '목'
+                element: '목',
             },
             dizhi: {
                 id: 3,
@@ -1474,15 +1474,15 @@ var manseryeok = (function (exports) {
                 hanja: '卯',
                 romanization: 'Myo',
                 animal: '토끼',
-                element: '목'
+                element: '목',
             },
             combined: {
                 hangul: '을묘',
                 hanja: '乙卯',
-                romanization: 'Eulmyo'
+                romanization: 'Eulmyo',
             },
             element: '목',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 52,
@@ -1491,7 +1491,7 @@ var manseryeok = (function (exports) {
                 hangul: '병',
                 hanja: '丙',
                 romanization: 'Byeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 4,
@@ -1499,15 +1499,15 @@ var manseryeok = (function (exports) {
                 hanja: '辰',
                 romanization: 'Jin',
                 animal: '용',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '병진',
                 hanja: '丙辰',
-                romanization: 'Byeongjin'
+                romanization: 'Byeongjin',
             },
             element: '화',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 53,
@@ -1516,7 +1516,7 @@ var manseryeok = (function (exports) {
                 hangul: '정',
                 hanja: '丁',
                 romanization: 'Jeong',
-                element: '화'
+                element: '화',
             },
             dizhi: {
                 id: 5,
@@ -1524,15 +1524,15 @@ var manseryeok = (function (exports) {
                 hanja: '巳',
                 romanization: 'Sa',
                 animal: '뱀',
-                element: '화'
+                element: '화',
             },
             combined: {
                 hangul: '정사',
                 hanja: '丁巳',
-                romanization: 'Jeongsa'
+                romanization: 'Jeongsa',
             },
             element: '화',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 54,
@@ -1541,7 +1541,7 @@ var manseryeok = (function (exports) {
                 hangul: '무',
                 hanja: '戊',
                 romanization: 'Mu',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 6,
@@ -1549,15 +1549,15 @@ var manseryeok = (function (exports) {
                 hanja: '午',
                 romanization: 'O',
                 animal: '말',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '무오',
                 hanja: '戊午',
-                romanization: 'Muo'
+                romanization: 'Muo',
             },
             element: '토',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 55,
@@ -1566,7 +1566,7 @@ var manseryeok = (function (exports) {
                 hangul: '기',
                 hanja: '己',
                 romanization: 'Gi',
-                element: '토'
+                element: '토',
             },
             dizhi: {
                 id: 7,
@@ -1574,15 +1574,15 @@ var manseryeok = (function (exports) {
                 hanja: '未',
                 romanization: 'Mi',
                 animal: '양',
-                element: '토'
+                element: '토',
             },
             combined: {
                 hangul: '기미',
                 hanja: '己未',
-                romanization: 'Gimi'
+                romanization: 'Gimi',
             },
             element: '토',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 56,
@@ -1591,7 +1591,7 @@ var manseryeok = (function (exports) {
                 hangul: '경',
                 hanja: '庚',
                 romanization: 'Gyeong',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 8,
@@ -1599,15 +1599,15 @@ var manseryeok = (function (exports) {
                 hanja: '申',
                 romanization: 'Sin',
                 animal: '원숭이',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '경신',
                 hanja: '庚申',
-                romanization: 'Gyeongsin'
+                romanization: 'Gyeongsin',
             },
             element: '금',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 57,
@@ -1616,7 +1616,7 @@ var manseryeok = (function (exports) {
                 hangul: '신',
                 hanja: '辛',
                 romanization: 'Sin',
-                element: '금'
+                element: '금',
             },
             dizhi: {
                 id: 9,
@@ -1624,15 +1624,15 @@ var manseryeok = (function (exports) {
                 hanja: '酉',
                 romanization: 'Yu',
                 animal: '닭',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '신유',
                 hanja: '辛酉',
-                romanization: 'Sinyu'
+                romanization: 'Sinyu',
             },
             element: '금',
-            yinYang: '음'
+            yinYang: '음',
         },
         {
             id: 58,
@@ -1641,7 +1641,7 @@ var manseryeok = (function (exports) {
                 hangul: '임',
                 hanja: '壬',
                 romanization: 'Im',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 10,
@@ -1649,15 +1649,15 @@ var manseryeok = (function (exports) {
                 hanja: '戌',
                 romanization: 'Sul',
                 animal: '개',
-                element: '금'
+                element: '금',
             },
             combined: {
                 hangul: '임술',
                 hanja: '壬戌',
-                romanization: 'Imsul'
+                romanization: 'Imsul',
             },
             element: '수',
-            yinYang: '양'
+            yinYang: '양',
         },
         {
             id: 59,
@@ -1666,7 +1666,7 @@ var manseryeok = (function (exports) {
                 hangul: '계',
                 hanja: '癸',
                 romanization: 'Gye',
-                element: '수'
+                element: '수',
             },
             dizhi: {
                 id: 11,
@@ -1674,16 +1674,16 @@ var manseryeok = (function (exports) {
                 hanja: '亥',
                 romanization: 'Hae',
                 animal: '돼지',
-                element: '수'
+                element: '수',
             },
             combined: {
                 hangul: '계해',
                 hanja: '癸亥',
-                romanization: 'Gyehae'
+                romanization: 'Gyehae',
             },
             element: '수',
-            yinYang: '음'
-        }
+            yinYang: '음',
+        },
     ];
     /**
      * ID로 60갑자 조회
@@ -1702,7 +1702,7 @@ var manseryeok = (function (exports) {
      * @returns 60갑자 정보 또는 undefined
      */
     function getPillarByHangul(hangul) {
-        return SIXTY_PILLARS.find(p => p.combined.hangul === hangul);
+        return SIXTY_PILLARS.find((p) => p.combined.hangul === hangul);
     }
 
     /**
@@ -1736,9 +1736,7 @@ var manseryeok = (function (exports) {
      *
      * 만세력 인덱스를 사용하여 양력과 음력 간 변환을 수행합니다.
      */
-    const MONTH_PILLAR_CORRECTIONS = [
-        { year: 1996, month: 1, fromDay: 6, toDay: 19, correctMonthPillarId: 25 },
-    ];
+    const MONTH_PILLAR_CORRECTIONS = [{ year: 1996, month: 1, fromDay: 6, toDay: 19, correctMonthPillarId: 25 }];
     function getCorrectMonthPillarId(year, month, day, originalId) {
         for (const correction of MONTH_PILLAR_CORRECTIONS) {
             if (correction.year === year &&
@@ -1765,13 +1763,12 @@ var manseryeok = (function (exports) {
             throw new OutOfRangeError(solarYear);
         }
         // 2. 월별 인덱스 조회
-        `${solarYear}-${String(solarMonth).padStart(2, '0')}`;
         const monthIndex = getMonthlyIndex(solarYear, solarMonth);
         if (!monthIndex) {
             throw new InvalidDateError(`No data found for ${solarYear}-${solarMonth}`);
         }
         // 3. 월 내에서 해당 날짜 찾기
-        const entry = monthIndex.entries.find(e => e.solar.year === solarYear && e.solar.month === solarMonth && e.solar.day === solarDay);
+        const entry = monthIndex.entries.find((e) => e.solar.year === solarYear && e.solar.month === solarMonth && e.solar.day === solarDay);
         if (!entry) {
             throw new InvalidDateError(`Invalid solar date: ${solarYear}-${solarMonth}-${solarDay}`);
         }
@@ -1812,7 +1809,7 @@ var manseryeok = (function (exports) {
             const monthIndex = getMonthlyIndex(lunarYear, month);
             if (!monthIndex)
                 continue;
-            const entry = monthIndex.entries.find(e => e.lunar.year === lunarYear &&
+            const entry = monthIndex.entries.find((e) => e.lunar.year === lunarYear &&
                 e.lunar.month === lunarMonth &&
                 e.lunar.day === lunarDay &&
                 e.lunar.isLeap === isLeapMonth);
@@ -1869,7 +1866,7 @@ var manseryeok = (function (exports) {
      * @returns 사주팔자 정보
      */
     function calculateSaju(solarYear, solarMonth, solarDay, solarHour, solarMinute = 0, options = {}) {
-        const { longitude = 127, applyTimeCorrection = true, } = options;
+        const { longitude = 127, applyTimeCorrection = true } = options;
         // 갑자 계산 (년주, 월주, 일주)
         const gapja = getGapja(solarYear, solarMonth, solarDay);
         // 시주 계산
@@ -1885,8 +1882,7 @@ var manseryeok = (function (exports) {
                 const standardMeridian = 135; // 한국 표준시 자오선 (UTC+9)
                 const degreesDiff = standardMeridian - longitude;
                 const longitudeCorrection = Math.round(degreesDiff * 4); // 1도 = 4분
-                calcMinute = solarMinute - longitudeCorrection;
-                calcHour = solarHour;
+                calcMinute -= longitudeCorrection;
                 if (calcMinute < 0) {
                     calcMinute += 60;
                     calcHour -= 1;
@@ -2341,7 +2337,7 @@ var manseryeok = (function (exports) {
      * @returns 절기 기본 정보 또는 undefined
      */
     function getSolarTermInfoByName(name) {
-        return SOLAR_TERM_NAMES.find(t => t.name === name);
+        return SOLAR_TERM_NAMES.find((t) => t.name === name);
     }
     /**
      * 사주 월에 해당하는 절기 목록 조회
@@ -2352,7 +2348,7 @@ var manseryeok = (function (exports) {
         if (sajuMonth < 1 || sajuMonth > 12) {
             throw new RangeError(`Saju month must be 1~12, got ${sajuMonth}`);
         }
-        return SOLAR_TERM_NAMES.filter(term => term.sajuMonth === sajuMonth);
+        return SOLAR_TERM_NAMES.filter((term) => term.sajuMonth === sajuMonth);
     }
     /**
      * 특정 연도의 모든 절기 조회 (시각 포함)
@@ -2365,9 +2361,9 @@ var manseryeok = (function (exports) {
         }
         const yearData = SOLAR_TERMS_DATA[year];
         const result = [];
-        yearData.forEach((termData, i) => {
+        yearData.forEach((termData) => {
             // 절기 이름으로 기본 정보 찾기
-            const baseInfo = SOLAR_TERM_NAMES.find(t => t.name === termData.name);
+            const baseInfo = SOLAR_TERM_NAMES.find((t) => t.name === termData.name);
             if (!baseInfo)
                 return;
             result.push({
@@ -2400,7 +2396,7 @@ var manseryeok = (function (exports) {
         const yearData = SOLAR_TERMS_DATA[year];
         for (const termData of yearData) {
             if (termData.month === month && Math.abs(termData.day - day) <= 1) {
-                const baseInfo = SOLAR_TERM_NAMES.find(t => t.name === termData.name);
+                const baseInfo = SOLAR_TERM_NAMES.find((t) => t.name === termData.name);
                 if (!baseInfo)
                     continue;
                 return {
@@ -2435,7 +2431,7 @@ var manseryeok = (function (exports) {
         yearData.forEach((termData) => {
             if (termData.month !== month)
                 return;
-            const baseInfo = SOLAR_TERM_NAMES.find(t => t.name === termData.name);
+            const baseInfo = SOLAR_TERM_NAMES.find((t) => t.name === termData.name);
             if (!baseInfo)
                 return;
             result.push({
@@ -2529,16 +2525,46 @@ var manseryeok = (function (exports) {
     const STEMS_HANJA = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
     /** 오행 한자 매핑 */
     const ELEMENT_HANJA = {
-        목: '木', 화: '火', 토: '土', 금: '金', 수: '水',
+        목: '木',
+        화: '火',
+        토: '土',
+        금: '金',
+        수: '水',
     };
     /** 오행 영문 매핑 */
     const ELEMENT_ENGLISH = {
-        목: 'wood', 화: 'fire', 토: 'earth', 금: 'metal', 수: 'water',
+        목: 'wood',
+        화: 'fire',
+        토: 'earth',
+        금: 'metal',
+        수: 'water',
     };
     /** 천간 → 오행 매핑 (갑을=목, 병정=화, 무기=토, 경신=금, 임계=수) */
-    const STEM_ELEMENT = ['목', '목', '화', '화', '토', '토', '금', '금', '수', '수'];
+    const STEM_ELEMENT = [
+        '목',
+        '목',
+        '화',
+        '화',
+        '토',
+        '토',
+        '금',
+        '금',
+        '수',
+        '수',
+    ];
     /** 천간 → 음양 매핑 (짝수 index=양, 홀수=음) */
-    const STEM_YINYANG = ['양', '음', '양', '음', '양', '음', '양', '음', '양', '음'];
+    const STEM_YINYANG = [
+        '양',
+        '음',
+        '양',
+        '음',
+        '양',
+        '음',
+        '양',
+        '음',
+        '양',
+        '음',
+    ];
     /** 천간 인덱스 조회 */
     function stemIndex(stem) {
         const idx = STEMS.indexOf(stem);
@@ -2554,11 +2580,50 @@ var manseryeok = (function (exports) {
     /** 지지 한자 배열 */
     const BRANCHES_HANJA = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
     /** 12지지 동물 (띠) */
-    const BRANCH_ANIMALS = ['쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지'];
+    const BRANCH_ANIMALS = [
+        '쥐',
+        '소',
+        '호랑이',
+        '토끼',
+        '용',
+        '뱀',
+        '말',
+        '양',
+        '원숭이',
+        '닭',
+        '개',
+        '돼지',
+    ];
     /** 지지 → 오행 매핑 */
-    const BRANCH_ELEMENT = ['수', '토', '목', '목', '토', '화', '화', '토', '금', '금', '토', '수'];
+    const BRANCH_ELEMENT = [
+        '수',
+        '토',
+        '목',
+        '목',
+        '토',
+        '화',
+        '화',
+        '토',
+        '금',
+        '금',
+        '토',
+        '수',
+    ];
     /** 지지 → 음양 매핑 */
-    const BRANCH_YINYANG = ['양', '음', '양', '음', '양', '음', '양', '음', '양', '음', '양', '음'];
+    const BRANCH_YINYANG = [
+        '양',
+        '음',
+        '양',
+        '음',
+        '양',
+        '음',
+        '양',
+        '음',
+        '양',
+        '음',
+        '양',
+        '음',
+    ];
     /** 지지 인덱스 조회 */
     function branchIndex(branch) {
         const idx = BRANCHES.indexOf(branch);
@@ -2571,11 +2636,19 @@ var manseryeok = (function (exports) {
     // ============================================================
     /** 오행 상생 (生): 목→화→토→금→수→목 */
     const ELEMENT_GENERATES = {
-        목: '화', 화: '토', 토: '금', 금: '수', 수: '목',
+        목: '화',
+        화: '토',
+        토: '금',
+        금: '수',
+        수: '목',
     };
     /** 오행 상극 (剋): 목→토→수→화→금→목 */
     const ELEMENT_CONTROLS = {
-        목: '토', 화: '금', 토: '수', 금: '목', 수: '화',
+        목: '토',
+        화: '금',
+        토: '수',
+        금: '목',
+        수: '화',
     };
     /** A가 B를 생하는지 */
     function generates(a, b) {
@@ -2587,19 +2660,50 @@ var manseryeok = (function (exports) {
     }
     /** 십성 한자 */
     const TEN_GOD_HANJA = {
-        비견: '比肩', 겁재: '劫財',
-        식신: '食神', 상관: '傷官',
-        편재: '偏財', 정재: '正財',
-        편관: '偏官', 정관: '正官',
-        편인: '偏印', 정인: '正印',
+        비견: '比肩',
+        겁재: '劫財',
+        식신: '食神',
+        상관: '傷官',
+        편재: '偏財',
+        정재: '正財',
+        편관: '偏官',
+        정관: '正官',
+        편인: '偏印',
+        정인: '正印',
     };
     // ============================================================
     // 12운성 (十二運星, Twelve Growth Stages)
     // ============================================================
     /** 12운성 이름 배열 (순서: 장생부터) */
-    const TWELVE_STATES = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
+    const TWELVE_STATES = [
+        '장생',
+        '목욕',
+        '관대',
+        '건록',
+        '제왕',
+        '쇠',
+        '병',
+        '사',
+        '묘',
+        '절',
+        '태',
+        '양',
+    ];
     /** 12운성 한자 */
-    const TWELVE_STATES_HANJA = ['長生', '沐浴', '冠帶', '建祿', '帝旺', '衰', '病', '死', '墓', '絶', '胎', '養'];
+    const TWELVE_STATES_HANJA = [
+        '長生',
+        '沐浴',
+        '冠帶',
+        '建祿',
+        '帝旺',
+        '衰',
+        '病',
+        '死',
+        '墓',
+        '絶',
+        '胎',
+        '養',
+    ];
     // ============================================================
     // 유틸리티
     // ============================================================
@@ -2684,7 +2788,11 @@ var manseryeok = (function (exports) {
      */
     function calculateElementScores(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
         const scores = {
-            목: 0, 화: 0, 토: 0, 금: 0, 수: 0,
+            목: 0,
+            화: 0,
+            토: 0,
+            금: 0,
+            수: 0,
         };
         // 1. 천간 점수 (각 5점)
         const stems = [yearStem, monthStem, dayStem, hourStem].filter(Boolean);
@@ -2765,7 +2873,7 @@ var manseryeok = (function (exports) {
         // 일간을 생하는 오행 (인성 오행)
         // ELEMENT_GENERATES[A] = B → A가 B를 생함 → B를 생하는 것은 A
         // 즉 dayElement를 생하는 오행 = ELEMENT_GENERATES의 역방향
-        const generatesDay = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === dayElement);
+        const generatesDay = Object.keys(ELEMENT_GENERATES).find((el) => ELEMENT_GENERATES[el] === dayElement);
         // 자기 세력 = 비견·겁재(같은 오행) + 편인·정인(생하는 오행)
         const selfScore = elementScores[dayElement] + elementScores[generatesDay];
         // 전체 점수
@@ -2833,10 +2941,7 @@ var manseryeok = (function (exports) {
     // 한국 기준 평균 절기 날짜 (시각은 12:00 기본)
     // ============================================================
     /** 사주 월을 결정하는 12개 절기 이름 */
-    const JEOLGI_NAMES = [
-        '소한', '입춘', '경칩', '청명', '입하', '망종',
-        '소서', '입추', '백로', '한로', '입동', '대설',
-    ];
+    const JEOLGI_NAMES = ['소한', '입춘', '경칩', '청명', '입하', '망종', '소서', '입추', '백로', '한로', '입동', '대설'];
     /** 절기 평균 날짜 [월, 일] */
     const JEOLGI_APPROX = {
         소한: [1, 6],
@@ -2859,7 +2964,7 @@ var manseryeok = (function (exports) {
     function getSolarTermDate(year, termName) {
         const yearData = SOLAR_TERMS_DATA[year];
         if (yearData) {
-            const term = yearData.find(t => t.name === termName);
+            const term = yearData.find((t) => t.name === termName);
             if (term) {
                 return new Date(year, term.month - 1, term.day, term.hour, term.minute, 0, 0);
             }
@@ -2877,9 +2982,7 @@ var manseryeok = (function (exports) {
     function findNearestJeolgi(birthYear, birthMonth, birthDay, birthHour, birthMinute, forward) {
         const birthDate = new Date(birthYear, birthMonth - 1, birthDay, birthHour, birthMinute);
         // 검색 범위: 전후 2년
-        const searchYears = forward
-            ? [birthYear, birthYear + 1]
-            : [birthYear - 1, birthYear];
+        const searchYears = forward ? [birthYear, birthYear + 1] : [birthYear - 1, birthYear];
         const candidates = [];
         for (const year of searchYears) {
             for (const termName of JEOLGI_NAMES) {
@@ -2899,8 +3002,7 @@ var manseryeok = (function (exports) {
             return fallback;
         }
         // 가장 가까운 절기 선택
-        candidates.sort((a, b) => Math.abs(a.getTime() - birthDate.getTime()) -
-            Math.abs(b.getTime() - birthDate.getTime()));
+        candidates.sort((a, b) => Math.abs(a.getTime() - birthDate.getTime()) - Math.abs(b.getTime() - birthDate.getTime()));
         return candidates[0];
     }
     /**
@@ -2936,8 +3038,8 @@ var manseryeok = (function (exports) {
         const fortunes = [];
         for (let i = 0; i < count; i++) {
             const offset = (i + 1) * flow;
-            const sIdx = ((monthStemIdx + offset) % 10 + 10) % 10;
-            const bIdx = ((monthBranchIdx + offset) % 12 + 12) % 12;
+            const sIdx = (((monthStemIdx + offset) % 10) + 10) % 10;
+            const bIdx = (((monthBranchIdx + offset) % 12) + 12) % 12;
             fortunes.push({
                 index: i + 1,
                 pillar: makePillar(sIdx, bIdx),
@@ -2965,7 +3067,7 @@ var manseryeok = (function (exports) {
      * @returns 현재 대운 또는 null
      */
     function getCurrentFortune(fortunes, currentAge) {
-        return fortunes.find(f => currentAge >= f.startAge && currentAge <= f.endAge) ?? null;
+        return fortunes.find((f) => currentAge >= f.startAge && currentAge <= f.endAge) ?? null;
     }
 
     /**
@@ -3030,7 +3132,11 @@ var manseryeok = (function (exports) {
         const elements = ['목', '화', '토', '금', '수'];
         // 각 그룹별 오행 분류
         const byGroup = {
-            비겁: [], 식상: [], 재성: [], 관성: [], 인성: [],
+            비겁: [],
+            식상: [],
+            재성: [],
+            관성: [],
+            인성: [],
         };
         for (const el of elements) {
             byGroup[groupMap[el]].push(el);
@@ -3042,14 +3148,12 @@ var manseryeok = (function (exports) {
         let adverseElement;
         let followElement;
         let description;
-        const isStrongByLevel = strengthLevel === '극강' ||
-            strengthLevel === '태강' ||
-            strengthLevel === '중화신강';
+        const isStrongByLevel = strengthLevel === '극강' || strengthLevel === '태강' || strengthLevel === '중화신강';
         if (isStrongByLevel) {
             // ── 신강(身强): 억제가 필요 ──
-            const foodScores = byGroup['식상'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-            const wealthScores = byGroup['재성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-            const officialScores = byGroup['관성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+            const foodScores = byGroup['식상'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
+            const wealthScores = byGroup['재성'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
+            const officialScores = byGroup['관성'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
             if (strengthLevel === '중화신강') {
                 if (officialScores.length > 0) {
                     usefulGroup = '관성';
@@ -3079,18 +3183,18 @@ var manseryeok = (function (exports) {
                 }
             }
             // 희신: 용신을 생하는 오행 (용신의 인성)
-            favorableElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === usefulElement);
+            favorableElement = Object.keys(ELEMENT_GENERATES).find((el) => ELEMENT_GENERATES[el] === usefulElement);
             // 기신: 용신을 극하는 오행 (비겁 또는 인성)
             unfavorableElement = dayElement; // 비겁 (일간과 같은 오행)
             // 구신: 기신을 생하는 오행
-            adverseElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === unfavorableElement);
+            adverseElement = Object.keys(ELEMENT_GENERATES).find((el) => ELEMENT_GENERATES[el] === unfavorableElement);
             description = `신강(${strengthLevel}) → 억부용신: ${usefulGroup}(${usefulElement}) | 희신: ${favorableElement} | 기신: ${unfavorableElement}(비겁)`;
         }
         else {
             // ── 신약(身弱): 부조가 필요 ──
             // 우선순위: 인성 > 비겁
-            const printScores = byGroup['인성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-            const siblingScores = byGroup['비겁'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+            const printScores = byGroup['인성'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
+            const siblingScores = byGroup['비겁'].map((el) => ({ el, score: bodyStrength.elementScores[el] }));
             const preferSiblingFirst = strengthLevel === '태약' || strengthLevel === '중화신약';
             if (preferSiblingFirst && siblingScores.length > 0) {
                 usefulGroup = '비겁';
@@ -3105,19 +3209,20 @@ var manseryeok = (function (exports) {
                 usefulElement = siblingScores.sort((a, b) => a.score - b.score)[0].el;
             }
             // 희신: 용신을 생하는 오행
-            favorableElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === usefulElement);
+            favorableElement = Object.keys(ELEMENT_GENERATES).find((el) => ELEMENT_GENERATES[el] === usefulElement);
             // 기신: 용신을 극하는 오행 (재성 또는 관성)
             // 신약일 때 기신 = 재성(일간이 극하는 오행) 또는 관성(일간을 극하는 오행)
             // 관성이 더 직접적으로 일간을 극하므로 관성을 기신으로
             const officialEls = byGroup['관성'];
-            unfavorableElement = officialEls.length > 0
-                ? officialEls.sort((a, b) => bodyStrength.elementScores[b] - bodyStrength.elementScores[a])[0]
-                : (byGroup['재성'][0] ?? dayElement);
+            unfavorableElement =
+                officialEls.length > 0
+                    ? officialEls.sort((a, b) => bodyStrength.elementScores[b] - bodyStrength.elementScores[a])[0]
+                    : (byGroup['재성'][0] ?? dayElement);
             // 구신: 기신을 생하는 오행
-            adverseElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === unfavorableElement);
+            adverseElement = Object.keys(ELEMENT_GENERATES).find((el) => ELEMENT_GENERATES[el] === unfavorableElement);
             if (strengthLevel === '극약') {
                 followElement = elements
-                    .map(el => ({ el, score: bodyStrength.elementScores[el] }))
+                    .map((el) => ({ el, score: bodyStrength.elementScores[el] }))
                     .sort((a, b) => b.score - a.score)[0].el;
             }
             description = `신약(${strengthLevel}) → 억부용신: ${usefulGroup}(${usefulElement}) | 희신: ${favorableElement} | 기신: ${unfavorableElement}(관성)`;
@@ -3722,12 +3827,8 @@ var manseryeok = (function (exports) {
      * 사주 전체의 합충형파해 관계를 분석합니다.
      */
     function analyzeRelations(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
-        const stems = hourStem
-            ? [yearStem, monthStem, dayStem, hourStem]
-            : [yearStem, monthStem, dayStem];
-        const branches = hourBranch
-            ? [yearBranch, monthBranch, dayBranch, hourBranch]
-            : [yearBranch, monthBranch, dayBranch];
+        const stems = hourStem ? [yearStem, monthStem, dayStem, hourStem] : [yearStem, monthStem, dayStem];
+        const branches = hourBranch ? [yearBranch, monthBranch, dayBranch, hourBranch] : [yearBranch, monthBranch, dayBranch];
         const pillarNames = ['년', '월', '일', '시'];
         // 천간합/충
         const stemHarmonies = [];
@@ -3823,8 +3924,18 @@ var manseryeok = (function (exports) {
      * 12신살 이름
      */
     const TWELVE_SPIRIT_NAMES = [
-        '겁살', '재살', '천살', '지살', '년살', '월살',
-        '망신살', '장성살', '반안살', '역마살', '육해살', '화개살',
+        '겁살',
+        '재살',
+        '천살',
+        '지살',
+        '년살',
+        '월살',
+        '망신살',
+        '장성살',
+        '반안살',
+        '역마살',
+        '육해살',
+        '화개살',
     ];
     /**
      * 12신살 기준 테이블
@@ -3901,10 +4012,18 @@ var manseryeok = (function (exports) {
      * 신자진 → 유, 인오술 → 묘, 사유축 → 오, 해묘미 → 자
      */
     const DOWHWA_TABLE = {
-        8: 9, 0: 9, 4: 9, // 신자진 → 유
-        2: 3, 6: 3, 10: 3, // 인오술 → 묘
-        5: 6, 9: 6, 1: 6, // 사유축 → 오
-        11: 0, 3: 0, 7: 0, // 해묘미 → 자
+        8: 9,
+        0: 9,
+        4: 9, // 신자진 → 유
+        2: 3,
+        6: 3,
+        10: 3, // 인오술 → 묘
+        5: 6,
+        9: 6,
+        1: 6, // 사유축 → 오
+        11: 0,
+        3: 0,
+        7: 0, // 해묘미 → 자
     };
     /**
      * 도화살 확인
@@ -3924,10 +4043,18 @@ var manseryeok = (function (exports) {
      * 신자진 → 진, 인오술 → 술, 사유축 → 축, 해묘미 → 미
      */
     const HWAGAE_TABLE = {
-        8: 4, 0: 4, 4: 4, // 신자진 → 진
-        2: 10, 6: 10, 10: 10, // 인오술 → 술
-        5: 1, 9: 1, 1: 1, // 사유축 → 축
-        11: 7, 3: 7, 7: 7, // 해묘미 → 미
+        8: 4,
+        0: 4,
+        4: 4, // 신자진 → 진
+        2: 10,
+        6: 10,
+        10: 10, // 인오술 → 술
+        5: 1,
+        9: 1,
+        1: 1, // 사유축 → 축
+        11: 7,
+        3: 7,
+        7: 7, // 해묘미 → 미
     };
     function isHwagaeSal(baseBranch, targetBranch) {
         const baseIdx = branchIndex(baseBranch);
@@ -3942,10 +4069,18 @@ var manseryeok = (function (exports) {
      * 신자진 → 인, 인오술 → 신, 사유축 → 해, 해묘미 → 사
      */
     const YEOKMA_TABLE = {
-        8: 2, 0: 2, 4: 2, // 신자진 → 인
-        2: 8, 6: 8, 10: 8, // 인오술 → 신
-        5: 11, 9: 11, 1: 11, // 사유축 → 해
-        11: 5, 3: 5, 7: 5, // 해묘미 → 사
+        8: 2,
+        0: 2,
+        4: 2, // 신자진 → 인
+        2: 8,
+        6: 8,
+        10: 8, // 인오술 → 신
+        5: 11,
+        9: 11,
+        1: 11, // 사유축 → 해
+        11: 5,
+        3: 5,
+        7: 5, // 해묘미 → 사
     };
     function isYeokmaSal(baseBranch, targetBranch) {
         const baseIdx = branchIndex(baseBranch);
@@ -4168,7 +4303,11 @@ var manseryeok = (function (exports) {
      */
     function analyzeFiveElements(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
         const counts = {
-            목: 0, 화: 0, 토: 0, 금: 0, 수: 0,
+            목: 0,
+            화: 0,
+            토: 0,
+            금: 0,
+            수: 0,
         };
         // 천간 오행 카운팅
         const stems = [yearStem, monthStem, dayStem, ...(hourStem ? [hourStem] : [])];
@@ -4195,11 +4334,7 @@ var manseryeok = (function (exports) {
         return { counts, ratios, percentages, levels, total };
     }
     function analyzeTenGods(dayStem, yearStem, monthStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
-        const allTenGods = [
-            '비견', '겁재', '식신', '상관',
-            '편재', '정재', '편관', '정관',
-            '편인', '정인',
-        ];
+        const allTenGods = ['비견', '겁재', '식신', '상관', '편재', '정재', '편관', '정관', '편인', '정인'];
         const counts = {};
         for (const tg of allTenGods)
             counts[tg] = 0;
@@ -4444,11 +4579,13 @@ var manseryeok = (function (exports) {
                 string: getHiddenStemsString(dayBranch),
                 hanjaString: getHiddenStemsHanjaString(dayBranch),
             },
-            hour: hourBranch ? {
-                stems: getHiddenStems(hourBranch),
-                string: getHiddenStemsString(hourBranch),
-                hanjaString: getHiddenStemsHanjaString(hourBranch),
-            } : null,
+            hour: hourBranch
+                ? {
+                    stems: getHiddenStems(hourBranch),
+                    string: getHiddenStemsString(hourBranch),
+                    hanjaString: getHiddenStemsHanjaString(hourBranch),
+                }
+                : null,
         };
         // 5. 12운성
         const twelveStates = calculateAllTwelveStates(dayStem, yearBranch, monthBranch, dayBranch, hourBranch);

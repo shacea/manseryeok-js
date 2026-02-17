@@ -15,17 +15,7 @@
  * 5. 합산 점수 > 전체 점수의 절반 → 신강(身强), 이하 → 신약(身弱)
  */
 
-import {
-  STEMS,
-  BRANCHES,
-  STEM_ELEMENT,
-  BRANCH_ELEMENT,
-  ELEMENT_GENERATES,
-  type FiveElement,
-  stemIndex,
-  branchIndex,
-} from '../data/stem-branch-data';
-import { HIDDEN_STEMS } from './hidden-stems';
+import { STEMS, STEM_ELEMENT, ELEMENT_GENERATES, type FiveElement, stemIndex } from '../data/stem-branch-data';
 
 // ============================================================
 // 지장간 점수 테이블
@@ -39,18 +29,18 @@ import { HIDDEN_STEMS } from './hidden-stems';
  * key: 지지 한글, value: { 천간 한글: 점수 }
  */
 export const HIDDEN_STEM_SCORES: Record<string, Record<string, number>> = {
-  자: { 임: 3, 계: 7 },          // 壬3 癸7 (합계 10 → 실제 비율 기준)
-  축: { 계: 3, 신: 3, 기: 4 },   // 癸3 辛3 己4
-  인: { 무: 1, 병: 3, 갑: 6 },   // 戊1 丙3 甲6
-  묘: { 갑: 3, 을: 7 },          // 甲3 乙7
-  진: { 을: 3, 계: 3, 무: 4 },   // 乙3 癸3 戊4
-  사: { 무: 1, 경: 3, 병: 6 },   // 戊1 庚3 丙6
-  오: { 병: 3, 기: 3, 정: 4 },   // 丙3 己3 丁4
-  미: { 정: 3, 을: 3, 기: 4 },   // 丁3 乙3 己4
-  신: { 무: 1, 임: 3, 경: 6 },   // 戊1 壬3 庚6
-  유: { 경: 3, 신: 7 },          // 庚3 辛7
-  술: { 신: 3, 정: 3, 무: 4 },   // 辛3 丁3 戊4
-  해: { 무: 1, 갑: 3, 임: 6 },   // 戊1 甲3 壬6
+  자: { 임: 3, 계: 7 }, // 壬3 癸7 (합계 10 → 실제 비율 기준)
+  축: { 계: 3, 신: 3, 기: 4 }, // 癸3 辛3 己4
+  인: { 무: 1, 병: 3, 갑: 6 }, // 戊1 丙3 甲6
+  묘: { 갑: 3, 을: 7 }, // 甲3 乙7
+  진: { 을: 3, 계: 3, 무: 4 }, // 乙3 癸3 戊4
+  사: { 무: 1, 경: 3, 병: 6 }, // 戊1 庚3 丙6
+  오: { 병: 3, 기: 3, 정: 4 }, // 丙3 己3 丁4
+  미: { 정: 3, 을: 3, 기: 4 }, // 丁3 乙3 己4
+  신: { 무: 1, 임: 3, 경: 6 }, // 戊1 壬3 庚6
+  유: { 경: 3, 신: 7 }, // 庚3 辛7
+  술: { 신: 3, 정: 3, 무: 4 }, // 辛3 丁3 戊4
+  해: { 무: 1, 갑: 3, 임: 6 }, // 戊1 甲3 壬6
 };
 
 // ============================================================
@@ -78,10 +68,14 @@ export function calculateElementScores(
   yearBranch: string,
   monthBranch: string,
   dayBranch: string,
-  hourBranch: string | null
+  hourBranch: string | null,
 ): Record<FiveElement, number> {
   const scores: Record<FiveElement, number> = {
-    목: 0, 화: 0, 토: 0, 금: 0, 수: 0,
+    목: 0,
+    화: 0,
+    토: 0,
+    금: 0,
+    수: 0,
   };
 
   // 1. 천간 점수 (각 5점)
@@ -94,7 +88,7 @@ export function calculateElementScores(
   // 2. 지지 지장간 점수 (월지는 2배)
   const branches: Array<{ branch: string; multiplier: number }> = [
     { branch: yearBranch, multiplier: 1 },
-    { branch: monthBranch, multiplier: 2 },  // 월지 2배 가중치
+    { branch: monthBranch, multiplier: 2 }, // 월지 2배 가중치
     { branch: dayBranch, multiplier: 1 },
     ...(hourBranch ? [{ branch: hourBranch, multiplier: 1 }] : []),
   ];
@@ -123,7 +117,7 @@ export function calculateStemScores(
   yearBranch: string,
   monthBranch: string,
   dayBranch: string,
-  hourBranch: string | null
+  hourBranch: string | null,
 ): Record<string, number> {
   const stemScores: Record<string, number> = {};
   for (const s of STEMS) stemScores[s] = 0;
@@ -204,16 +198,28 @@ export function calculateBodyStrength(
   yearBranch: string,
   monthBranch: string,
   dayBranch: string,
-  hourBranch: string | null
+  hourBranch: string | null,
 ): BodyStrengthResult {
   const elementScores = calculateElementScores(
-    yearStem, monthStem, dayStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    yearStem,
+    monthStem,
+    dayStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
 
   const stemScores = calculateStemScores(
-    yearStem, monthStem, dayStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    yearStem,
+    monthStem,
+    dayStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
 
   // 일간 오행
@@ -224,7 +230,7 @@ export function calculateBodyStrength(
   // ELEMENT_GENERATES[A] = B → A가 B를 생함 → B를 생하는 것은 A
   // 즉 dayElement를 생하는 오행 = ELEMENT_GENERATES의 역방향
   const generatesDay = (Object.keys(ELEMENT_GENERATES) as FiveElement[]).find(
-    el => ELEMENT_GENERATES[el] === dayElement
+    (el) => ELEMENT_GENERATES[el] === dayElement,
   )!;
 
   // 자기 세력 = 비견·겁재(같은 오행) + 편인·정인(생하는 오행)

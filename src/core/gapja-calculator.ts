@@ -17,11 +17,7 @@ export { getPillarById };
  * @param dayPillarId 일주 ID (0~59)
  * @returns 갑자 정보
  */
-export function formatGapjaByIds(
-  yearPillarId: number,
-  monthPillarId: number,
-  dayPillarId: number
-): GapjaResult {
+export function formatGapjaByIds(yearPillarId: number, monthPillarId: number, dayPillarId: number): GapjaResult {
   const year = getPillarById(yearPillarId);
   const month = getPillarById(monthPillarId);
   const day = getPillarById(dayPillarId);
@@ -42,7 +38,7 @@ export function formatGapjaByIds(
  * @returns 60갑자 ID 또는 undefined
  */
 export function getPillarIdByHangul(hangul: string): number | undefined {
-  const pillar = SIXTY_PILLARS.find(p => p.combined.hangul === hangul);
+  const pillar = SIXTY_PILLARS.find((p) => p.combined.hangul === hangul);
   return pillar?.id;
 }
 
@@ -52,6 +48,6 @@ export function getPillarIdByHangul(hangul: string): number | undefined {
  * @returns 60갑자 ID 또는 undefined
  */
 export function getPillarIdByHanja(hanja: string): number | undefined {
-  const pillar = SIXTY_PILLARS.find(p => p.combined.hanja === hanja);
+  const pillar = SIXTY_PILLARS.find((p) => p.combined.hanja === hanja);
   return pillar?.id;
 }

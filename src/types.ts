@@ -24,7 +24,7 @@ export interface SolarToLunarResult {
     isLeapMonth: boolean;
   };
   gapja: {
-    yearPillar: string;      // "갑진"
+    yearPillar: string; // "갑진"
     yearPillarHanja: string; // "甲辰"
     monthPillar: string;
     monthPillarHanja: string;
@@ -75,9 +75,9 @@ export interface GapjaResult {
  * 절기 정보
  */
 export interface SolarTermInfo {
-  name: string;           // 입춘, 경칩, ...
-  index: number;          // 0~23
-  longitude: number;      // 태양 황경
+  name: string; // 입춘, 경칩, ...
+  index: number; // 0~23
+  longitude: number; // 태양 황경
   type: 'jeolgi' | 'junggi';
   sajuMonth: number;
   datetime: Date;

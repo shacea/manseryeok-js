@@ -16,12 +16,7 @@
  * 절기 데이터 없는 연도: 평균 절기 날짜로 근사 계산
  */
 
-import {
-  STEM_YINYANG,
-  stemIndex,
-  makePillar,
-  makePillarHanja,
-} from '../data/stem-branch-data';
+import { STEM_YINYANG, stemIndex, makePillar, makePillarHanja } from '../data/stem-branch-data';
 import { SOLAR_TERMS_DATA } from '../data/solar-terms-data';
 
 // ============================================================
@@ -30,10 +25,7 @@ import { SOLAR_TERMS_DATA } from '../data/solar-terms-data';
 // ============================================================
 
 /** 사주 월을 결정하는 12개 절기 이름 */
-const JEOLGI_NAMES = [
-  '소한', '입춘', '경칩', '청명', '입하', '망종',
-  '소서', '입추', '백로', '한로', '입동', '대설',
-];
+const JEOLGI_NAMES = ['소한', '입춘', '경칩', '청명', '입하', '망종', '소서', '입추', '백로', '한로', '입동', '대설'];
 
 /** 절기 평균 날짜 [월, 일] */
 const JEOLGI_APPROX: Record<string, [number, number]> = {
@@ -58,7 +50,7 @@ const JEOLGI_APPROX: Record<string, [number, number]> = {
 function getSolarTermDate(year: number, termName: string): Date {
   const yearData = SOLAR_TERMS_DATA[year];
   if (yearData) {
-    const term = yearData.find(t => t.name === termName);
+    const term = yearData.find((t) => t.name === termName);
     if (term) {
       return new Date(year, term.month - 1, term.day, term.hour, term.minute, 0, 0);
     }
@@ -82,14 +74,12 @@ function findNearestJeolgi(
   birthDay: number,
   birthHour: number,
   birthMinute: number,
-  forward: boolean
+  forward: boolean,
 ): Date {
   const birthDate = new Date(birthYear, birthMonth - 1, birthDay, birthHour, birthMinute);
 
   // 검색 범위: 전후 2년
-  const searchYears = forward
-    ? [birthYear, birthYear + 1]
-    : [birthYear - 1, birthYear];
+  const searchYears = forward ? [birthYear, birthYear + 1] : [birthYear - 1, birthYear];
 
   const candidates: Date[] = [];
 
@@ -113,10 +103,7 @@ function findNearestJeolgi(
   }
 
   // 가장 가까운 절기 선택
-  candidates.sort((a, b) =>
-    Math.abs(a.getTime() - birthDate.getTime()) -
-    Math.abs(b.getTime() - birthDate.getTime())
-  );
+  candidates.sort((a, b) => Math.abs(a.getTime() - birthDate.getTime()) - Math.abs(b.getTime() - birthDate.getTime()));
   return candidates[0];
 }
 
@@ -182,7 +169,7 @@ export function calculateMajorFortune(
   monthStemIdx: number,
   monthBranchIdx: number,
   yearStem: string,
-  count: number = 10
+  count: number = 10,
 ): MajorFortuneResult {
   // 1. 순행/역행 결정
   // 양남음녀 = 순행, 음남양녀 = 역행
@@ -192,10 +179,7 @@ export function calculateMajorFortune(
 
   // 2. 절기까지의 일수 계산
   const birthDate = new Date(birthYear, birthMonth - 1, birthDay, birthHour, birthMinute);
-  const jeolgiDate = findNearestJeolgi(
-    birthYear, birthMonth, birthDay, birthHour, birthMinute,
-    isForward
-  );
+  const jeolgiDate = findNearestJeolgi(birthYear, birthMonth, birthDay, birthHour, birthMinute, isForward);
 
   const diffMs = Math.abs(jeolgiDate.getTime() - birthDate.getTime());
   const daysToJeolgi = diffMs / (1000 * 60 * 60 * 24);
@@ -210,8 +194,8 @@ export function calculateMajorFortune(
 
   for (let i = 0; i < count; i++) {
     const offset = (i + 1) * flow;
-    const sIdx = ((monthStemIdx + offset) % 10 + 10) % 10;
-    const bIdx = ((monthBranchIdx + offset) % 12 + 12) % 12;
+    const sIdx = (((monthStemIdx + offset) % 10) + 10) % 10;
+    const bIdx = (((monthBranchIdx + offset) % 12) + 12) % 12;
 
     fortunes.push({
       index: i + 1,
@@ -242,9 +226,6 @@ export function calculateMajorFortune(
  * @param currentAge 현재 나이
  * @returns 현재 대운 또는 null
  */
-export function getCurrentFortune(
-  fortunes: MajorFortune[],
-  currentAge: number
-): MajorFortune | null {
-  return fortunes.find(f => currentAge >= f.startAge && currentAge <= f.endAge) ?? null;
+export function getCurrentFortune(fortunes: MajorFortune[], currentAge: number): MajorFortune | null {
+  return fortunes.find((f) => currentAge >= f.startAge && currentAge <= f.endAge) ?? null;
 }

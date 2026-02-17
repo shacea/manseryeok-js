@@ -26,7 +26,12 @@ import { calculateAllTwelveStates } from './twelve-states';
 import { calculateAllTwelveSpirits } from './twelve-spirits';
 import { analyzeSpecialStars, type SpecialStarResult } from './special-stars';
 import { analyzeRelations, type PillarRelations } from './relations';
-import { analyzeFiveElements, analyzeTenGods, type FiveElementAnalysis, type TenGodAnalysis } from './five-elements-analysis';
+import {
+  analyzeFiveElements,
+  analyzeTenGods,
+  type FiveElementAnalysis,
+  type TenGodAnalysis,
+} from './five-elements-analysis';
 import { calculateBodyStrength, type BodyStrengthResult } from './body-strength';
 import { determineUsefulGod, type UsefulGodResult } from './useful-god';
 import { calculateMajorFortune, type MajorFortuneResult } from './major-fortune';
@@ -150,7 +155,7 @@ export function calculateManseryeok(
   solarDay: number,
   solarHour?: number,
   solarMinute: number = 0,
-  options: ManseryeokOptions = {}
+  options: ManseryeokOptions = {},
 ): ManseryeokResult {
   const { isMale = null, fortuneCount = 10, ...sajuOptions } = options;
 
@@ -177,8 +182,14 @@ export function calculateManseryeok(
 
   // 3. 십성
   const tenGods = calculateAllTenGods(
-    dayStem, yearStem, monthStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    dayStem,
+    yearStem,
+    monthStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
 
   // 4. 지장간
@@ -198,11 +209,13 @@ export function calculateManseryeok(
       string: getHiddenStemsString(dayBranch),
       hanjaString: getHiddenStemsHanjaString(dayBranch),
     },
-    hour: hourBranch ? {
-      stems: getHiddenStems(hourBranch),
-      string: getHiddenStemsString(hourBranch),
-      hanjaString: getHiddenStemsHanjaString(hourBranch),
-    } : null,
+    hour: hourBranch
+      ? {
+          stems: getHiddenStems(hourBranch),
+          string: getHiddenStemsString(hourBranch),
+          hanjaString: getHiddenStemsHanjaString(hourBranch),
+        }
+      : null,
   };
 
   // 5. 12운성
@@ -213,32 +226,62 @@ export function calculateManseryeok(
 
   // 7. 신살/길성
   const specialStars = analyzeSpecialStars(
-    yearStem, monthStem, dayStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    yearStem,
+    monthStem,
+    dayStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
 
   // 8. 합충형파해, 공망
   const relations = analyzeRelations(
-    yearStem, monthStem, dayStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    yearStem,
+    monthStem,
+    dayStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
 
   // 9. 오행 비율 분석
   const fiveElements = analyzeFiveElements(
-    yearStem, monthStem, dayStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    yearStem,
+    monthStem,
+    dayStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
 
   // 10. 십성 비율 분석
   const tenGodAnalysis = analyzeTenGods(
-    dayStem, yearStem, monthStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    dayStem,
+    yearStem,
+    monthStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
 
   // 11. 신강/신약
   const bodyStrengthBase = calculateBodyStrength(
-    yearStem, monthStem, dayStem, hourStem,
-    yearBranch, monthBranch, dayBranch, hourBranch
+    yearStem,
+    monthStem,
+    dayStem,
+    hourStem,
+    yearBranch,
+    monthBranch,
+    dayBranch,
+    hourBranch,
   );
   const bodyStrength = bodyStrengthBase;
 
@@ -257,11 +300,15 @@ export function calculateManseryeok(
 
     majorFortune = calculateMajorFortune(
       isMale,
-      solarYear, solarMonth, solarDay,
-      effectiveHour, effectiveMinute,
-      monthStemIdx, monthBranchIdx,
+      solarYear,
+      solarMonth,
+      solarDay,
+      effectiveHour,
+      effectiveMinute,
+      monthStemIdx,
+      monthBranchIdx,
       yearStem,
-      fortuneCount
+      fortuneCount,
     );
   }
 
@@ -274,7 +321,7 @@ export function calculateManseryeok(
     sixRelations = analyzeSixRelations(
       { year: tenGods.stem.year, month: tenGods.stem.month, hour: tenGods.stem.hour },
       { year: tenGods.branch.year, month: tenGods.branch.month, day: tenGods.branch.day, hour: tenGods.branch.hour },
-      isMale
+      isMale,
     );
   }
 
