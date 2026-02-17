@@ -173,6 +173,8 @@ export interface BodyStrengthResult {
   elementScores: Record<FiveElement, number>;
   /** 천간별 점수 */
   stemScores: Record<string, number>;
+  level: BodyStrengthLevel;
+  levelPercentile: number;
   /** 판별 근거 설명 */
   description: string;
 }
@@ -232,11 +234,13 @@ export function calculateBodyStrength(
   const totalScore = Object.values(elementScores).reduce((a, b) => a + b, 0);
 
   const selfRatio = totalScore > 0 ? selfScore / totalScore : 0;
-  const isStrong = selfRatio > 0.5;
+  const level = getBodyStrengthLevel(selfRatio);
+  const levelPercentile = LEVEL_PERCENTILES[level];
+  const isStrong = level === '극강' || level === '태강' || level === '중화신강';
 
   const description = isStrong
-    ? `신강(身强): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`
-    : `신약(身弱): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`;
+    ? `신강(身强, ${level}): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`
+    : `신약(身弱, ${level}): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`;
 
   return {
     isStrong,
@@ -245,6 +249,8 @@ export function calculateBodyStrength(
     selfRatio,
     elementScores,
     stemScores,
+    level,
+    levelPercentile,
     description,
   };
 }
@@ -258,12 +264,22 @@ export function calculateBodyStrength(
  * - 약(弱): selfRatio < 0.45
  * - 극약(極弱): selfRatio < 0.3
  */
-export type BodyStrengthLevel = '극강' | '강' | '중화' | '약' | '극약';
+export type BodyStrengthLevel = '극강' | '태강' | '중화신강' | '중화신약' | '태약' | '극약';
+
+export const LEVEL_PERCENTILES: Record<BodyStrengthLevel, number> = {
+  극강: 4.34,
+  태강: 6.08,
+  중화신강: 26.31,
+  중화신약: 26.31,
+  태약: 16.82,
+  극약: 4.34,
+};
 
 export function getBodyStrengthLevel(selfRatio: number): BodyStrengthLevel {
-  if (selfRatio > 0.7) return '극강';
-  if (selfRatio > 0.55) return '강';
-  if (selfRatio >= 0.45) return '중화';
-  if (selfRatio >= 0.3) return '약';
+  if (selfRatio > 0.9) return '극강';
+  if (selfRatio > 0.75) return '태강';
+  if (selfRatio >= 0.4) return '중화신강';
+  if (selfRatio >= 0.38) return '중화신약';
+  if (selfRatio >= 0.25) return '태약';
   return '극약';
 }

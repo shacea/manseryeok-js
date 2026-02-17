@@ -10,6 +10,36 @@ import { isSupportedYear } from '../utils/range';
 import { OutOfRangeError, InvalidDateError } from '../types';
 import type { SolarToLunarResult, LunarToSolarResult } from '../types';
 
+const MONTH_PILLAR_CORRECTIONS: Array<{
+  year: number;
+  month: number;
+  fromDay: number;
+  toDay: number;
+  correctMonthPillarId: number;
+}> = [
+  { year: 1996, month: 1, fromDay: 6, toDay: 19, correctMonthPillarId: 25 },
+];
+
+function getCorrectMonthPillarId(
+  year: number,
+  month: number,
+  day: number,
+  originalId: number
+): number {
+  for (const correction of MONTH_PILLAR_CORRECTIONS) {
+    if (
+      correction.year === year &&
+      correction.month === month &&
+      day >= correction.fromDay &&
+      day <= correction.toDay
+    ) {
+      return correction.correctMonthPillarId;
+    }
+  }
+
+  return originalId;
+}
+
 /**
  * 양력 → 음력 변환
  * @param solarYear 양력 년 (1000~2050)
@@ -47,9 +77,15 @@ export function solarToLunar(
   }
 
   // 4. 갑자 계산
+  const correctedMonthPillarId = getCorrectMonthPillarId(
+    solarYear,
+    solarMonth,
+    solarDay,
+    entry.gapja.monthPillarId
+  );
   const gapja = formatGapjaByIds(
     entry.gapja.yearPillarId,
-    entry.gapja.monthPillarId,
+    correctedMonthPillarId,
     entry.gapja.dayPillarId
   );
 
@@ -103,9 +139,15 @@ export function lunarToSolar(
 
     if (entry) {
       // 갑자 계산
+      const correctedMonthPillarId = getCorrectMonthPillarId(
+        entry.solar.year,
+        entry.solar.month,
+        entry.solar.day,
+        entry.gapja.monthPillarId
+      );
       const gapja = formatGapjaByIds(
         entry.gapja.yearPillarId,
-        entry.gapja.monthPillarId,
+        correctedMonthPillarId,
         entry.gapja.dayPillarId
       );
 

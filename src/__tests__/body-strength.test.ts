@@ -55,10 +55,11 @@ describe('신강/신약 판별', () => {
   });
 
   test('신강/신약 강도 레벨', () => {
-    expect(getBodyStrengthLevel(0.8)).toBe('극강');
-    expect(getBodyStrengthLevel(0.6)).toBe('강');
-    expect(getBodyStrengthLevel(0.5)).toBe('중화');
-    expect(getBodyStrengthLevel(0.4)).toBe('약');
+    expect(getBodyStrengthLevel(0.95)).toBe('극강');
+    expect(getBodyStrengthLevel(0.8)).toBe('태강');
+    expect(getBodyStrengthLevel(0.5)).toBe('중화신강');
+    expect(getBodyStrengthLevel(0.39)).toBe('중화신약');
+    expect(getBodyStrengthLevel(0.3)).toBe('태약');
     expect(getBodyStrengthLevel(0.2)).toBe('극약');
   });
 

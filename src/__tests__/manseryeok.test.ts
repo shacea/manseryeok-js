@@ -217,12 +217,20 @@ describe('PDF 검증: 신승욱 1984/10/12 12:05 남 부산(129°)', () => {
       expect(typeof result.bodyStrength.isStrong).toBe('boolean');
       expect(result.bodyStrength.totalScore).toBeGreaterThan(0);
     });
+
+    test('신강 레벨 = 중화신강', () => {
+      expect(result.bodyStrength.level).toBe('중화신강');
+    });
   });
 
   describe('용신', () => {
     test('용신 결과 존재', () => {
       expect(result.usefulGod).toBeDefined();
       expect(result.usefulGod.usefulElement).toBeDefined();
+    });
+
+    test('용신 = 목', () => {
+      expect(result.usefulGod.usefulElement).toBe('목');
     });
   });
 
@@ -420,6 +428,11 @@ describe('PDF 검증: 박정은 1981/08/23 16:00 여 인천(126.5°)', () => {
     expect(result.fiveElements.percentages.수).toBe('12.5%');
   });
 
+  test('신강 레벨/용신', () => {
+    expect(result.bodyStrength.level).toBe('태강');
+    expect(result.usefulGod.usefulElement).toBe('목');
+  });
+
   test('대운 순행 (여+음간 신)', () => {
     expect(result.majorFortune).not.toBeNull();
     expect(result.majorFortune!.isForward).toBe(true);
@@ -480,6 +493,12 @@ describe('PDF 검증: 쿠미 1993/09/24 시간모름 여 도쿄', () => {
     expect(result.fiveElements.percentages.금).toBe('66.7%');
     expect(result.fiveElements.percentages.수).toBe('16.7%');
   });
+
+  test('신강 레벨/용신/종용신', () => {
+    expect(result.bodyStrength.level).toBe('극약');
+    expect(result.usefulGod.usefulElement).toBe('화');
+    expect(result.usefulGod.followElement).toBe('금');
+  });
 });
 
 describe('PDF 검증: 김은지 1996/01/07 10:40 여 서울(127°)', () => {
@@ -494,8 +513,13 @@ describe('PDF 검증: 김은지 1996/01/07 10:40 여 서울(127°)', () => {
     expect(result.saju.hourPillar).toBe('정사');
   });
 
-  test.skip('월주 = 기축 (기존 DB 소한 절기 경계 이슈로 무자 반환)', () => {
+  test('월주 = 기축', () => {
     expect(result.saju.monthPillar).toBe('기축');
+  });
+
+  test('신강 레벨/용신', () => {
+    expect(result.bodyStrength.level).toBe('태약');
+    expect(result.usefulGod.usefulElement).toBe('수');
   });
 
   test('년/일/시 천간 십성', () => {

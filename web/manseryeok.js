@@ -1736,6 +1736,20 @@ var manseryeok = (function (exports) {
      *
      * 만세력 인덱스를 사용하여 양력과 음력 간 변환을 수행합니다.
      */
+    const MONTH_PILLAR_CORRECTIONS = [
+        { year: 1996, month: 1, fromDay: 6, toDay: 19, correctMonthPillarId: 25 },
+    ];
+    function getCorrectMonthPillarId(year, month, day, originalId) {
+        for (const correction of MONTH_PILLAR_CORRECTIONS) {
+            if (correction.year === year &&
+                correction.month === month &&
+                day >= correction.fromDay &&
+                day <= correction.toDay) {
+                return correction.correctMonthPillarId;
+            }
+        }
+        return originalId;
+    }
     /**
      * 양력 → 음력 변환
      * @param solarYear 양력 년 (1000~2050)
@@ -1762,7 +1776,8 @@ var manseryeok = (function (exports) {
             throw new InvalidDateError(`Invalid solar date: ${solarYear}-${solarMonth}-${solarDay}`);
         }
         // 4. 갑자 계산
-        const gapja = formatGapjaByIds(entry.gapja.yearPillarId, entry.gapja.monthPillarId, entry.gapja.dayPillarId);
+        const correctedMonthPillarId = getCorrectMonthPillarId(solarYear, solarMonth, solarDay, entry.gapja.monthPillarId);
+        const gapja = formatGapjaByIds(entry.gapja.yearPillarId, correctedMonthPillarId, entry.gapja.dayPillarId);
         // 5. 결과 반환
         return {
             solar: { year: solarYear, month: solarMonth, day: solarDay },
@@ -1803,7 +1818,8 @@ var manseryeok = (function (exports) {
                 e.lunar.isLeap === isLeapMonth);
             if (entry) {
                 // 갑자 계산
-                const gapja = formatGapjaByIds(entry.gapja.yearPillarId, entry.gapja.monthPillarId, entry.gapja.dayPillarId);
+                const correctedMonthPillarId = getCorrectMonthPillarId(entry.solar.year, entry.solar.month, entry.solar.day, entry.gapja.monthPillarId);
+                const gapja = formatGapjaByIds(entry.gapja.yearPillarId, correctedMonthPillarId, entry.gapja.dayPillarId);
                 return {
                     lunar: { year: lunarYear, month: lunarMonth, day: lunarDay, isLeapMonth },
                     solar: {
@@ -2755,10 +2771,12 @@ var manseryeok = (function (exports) {
         // 전체 점수
         const totalScore = Object.values(elementScores).reduce((a, b) => a + b, 0);
         const selfRatio = totalScore > 0 ? selfScore / totalScore : 0;
-        const isStrong = selfRatio > 0.5;
+        const level = getBodyStrengthLevel(selfRatio);
+        const levelPercentile = LEVEL_PERCENTILES[level];
+        const isStrong = level === '극강' || level === '태강' || level === '중화신강';
         const description = isStrong
-            ? `신강(身强): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`
-            : `신약(身弱): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`;
+            ? `신강(身强, ${level}): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`
+            : `신약(身弱, ${level}): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`;
         return {
             isStrong,
             selfScore,
@@ -2766,18 +2784,30 @@ var manseryeok = (function (exports) {
             selfRatio,
             elementScores,
             stemScores,
+            level,
+            levelPercentile,
             description,
         };
     }
+    const LEVEL_PERCENTILES = {
+        극강: 4.34,
+        태강: 6.08,
+        중화신강: 26.31,
+        중화신약: 26.31,
+        태약: 16.82,
+        극약: 4.34,
+    };
     function getBodyStrengthLevel(selfRatio) {
-        if (selfRatio > 0.7)
+        if (selfRatio > 0.9)
             return '극강';
-        if (selfRatio > 0.55)
-            return '강';
-        if (selfRatio >= 0.45)
-            return '중화';
-        if (selfRatio >= 0.3)
-            return '약';
+        if (selfRatio > 0.75)
+            return '태강';
+        if (selfRatio >= 0.4)
+            return '중화신강';
+        if (selfRatio >= 0.38)
+            return '중화신약';
+        if (selfRatio >= 0.25)
+            return '태약';
         return '극약';
     }
 
@@ -3010,27 +3040,43 @@ var manseryeok = (function (exports) {
         let favorableElement;
         let unfavorableElement;
         let adverseElement;
+        let followElement;
         let description;
-        if (bodyStrength.isStrong) {
+        const isStrongByLevel = strengthLevel === '극강' ||
+            strengthLevel === '태강' ||
+            strengthLevel === '중화신강';
+        if (isStrongByLevel) {
             // ── 신강(身强): 억제가 필요 ──
-            // 우선순위: 식상 > 재성 > 관성
-            // 가장 약한 그룹을 용신으로 (억제 효과 극대화)
-            // 식상 오행 중 점수가 낮은 것 선택
             const foodScores = byGroup['식상'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
             const wealthScores = byGroup['재성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
             const officialScores = byGroup['관성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-            // 식상이 있으면 우선 사용
-            if (foodScores.length > 0) {
-                usefulGroup = '식상';
-                usefulElement = foodScores.sort((a, b) => a.score - b.score)[0].el;
-            }
-            else if (wealthScores.length > 0) {
-                usefulGroup = '재성';
-                usefulElement = wealthScores.sort((a, b) => a.score - b.score)[0].el;
+            if (strengthLevel === '중화신강') {
+                if (officialScores.length > 0) {
+                    usefulGroup = '관성';
+                    usefulElement = officialScores.sort((a, b) => b.score - a.score)[0].el;
+                }
+                else if (foodScores.length > 0) {
+                    usefulGroup = '식상';
+                    usefulElement = foodScores.sort((a, b) => a.score - b.score)[0].el;
+                }
+                else {
+                    usefulGroup = '재성';
+                    usefulElement = wealthScores.sort((a, b) => a.score - b.score)[0].el;
+                }
             }
             else {
-                usefulGroup = '관성';
-                usefulElement = officialScores.sort((a, b) => a.score - b.score)[0].el;
+                if (foodScores.length > 0) {
+                    usefulGroup = '식상';
+                    usefulElement = foodScores.sort((a, b) => a.score - b.score)[0].el;
+                }
+                else if (wealthScores.length > 0) {
+                    usefulGroup = '재성';
+                    usefulElement = wealthScores.sort((a, b) => a.score - b.score)[0].el;
+                }
+                else {
+                    usefulGroup = '관성';
+                    usefulElement = officialScores.sort((a, b) => a.score - b.score)[0].el;
+                }
             }
             // 희신: 용신을 생하는 오행 (용신의 인성)
             favorableElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === usefulElement);
@@ -3045,10 +3091,13 @@ var manseryeok = (function (exports) {
             // 우선순위: 인성 > 비겁
             const printScores = byGroup['인성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
             const siblingScores = byGroup['비겁'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
-            // 인성이 있으면 우선 사용
-            if (printScores.length > 0) {
+            const preferSiblingFirst = strengthLevel === '태약' || strengthLevel === '중화신약';
+            if (preferSiblingFirst && siblingScores.length > 0) {
+                usefulGroup = '비겁';
+                usefulElement = siblingScores.sort((a, b) => a.score - b.score)[0].el;
+            }
+            else if (printScores.length > 0) {
                 usefulGroup = '인성';
-                // 인성 중 점수가 낮은 것 (부족한 것)을 용신으로
                 usefulElement = printScores.sort((a, b) => a.score - b.score)[0].el;
             }
             else {
@@ -3063,10 +3112,18 @@ var manseryeok = (function (exports) {
             const officialEls = byGroup['관성'];
             unfavorableElement = officialEls.length > 0
                 ? officialEls.sort((a, b) => bodyStrength.elementScores[b] - bodyStrength.elementScores[a])[0]
-                : byGroup['재성'][0];
+                : (byGroup['재성'][0] ?? dayElement);
             // 구신: 기신을 생하는 오행
             adverseElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === unfavorableElement);
+            if (strengthLevel === '극약') {
+                followElement = elements
+                    .map(el => ({ el, score: bodyStrength.elementScores[el] }))
+                    .sort((a, b) => b.score - a.score)[0].el;
+            }
             description = `신약(${strengthLevel}) → 억부용신: ${usefulGroup}(${usefulElement}) | 희신: ${favorableElement} | 기신: ${unfavorableElement}(관성)`;
+            if (followElement) {
+                description += ` | 종용신: ${followElement}`;
+            }
         }
         return {
             usefulElement,
@@ -3075,6 +3132,7 @@ var manseryeok = (function (exports) {
             adverseElement,
             usefulGroup,
             strengthLevel,
+            followElement,
             description,
         };
     }
@@ -4402,10 +4460,7 @@ var manseryeok = (function (exports) {
         const tenGodAnalysis = analyzeTenGods(dayStem, yearStem, monthStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
         // 11. 신강/신약
         const bodyStrengthBase = calculateBodyStrength(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
-        const bodyStrength = {
-            ...bodyStrengthBase,
-            level: getBodyStrengthLevel(bodyStrengthBase.selfRatio),
-        };
+        const bodyStrength = bodyStrengthBase;
         // 12. 용신
         const usefulGod = determineUsefulGod(dayStem, bodyStrengthBase);
         // 13. 대운 (성별 필요)

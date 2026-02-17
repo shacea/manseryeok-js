@@ -88,6 +88,7 @@ export interface UsefulGodResult {
   usefulGroup: TenGodGroup;
   /** 신강/신약 강도 */
   strengthLevel: BodyStrengthLevel;
+  followElement?: FiveElement;
   /** 결정 근거 설명 */
   description: string;
 }
@@ -124,28 +125,42 @@ export function determineUsefulGod(
   let favorableElement: FiveElement;
   let unfavorableElement: FiveElement;
   let adverseElement: FiveElement;
+  let followElement: FiveElement | undefined;
   let description: string;
 
-  if (bodyStrength.isStrong) {
-    // ── 신강(身强): 억제가 필요 ──
-    // 우선순위: 식상 > 재성 > 관성
-    // 가장 약한 그룹을 용신으로 (억제 효과 극대화)
+  const isStrongByLevel =
+    strengthLevel === '극강' ||
+    strengthLevel === '태강' ||
+    strengthLevel === '중화신강';
 
-    // 식상 오행 중 점수가 낮은 것 선택
+  if (isStrongByLevel) {
+    // ── 신강(身强): 억제가 필요 ──
     const foodScores = byGroup['식상'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
     const wealthScores = byGroup['재성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
     const officialScores = byGroup['관성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
 
-    // 식상이 있으면 우선 사용
-    if (foodScores.length > 0) {
-      usefulGroup = '식상';
-      usefulElement = foodScores.sort((a, b) => a.score - b.score)[0].el;
-    } else if (wealthScores.length > 0) {
-      usefulGroup = '재성';
-      usefulElement = wealthScores.sort((a, b) => a.score - b.score)[0].el;
+    if (strengthLevel === '중화신강') {
+      if (officialScores.length > 0) {
+        usefulGroup = '관성';
+        usefulElement = officialScores.sort((a, b) => b.score - a.score)[0].el;
+      } else if (foodScores.length > 0) {
+        usefulGroup = '식상';
+        usefulElement = foodScores.sort((a, b) => a.score - b.score)[0].el;
+      } else {
+        usefulGroup = '재성';
+        usefulElement = wealthScores.sort((a, b) => a.score - b.score)[0].el;
+      }
     } else {
-      usefulGroup = '관성';
-      usefulElement = officialScores.sort((a, b) => a.score - b.score)[0].el;
+      if (foodScores.length > 0) {
+        usefulGroup = '식상';
+        usefulElement = foodScores.sort((a, b) => a.score - b.score)[0].el;
+      } else if (wealthScores.length > 0) {
+        usefulGroup = '재성';
+        usefulElement = wealthScores.sort((a, b) => a.score - b.score)[0].el;
+      } else {
+        usefulGroup = '관성';
+        usefulElement = officialScores.sort((a, b) => a.score - b.score)[0].el;
+      }
     }
 
     // 희신: 용신을 생하는 오행 (용신의 인성)
@@ -170,10 +185,13 @@ export function determineUsefulGod(
     const printScores = byGroup['인성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
     const siblingScores = byGroup['비겁'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
 
-    // 인성이 있으면 우선 사용
-    if (printScores.length > 0) {
+    const preferSiblingFirst = strengthLevel === '태약' || strengthLevel === '중화신약';
+
+    if (preferSiblingFirst && siblingScores.length > 0) {
+      usefulGroup = '비겁';
+      usefulElement = siblingScores.sort((a, b) => a.score - b.score)[0].el;
+    } else if (printScores.length > 0) {
       usefulGroup = '인성';
-      // 인성 중 점수가 낮은 것 (부족한 것)을 용신으로
       usefulElement = printScores.sort((a, b) => a.score - b.score)[0].el;
     } else {
       usefulGroup = '비겁';
@@ -191,14 +209,23 @@ export function determineUsefulGod(
     const officialEls = byGroup['관성'];
     unfavorableElement = officialEls.length > 0
       ? officialEls.sort((a, b) => bodyStrength.elementScores[b] - bodyStrength.elementScores[a])[0]
-      : byGroup['재성'][0];
+      : (byGroup['재성'][0] ?? dayElement);
 
     // 구신: 기신을 생하는 오행
     adverseElement = (Object.keys(ELEMENT_GENERATES) as FiveElement[]).find(
       el => ELEMENT_GENERATES[el] === unfavorableElement
     )!;
 
+    if (strengthLevel === '극약') {
+      followElement = elements
+        .map(el => ({ el, score: bodyStrength.elementScores[el] }))
+        .sort((a, b) => b.score - a.score)[0].el;
+    }
+
     description = `신약(${strengthLevel}) → 억부용신: ${usefulGroup}(${usefulElement}) | 희신: ${favorableElement} | 기신: ${unfavorableElement}(관성)`;
+    if (followElement) {
+      description += ` | 종용신: ${followElement}`;
+    }
   }
 
   return {
@@ -208,6 +235,7 @@ export function determineUsefulGod(
     adverseElement,
     usefulGroup,
     strengthLevel,
+    followElement,
     description,
   };
 }

@@ -27,7 +27,7 @@ import { calculateAllTwelveSpirits } from './twelve-spirits';
 import { analyzeSpecialStars, type SpecialStarResult } from './special-stars';
 import { analyzeRelations, type PillarRelations } from './relations';
 import { analyzeFiveElements, analyzeTenGods, type FiveElementAnalysis, type TenGodAnalysis } from './five-elements-analysis';
-import { calculateBodyStrength, getBodyStrengthLevel, type BodyStrengthResult, type BodyStrengthLevel } from './body-strength';
+import { calculateBodyStrength, type BodyStrengthResult } from './body-strength';
 import { determineUsefulGod, type UsefulGodResult } from './useful-god';
 import { calculateMajorFortune, type MajorFortuneResult } from './major-fortune';
 import { getPalaces, analyzeSixRelations, type PalaceInfo, type SixRelation } from './palace';
@@ -96,7 +96,7 @@ export interface ManseryeokResult {
   tenGodAnalysis: TenGodAnalysis;
 
   /** 신강/신약 판정 */
-  bodyStrength: BodyStrengthResult & { level: BodyStrengthLevel };
+  bodyStrength: BodyStrengthResult;
 
   /** 용신 */
   usefulGod: UsefulGodResult;
@@ -240,10 +240,7 @@ export function calculateManseryeok(
     yearStem, monthStem, dayStem, hourStem,
     yearBranch, monthBranch, dayBranch, hourBranch
   );
-  const bodyStrength = {
-    ...bodyStrengthBase,
-    level: getBodyStrengthLevel(bodyStrengthBase.selfRatio),
-  };
+  const bodyStrength = bodyStrengthBase;
 
   // 12. 용신
   const usefulGod = determineUsefulGod(dayStem, bodyStrengthBase);
