@@ -2499,33 +2499,2055 @@ var manseryeok = (function (exports) {
         return false;
     }
 
+    /**
+     * 천간(天干)·지지(地支) 기초 데이터
+     *
+     * 사주팔자 분석에 필요한 모든 기초 상수 및 매핑을 제공합니다.
+     */
+    // ============================================================
+    // 천간 (天干, Heavenly Stems)
+    // ============================================================
+    /** 천간 한글 배열 (index 0~9) */
+    const STEMS = ['갑', '을', '병', '정', '무', '기', '경', '신', '임', '계'];
+    /** 천간 한자 배열 */
+    const STEMS_HANJA = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+    /** 오행 한자 매핑 */
+    const ELEMENT_HANJA = {
+        목: '木', 화: '火', 토: '土', 금: '金', 수: '水',
+    };
+    /** 오행 영문 매핑 */
+    const ELEMENT_ENGLISH = {
+        목: 'wood', 화: 'fire', 토: 'earth', 금: 'metal', 수: 'water',
+    };
+    /** 천간 → 오행 매핑 (갑을=목, 병정=화, 무기=토, 경신=금, 임계=수) */
+    const STEM_ELEMENT = ['목', '목', '화', '화', '토', '토', '금', '금', '수', '수'];
+    /** 천간 → 음양 매핑 (짝수 index=양, 홀수=음) */
+    const STEM_YINYANG = ['양', '음', '양', '음', '양', '음', '양', '음', '양', '음'];
+    /** 천간 인덱스 조회 */
+    function stemIndex(stem) {
+        const idx = STEMS.indexOf(stem);
+        if (idx === -1)
+            throw new Error(`Invalid stem: ${stem}`);
+        return idx;
+    }
+    // ============================================================
+    // 지지 (地支, Earthly Branches)
+    // ============================================================
+    /** 지지 한글 배열 (index 0~11) */
+    const BRANCHES = ['자', '축', '인', '묘', '진', '사', '오', '미', '신', '유', '술', '해'];
+    /** 지지 한자 배열 */
+    const BRANCHES_HANJA = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+    /** 12지지 동물 (띠) */
+    const BRANCH_ANIMALS = ['쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지'];
+    /** 지지 → 오행 매핑 */
+    const BRANCH_ELEMENT = ['수', '토', '목', '목', '토', '화', '화', '토', '금', '금', '토', '수'];
+    /** 지지 → 음양 매핑 */
+    const BRANCH_YINYANG = ['양', '음', '양', '음', '양', '음', '양', '음', '양', '음', '양', '음'];
+    /** 지지 인덱스 조회 */
+    function branchIndex(branch) {
+        const idx = BRANCHES.indexOf(branch);
+        if (idx === -1)
+            throw new Error(`Invalid branch: ${branch}`);
+        return idx;
+    }
+    // ============================================================
+    // 오행 상생·상극 관계
+    // ============================================================
+    /** 오행 상생 (生): 목→화→토→금→수→목 */
+    const ELEMENT_GENERATES = {
+        목: '화', 화: '토', 토: '금', 금: '수', 수: '목',
+    };
+    /** 오행 상극 (剋): 목→토→수→화→금→목 */
+    const ELEMENT_CONTROLS = {
+        목: '토', 화: '금', 토: '수', 금: '목', 수: '화',
+    };
+    /** A가 B를 생하는지 */
+    function generates(a, b) {
+        return ELEMENT_GENERATES[a] === b;
+    }
+    /** A가 B를 극하는지 */
+    function controls(a, b) {
+        return ELEMENT_CONTROLS[a] === b;
+    }
+    /** 십성 한자 */
+    const TEN_GOD_HANJA = {
+        비견: '比肩', 겁재: '劫財',
+        식신: '食神', 상관: '傷官',
+        편재: '偏財', 정재: '正財',
+        편관: '偏官', 정관: '正官',
+        편인: '偏印', 정인: '正印',
+    };
+    // ============================================================
+    // 12운성 (十二運星, Twelve Growth Stages)
+    // ============================================================
+    /** 12운성 이름 배열 (순서: 장생부터) */
+    const TWELVE_STATES = ['장생', '목욕', '관대', '건록', '제왕', '쇠', '병', '사', '묘', '절', '태', '양'];
+    /** 12운성 한자 */
+    const TWELVE_STATES_HANJA = ['長生', '沐浴', '冠帶', '建祿', '帝旺', '衰', '病', '死', '墓', '絶', '胎', '養'];
+    // ============================================================
+    // 유틸리티
+    // ============================================================
+    /**
+     * 사주 기둥(pillar) 문자열에서 천간/지지 분리
+     * @param pillar 예: "갑자", "을축"
+     * @returns [천간, 지지]
+     */
+    function splitPillar(pillar) {
+        if (pillar.length !== 2)
+            throw new Error(`Invalid pillar: ${pillar}`);
+        return [pillar[0], pillar[1]];
+    }
+    /**
+     * 천간/지지 인덱스로 기둥 문자열 생성
+     */
+    function makePillar(stemIdx, branchIdx) {
+        return STEMS[stemIdx % 10] + BRANCHES[branchIdx % 12];
+    }
+    /**
+     * 천간/지지 인덱스로 한자 기둥 문자열 생성
+     */
+    function makePillarHanja(stemIdx, branchIdx) {
+        return STEMS_HANJA[stemIdx % 10] + BRANCHES_HANJA[branchIdx % 12];
+    }
+
+    /**
+     * 신강/신약(身强/身弱) 판별 모듈
+     *
+     * 일간(日干)의 강약을 오행 점수 시스템으로 계산합니다.
+     *
+     * 알고리즘 출처:
+     * - china-testing/bazi (Python, ⭐1162): bazi.py L206-287, ganzhi.py L44-56
+     * - http://www.131.com.tw/word/b3_2_14.htm (五行 점수 계산 원전)
+     *
+     * 핵심 공식:
+     * 1. 천간 각각 5점
+     * 2. 지지 지장간 점수 (자=8, 묘=8, 유=8; 나머지는 본기5+중기2+여기1)
+     * 3. 월지(月支)는 2배 가중치
+     * 4. 일간과 같은 오행(비견·겁재) + 일간을 생하는 오행(편인·정인) 합산
+     * 5. 합산 점수 > 전체 점수의 절반 → 신강(身强), 이하 → 신약(身弱)
+     */
+    // ============================================================
+    // 지장간 점수 테이블
+    // 출처: china-testing/bazi ganzhi.py L44-56
+    // 자(子)·묘(卯)·유(酉)는 단일 지장간으로 8점
+    // 나머지는 본기 5점 + 중기 2점 + 여기 1점
+    // ============================================================
+    /**
+     * 지지별 지장간 점수 테이블
+     * key: 지지 한글, value: { 천간 한글: 점수 }
+     */
+    const HIDDEN_STEM_SCORES = {
+        자: { 임: 3, 계: 7 }, // 壬3 癸7 (합계 10 → 실제 비율 기준)
+        축: { 계: 3, 신: 3, 기: 4 }, // 癸3 辛3 己4
+        인: { 무: 1, 병: 3, 갑: 6 }, // 戊1 丙3 甲6
+        묘: { 갑: 3, 을: 7 }, // 甲3 乙7
+        진: { 을: 3, 계: 3, 무: 4 }, // 乙3 癸3 戊4
+        사: { 무: 1, 경: 3, 병: 6 }, // 戊1 庚3 丙6
+        오: { 병: 3, 기: 3, 정: 4 }, // 丙3 己3 丁4
+        미: { 정: 3, 을: 3, 기: 4 }, // 丁3 乙3 己4
+        신: { 무: 1, 임: 3, 경: 6 }, // 戊1 壬3 庚6
+        유: { 경: 3, 신: 7 }, // 庚3 辛7
+        술: { 신: 3, 정: 3, 무: 4 }, // 辛3 丁3 戊4
+        해: { 무: 1, 갑: 3, 임: 6 }, // 戊1 甲3 壬6
+    };
+    // ============================================================
+    // 오행 점수 계산
+    // ============================================================
+    /**
+     * 사주 전체의 오행별 점수를 계산합니다.
+     *
+     * @param yearStem 년간 (한글)
+     * @param monthStem 월간 (한글)
+     * @param dayStem 일간 (한글)
+     * @param hourStem 시간 (한글, null 가능)
+     * @param yearBranch 년지 (한글)
+     * @param monthBranch 월지 (한글)
+     * @param dayBranch 일지 (한글)
+     * @param hourBranch 시지 (한글, null 가능)
+     * @returns 오행별 점수 맵
+     */
+    function calculateElementScores(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        const scores = {
+            목: 0, 화: 0, 토: 0, 금: 0, 수: 0,
+        };
+        // 1. 천간 점수 (각 5점)
+        const stems = [yearStem, monthStem, dayStem, hourStem].filter(Boolean);
+        for (const stem of stems) {
+            const idx = stemIndex(stem);
+            scores[STEM_ELEMENT[idx]] += 5;
+        }
+        // 2. 지지 지장간 점수 (월지는 2배)
+        const branches = [
+            { branch: yearBranch, multiplier: 1 },
+            { branch: monthBranch, multiplier: 2 }, // 월지 2배 가중치
+            { branch: dayBranch, multiplier: 1 },
+            ...(hourBranch ? [{ branch: hourBranch, multiplier: 1 }] : []),
+        ];
+        for (const { branch, multiplier } of branches) {
+            const stemScores = HIDDEN_STEM_SCORES[branch];
+            if (!stemScores)
+                continue;
+            for (const [hiddenStem, score] of Object.entries(stemScores)) {
+                const idx = stemIndex(hiddenStem);
+                scores[STEM_ELEMENT[idx]] += score * multiplier;
+            }
+        }
+        return scores;
+    }
+    /**
+     * 천간별 점수를 계산합니다 (오행 점수와 별도로 개별 천간 추적).
+     */
+    function calculateStemScores(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        const stemScores = {};
+        for (const s of STEMS)
+            stemScores[s] = 0;
+        // 천간 점수 (각 5점)
+        const stems = [yearStem, monthStem, dayStem, hourStem].filter(Boolean);
+        for (const stem of stems) {
+            stemScores[stem] = (stemScores[stem] ?? 0) + 5;
+        }
+        // 지지 지장간 점수 (월지 2배)
+        const branches = [
+            { branch: yearBranch, multiplier: 1 },
+            { branch: monthBranch, multiplier: 2 },
+            { branch: dayBranch, multiplier: 1 },
+            ...(hourBranch ? [{ branch: hourBranch, multiplier: 1 }] : []),
+        ];
+        for (const { branch, multiplier } of branches) {
+            const scores = HIDDEN_STEM_SCORES[branch];
+            if (!scores)
+                continue;
+            for (const [hiddenStem, score] of Object.entries(scores)) {
+                stemScores[hiddenStem] = (stemScores[hiddenStem] ?? 0) + score * multiplier;
+            }
+        }
+        return stemScores;
+    }
+    /**
+     * 신강/신약을 판별합니다.
+     *
+     * 판별 기준:
+     * - 일간과 같은 오행(비견·겁재) + 일간을 생하는 오행(편인·정인) 점수 합산
+     * - 합산 점수 > 전체 점수의 50% → 신강(身强)
+     * - 합산 점수 ≤ 전체 점수의 50% → 신약(身弱)
+     *
+     * @param yearStem 년간
+     * @param monthStem 월간
+     * @param dayStem 일간
+     * @param hourStem 시간 (null 가능)
+     * @param yearBranch 년지
+     * @param monthBranch 월지
+     * @param dayBranch 일지
+     * @param hourBranch 시지 (null 가능)
+     */
+    function calculateBodyStrength(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        const elementScores = calculateElementScores(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        const stemScores = calculateStemScores(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        // 일간 오행
+        const dayIdx = stemIndex(dayStem);
+        const dayElement = STEM_ELEMENT[dayIdx];
+        // 일간을 생하는 오행 (인성 오행)
+        // ELEMENT_GENERATES[A] = B → A가 B를 생함 → B를 생하는 것은 A
+        // 즉 dayElement를 생하는 오행 = ELEMENT_GENERATES의 역방향
+        const generatesDay = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === dayElement);
+        // 자기 세력 = 비견·겁재(같은 오행) + 편인·정인(생하는 오행)
+        const selfScore = elementScores[dayElement] + elementScores[generatesDay];
+        // 전체 점수
+        const totalScore = Object.values(elementScores).reduce((a, b) => a + b, 0);
+        const selfRatio = totalScore > 0 ? selfScore / totalScore : 0;
+        const isStrong = selfRatio > 0.5;
+        const description = isStrong
+            ? `신강(身强): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`
+            : `신약(身弱): 자기 세력 ${selfScore}점 / 전체 ${totalScore}점 (${(selfRatio * 100).toFixed(1)}%)`;
+        return {
+            isStrong,
+            selfScore,
+            totalScore,
+            selfRatio,
+            elementScores,
+            stemScores,
+            description,
+        };
+    }
+    function getBodyStrengthLevel(selfRatio) {
+        if (selfRatio > 0.7)
+            return '극강';
+        if (selfRatio > 0.55)
+            return '강';
+        if (selfRatio >= 0.45)
+            return '중화';
+        if (selfRatio >= 0.3)
+            return '약';
+        return '극약';
+    }
+
+    /**
+     * 대운수(大運數) 계산 모듈
+     *
+     * 대운(大運)의 시작 나이와 각 대운 간지를 계산합니다.
+     *
+     * 알고리즘 출처:
+     * - rath/orrery TypeScript (⭐33): pillars.ts L401-443
+     * - china-testing/bazi Python (⭐1162): bazi.py L236-254
+     *
+     * 핵심 공식:
+     * 1. 순행/역행 결정: 양남음녀=순행, 음남양녀=역행
+     * 2. 순행이면 다음 절기(節氣)까지의 일수, 역행이면 이전 절기까지의 일수
+     * 3. 대운 시작 나이 = 절기까지 일수 / 3 (3일 = 1년)
+     * 4. 대운은 월주(月柱)에서 순/역행으로 10년씩 진행
+     *
+     * 절기 데이터 없는 연도: 평균 절기 날짜로 근사 계산
+     */
+    // ============================================================
+    // 절기(節氣) 평균 날짜 (데이터 없는 연도용 근사값)
+    // 한국 기준 평균 절기 날짜 (시각은 12:00 기본)
+    // ============================================================
+    /** 사주 월을 결정하는 12개 절기 이름 */
+    const JEOLGI_NAMES = [
+        '소한', '입춘', '경칩', '청명', '입하', '망종',
+        '소서', '입추', '백로', '한로', '입동', '대설',
+    ];
+    /** 절기 평균 날짜 [월, 일] */
+    const JEOLGI_APPROX = {
+        소한: [1, 6],
+        입춘: [2, 4],
+        경칩: [3, 6],
+        청명: [4, 5],
+        입하: [5, 6],
+        망종: [6, 6],
+        소서: [7, 7],
+        입추: [8, 7],
+        백로: [9, 8],
+        한로: [10, 8],
+        입동: [11, 7],
+        대설: [12, 7],
+    };
+    /**
+     * 특정 연도의 절기 시각을 Date 객체로 반환합니다.
+     * 데이터가 없으면 평균 날짜로 근사합니다.
+     */
+    function getSolarTermDate(year, termName) {
+        const yearData = SOLAR_TERMS_DATA[year];
+        if (yearData) {
+            const term = yearData.find(t => t.name === termName);
+            if (term) {
+                return new Date(year, term.month - 1, term.day, term.hour, term.minute, 0, 0);
+            }
+        }
+        // 근사값 사용
+        const approx = JEOLGI_APPROX[termName];
+        if (approx) {
+            return new Date(year, approx[0] - 1, approx[1], 12, 0, 0, 0);
+        }
+        throw new Error(`Unknown solar term: ${termName}`);
+    }
+    /**
+     * 출생일 기준으로 다음/이전 절기(節氣) 날짜를 찾습니다.
+     */
+    function findNearestJeolgi(birthYear, birthMonth, birthDay, birthHour, birthMinute, forward) {
+        const birthDate = new Date(birthYear, birthMonth - 1, birthDay, birthHour, birthMinute);
+        // 검색 범위: 전후 2년
+        const searchYears = forward
+            ? [birthYear, birthYear + 1]
+            : [birthYear - 1, birthYear];
+        const candidates = [];
+        for (const year of searchYears) {
+            for (const termName of JEOLGI_NAMES) {
+                const termDate = getSolarTermDate(year, termName);
+                if (forward && termDate > birthDate) {
+                    candidates.push(termDate);
+                }
+                else if (!forward && termDate < birthDate) {
+                    candidates.push(termDate);
+                }
+            }
+        }
+        if (candidates.length === 0) {
+            // 폴백: 출생일 기준 15일 후/전
+            const fallback = new Date(birthDate);
+            fallback.setDate(fallback.getDate() + (forward ? 15 : -15));
+            return fallback;
+        }
+        // 가장 가까운 절기 선택
+        candidates.sort((a, b) => Math.abs(a.getTime() - birthDate.getTime()) -
+            Math.abs(b.getTime() - birthDate.getTime()));
+        return candidates[0];
+    }
+    /**
+     * 대운수를 계산합니다.
+     *
+     * @param isMale 남성 여부
+     * @param birthYear 출생 연도
+     * @param birthMonth 출생 월
+     * @param birthDay 출생 일
+     * @param birthHour 출생 시 (기본값: 0)
+     * @param birthMinute 출생 분 (기본값: 0)
+     * @param monthStemIdx 월간 인덱스 (0~9)
+     * @param monthBranchIdx 월지 인덱스 (0~11)
+     * @param yearStem 년간 (한글) - 순행/역행 결정에 사용
+     * @param count 대운 개수 (기본값: 10)
+     */
+    function calculateMajorFortune(isMale, birthYear, birthMonth, birthDay, birthHour = 0, birthMinute = 0, monthStemIdx, monthBranchIdx, yearStem, count = 10) {
+        // 1. 순행/역행 결정
+        // 양남음녀 = 순행, 음남양녀 = 역행
+        const yearStemIdx = stemIndex(yearStem);
+        const isYangYear = STEM_YINYANG[yearStemIdx] === '양';
+        const isForward = (isMale && isYangYear) || (!isMale && !isYangYear);
+        // 2. 절기까지의 일수 계산
+        const birthDate = new Date(birthYear, birthMonth - 1, birthDay, birthHour, birthMinute);
+        const jeolgiDate = findNearestJeolgi(birthYear, birthMonth, birthDay, birthHour, birthMinute, isForward);
+        const diffMs = Math.abs(jeolgiDate.getTime() - birthDate.getTime());
+        const daysToJeolgi = diffMs / (1000 * 60 * 60 * 24);
+        // 핵심 공식: 3일 = 1년
+        const startAgeExact = daysToJeolgi / 3;
+        const startAge = Math.round(startAgeExact);
+        // 3. 대운 간지 생성 (월주에서 순/역행)
+        const flow = isForward ? 1 : -1;
+        const fortunes = [];
+        for (let i = 0; i < count; i++) {
+            const offset = (i + 1) * flow;
+            const sIdx = ((monthStemIdx + offset) % 10 + 10) % 10;
+            const bIdx = ((monthBranchIdx + offset) % 12 + 12) % 12;
+            fortunes.push({
+                index: i + 1,
+                pillar: makePillar(sIdx, bIdx),
+                pillarHanja: makePillarHanja(sIdx, bIdx),
+                startAge: startAge + i * 10,
+                endAge: startAge + (i + 1) * 10 - 1,
+            });
+        }
+        const direction = isForward ? '순행(順行)' : '역행(逆行)';
+        const description = `${direction} | 절기까지 ${daysToJeolgi.toFixed(1)}일 → 대운 시작 ${startAgeExact.toFixed(1)}세 (반올림: ${startAge}세)`;
+        return {
+            isForward,
+            startAgeExact,
+            startAge,
+            daysToJeolgi,
+            fortunes,
+            description,
+        };
+    }
+    /**
+     * 현재 나이에 해당하는 대운을 찾습니다.
+     *
+     * @param fortunes 대운 목록
+     * @param currentAge 현재 나이
+     * @returns 현재 대운 또는 null
+     */
+    function getCurrentFortune(fortunes, currentAge) {
+        return fortunes.find(f => currentAge >= f.startAge && currentAge <= f.endAge) ?? null;
+    }
+
+    /**
+     * 억부용신(抑扶用神) 결정 모듈
+     *
+     * 신강/신약에 따라 용신(用神)과 기신(忌神)을 결정합니다.
+     *
+     * 알고리즘 출처:
+     * - 억부용신 원리: 신강하면 억제(억부), 신약하면 부조(扶助)
+     * - 오행 상생·상극 관계 기반
+     *
+     * 억부용신 결정 원칙:
+     * ┌─────────┬──────────────────────────────────────────────────────┐
+     * │ 신강(强) │ 식상(食傷)·재성(財星)·관성(官星)으로 억제           │
+     * │         │ 우선순위: 식상 > 재성 > 관성                         │
+     * ├─────────┼──────────────────────────────────────────────────────┤
+     * │ 신약(弱) │ 비겁(比劫)·인성(印星)으로 부조                      │
+     * │         │ 우선순위: 인성 > 비겁                                 │
+     * └─────────┴──────────────────────────────────────────────────────┘
+     */
+    /**
+     * 일간 오행 기준으로 각 오행의 십성 그룹을 반환합니다.
+     */
+    function getElementGroup(dayElement, targetElement) {
+        if (dayElement === targetElement)
+            return '비겁';
+        if (ELEMENT_GENERATES[dayElement] === targetElement)
+            return '식상';
+        if (ELEMENT_CONTROLS[dayElement] === targetElement)
+            return '재성';
+        if (ELEMENT_CONTROLS[targetElement] === dayElement)
+            return '관성';
+        // 나를 생하는 오행
+        return '인성';
+    }
+    /**
+     * 일간 기준 각 오행의 십성 그룹 맵을 반환합니다.
+     */
+    function getElementGroupMap(dayStem) {
+        const dayIdx = stemIndex(dayStem);
+        const dayElement = STEM_ELEMENT[dayIdx];
+        const elements = ['목', '화', '토', '금', '수'];
+        const result = {};
+        for (const el of elements) {
+            result[el] = getElementGroup(dayElement, el);
+        }
+        return result;
+    }
+    /**
+     * 억부용신을 결정합니다.
+     *
+     * @param dayStem 일간 (한글)
+     * @param bodyStrength 신강/신약 계산 결과
+     * @returns 용신 결정 결과
+     */
+    function determineUsefulGod(dayStem, bodyStrength) {
+        const dayIdx = stemIndex(dayStem);
+        const dayElement = STEM_ELEMENT[dayIdx];
+        const strengthLevel = getBodyStrengthLevel(bodyStrength.selfRatio);
+        const groupMap = getElementGroupMap(dayStem);
+        // 오행 목록
+        const elements = ['목', '화', '토', '금', '수'];
+        // 각 그룹별 오행 분류
+        const byGroup = {
+            비겁: [], 식상: [], 재성: [], 관성: [], 인성: [],
+        };
+        for (const el of elements) {
+            byGroup[groupMap[el]].push(el);
+        }
+        let usefulGroup;
+        let usefulElement;
+        let favorableElement;
+        let unfavorableElement;
+        let adverseElement;
+        let description;
+        if (bodyStrength.isStrong) {
+            // ── 신강(身强): 억제가 필요 ──
+            // 우선순위: 식상 > 재성 > 관성
+            // 가장 약한 그룹을 용신으로 (억제 효과 극대화)
+            // 식상 오행 중 점수가 낮은 것 선택
+            const foodScores = byGroup['식상'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+            const wealthScores = byGroup['재성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+            const officialScores = byGroup['관성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+            // 식상이 있으면 우선 사용
+            if (foodScores.length > 0) {
+                usefulGroup = '식상';
+                usefulElement = foodScores.sort((a, b) => a.score - b.score)[0].el;
+            }
+            else if (wealthScores.length > 0) {
+                usefulGroup = '재성';
+                usefulElement = wealthScores.sort((a, b) => a.score - b.score)[0].el;
+            }
+            else {
+                usefulGroup = '관성';
+                usefulElement = officialScores.sort((a, b) => a.score - b.score)[0].el;
+            }
+            // 희신: 용신을 생하는 오행 (용신의 인성)
+            favorableElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === usefulElement);
+            // 기신: 용신을 극하는 오행 (비겁 또는 인성)
+            unfavorableElement = dayElement; // 비겁 (일간과 같은 오행)
+            // 구신: 기신을 생하는 오행
+            adverseElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === unfavorableElement);
+            description = `신강(${strengthLevel}) → 억부용신: ${usefulGroup}(${usefulElement}) | 희신: ${favorableElement} | 기신: ${unfavorableElement}(비겁)`;
+        }
+        else {
+            // ── 신약(身弱): 부조가 필요 ──
+            // 우선순위: 인성 > 비겁
+            const printScores = byGroup['인성'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+            const siblingScores = byGroup['비겁'].map(el => ({ el, score: bodyStrength.elementScores[el] }));
+            // 인성이 있으면 우선 사용
+            if (printScores.length > 0) {
+                usefulGroup = '인성';
+                // 인성 중 점수가 낮은 것 (부족한 것)을 용신으로
+                usefulElement = printScores.sort((a, b) => a.score - b.score)[0].el;
+            }
+            else {
+                usefulGroup = '비겁';
+                usefulElement = siblingScores.sort((a, b) => a.score - b.score)[0].el;
+            }
+            // 희신: 용신을 생하는 오행
+            favorableElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === usefulElement);
+            // 기신: 용신을 극하는 오행 (재성 또는 관성)
+            // 신약일 때 기신 = 재성(일간이 극하는 오행) 또는 관성(일간을 극하는 오행)
+            // 관성이 더 직접적으로 일간을 극하므로 관성을 기신으로
+            const officialEls = byGroup['관성'];
+            unfavorableElement = officialEls.length > 0
+                ? officialEls.sort((a, b) => bodyStrength.elementScores[b] - bodyStrength.elementScores[a])[0]
+                : byGroup['재성'][0];
+            // 구신: 기신을 생하는 오행
+            adverseElement = Object.keys(ELEMENT_GENERATES).find(el => ELEMENT_GENERATES[el] === unfavorableElement);
+            description = `신약(${strengthLevel}) → 억부용신: ${usefulGroup}(${usefulElement}) | 희신: ${favorableElement} | 기신: ${unfavorableElement}(관성)`;
+        }
+        return {
+            usefulElement,
+            favorableElement,
+            unfavorableElement,
+            adverseElement,
+            usefulGroup,
+            strengthLevel,
+            description,
+        };
+    }
+    function classifyElement(element, usefulGod) {
+        if (element === usefulGod.usefulElement)
+            return '용신';
+        if (element === usefulGod.favorableElement)
+            return '희신';
+        if (element === usefulGod.unfavorableElement)
+            return '기신';
+        if (element === usefulGod.adverseElement)
+            return '구신';
+        return '한신';
+    }
+
+    /**
+     * 지장간(地藏干) 모듈
+     *
+     * 각 지지(地支) 속에 숨어 있는 천간(天干)을 제공합니다.
+     * 지장간은 여기(餘氣), 중기(中氣), 본기(本氣)로 구성됩니다.
+     *
+     * 순서: [여기, 중기, 본기] 또는 [여기, 본기] (중기 없는 경우)
+     */
+    /**
+     * 지장간 데이터
+     * - 자(子): 임(여기), 계(본기)
+     * - 축(丑): 계(여기), 신(중기), 기(본기)
+     * - 인(寅): 무(여기), 병(중기), 갑(본기)
+     * - 묘(卯): 갑(여기), 을(본기)
+     * - 진(辰): 을(여기), 계(중기), 무(본기)
+     * - 사(巳): 무(여기), 경(중기), 병(본기)
+     * - 오(午): 병(여기), 기(중기), 정(본기)
+     * - 미(未): 정(여기), 을(중기), 기(본기)
+     * - 신(申): 무(여기), 임(중기), 경(본기)
+     * - 유(酉): 경(여기), 신(본기)
+     * - 술(戌): 신(여기), 정(중기), 무(본기)
+     * - 해(亥): 무(여기), 갑(중기), 임(본기)
+     */
+    const HIDDEN_STEMS = {
+        자: ['임', '계'],
+        축: ['계', '신', '기'],
+        인: ['무', '병', '갑'],
+        묘: ['갑', '을'],
+        진: ['을', '계', '무'],
+        사: ['무', '경', '병'],
+        오: ['병', '기', '정'],
+        미: ['정', '을', '기'],
+        신: ['무', '임', '경'],
+        유: ['경', '신'],
+        술: ['신', '정', '무'],
+        해: ['무', '갑', '임'],
+    };
+    /**
+     * 지장간 한자 데이터
+     */
+    const HIDDEN_STEMS_HANJA = {
+        자: ['壬', '癸'],
+        축: ['癸', '辛', '己'],
+        인: ['戊', '丙', '甲'],
+        묘: ['甲', '乙'],
+        진: ['乙', '癸', '戊'],
+        사: ['戊', '庚', '丙'],
+        오: ['丙', '己', '丁'],
+        미: ['丁', '乙', '己'],
+        신: ['戊', '壬', '庚'],
+        유: ['庚', '辛'],
+        술: ['辛', '丁', '戊'],
+        해: ['戊', '甲', '壬'],
+    };
+    /**
+     * 지지의 지장간을 조회합니다.
+     *
+     * @param branch 지지 (자, 축, 인, ...)
+     * @returns 지장간 배열 [여기, (중기), 본기]
+     */
+    function getHiddenStems(branch) {
+        const result = HIDDEN_STEMS[branch];
+        if (!result)
+            throw new Error(`Invalid branch for hidden stems: ${branch}`);
+        return result;
+    }
+    /**
+     * 지지의 본기(本氣)를 조회합니다.
+     * 본기는 지장간의 마지막 요소입니다.
+     *
+     * @param branch 지지
+     * @returns 본기 천간
+     */
+    function getMainStem(branch) {
+        const stems = getHiddenStems(branch);
+        return stems[stems.length - 1];
+    }
+    /**
+     * 지장간을 한자 문자열로 반환합니다.
+     * PDF 형식에 맞춤 (예: "병기정", "갑을")
+     */
+    function getHiddenStemsString(branch) {
+        return getHiddenStems(branch).join('');
+    }
+    /**
+     * 지장간을 한자 문자열로 반환합니다.
+     */
+    function getHiddenStemsHanjaString(branch) {
+        const result = HIDDEN_STEMS_HANJA[branch];
+        if (!result)
+            throw new Error(`Invalid branch for hidden stems: ${branch}`);
+        return result.join('');
+    }
+
+    /**
+     * 십성(十神) 계산 모듈
+     *
+     * 일간(日干)을 기준으로 다른 천간/지지의 십성을 판별합니다.
+     *
+     * 십성 판별 규칙:
+     * - 비견(比肩): 같은 오행, 같은 음양
+     * - 겁재(劫財): 같은 오행, 다른 음양
+     * - 식신(食神): 내가 생하는 오행, 같은 음양
+     * - 상관(傷官): 내가 생하는 오행, 다른 음양
+     * - 편재(偏財): 내가 극하는 오행, 같은 음양
+     * - 정재(正財): 내가 극하는 오행, 다른 음양
+     * - 편관(偏官): 나를 극하는 오행, 같은 음양
+     * - 정관(正官): 나를 극하는 오행, 다른 음양
+     * - 편인(偏印): 나를 생하는 오행, 같은 음양
+     * - 정인(正印): 나를 생하는 오행, 다른 음양
+     */
+    /**
+     * 두 천간 사이의 십성 관계를 계산합니다.
+     *
+     * @param dayStem 일간 (기준)
+     * @param targetStem 대상 천간
+     * @returns 십성 이름
+     */
+    function getTenGodByStem(dayStem, targetStem) {
+        const dayIdx = stemIndex(dayStem);
+        const targetIdx = stemIndex(targetStem);
+        const dayElement = STEM_ELEMENT[dayIdx];
+        const targetElement = STEM_ELEMENT[targetIdx];
+        const samePolarity = STEM_YINYANG[dayIdx] === STEM_YINYANG[targetIdx];
+        return determineTenGod(dayElement, targetElement, samePolarity);
+    }
+    /**
+     * 일간과 지지 사이의 십성 관계를 계산합니다.
+     * (지지의 본기(本氣) 오행 기준)
+     *
+     * @param dayStem 일간
+     * @param targetBranch 대상 지지
+     * @returns 십성 이름
+     */
+    function getTenGodByBranch(dayStem, targetBranch) {
+        const dayIdx = stemIndex(dayStem);
+        const dayElement = STEM_ELEMENT[dayIdx];
+        // 지지의 십성은 본기(本氣) 천간 기준으로 판별
+        const mainStem = getMainStem(targetBranch);
+        const mainStemIdx = stemIndex(mainStem);
+        const targetElement = STEM_ELEMENT[mainStemIdx];
+        const samePolarity = STEM_YINYANG[dayIdx] === STEM_YINYANG[mainStemIdx];
+        return determineTenGod(dayElement, targetElement, samePolarity);
+    }
+    /**
+     * 오행 관계와 음양으로 십성을 결정합니다.
+     */
+    function determineTenGod(dayElement, targetElement, samePolarity) {
+        // 같은 오행 → 비견/겁재
+        if (dayElement === targetElement) {
+            return samePolarity ? '비견' : '겁재';
+        }
+        // 내가 생하는 오행 (식상) → 식신/상관
+        if (ELEMENT_GENERATES[dayElement] === targetElement) {
+            return samePolarity ? '식신' : '상관';
+        }
+        // 내가 극하는 오행 (재성) → 편재/정재
+        if (ELEMENT_CONTROLS[dayElement] === targetElement) {
+            return samePolarity ? '편재' : '정재';
+        }
+        // 나를 극하는 오행 (관성) → 편관/정관
+        if (ELEMENT_CONTROLS[targetElement] === dayElement) {
+            return samePolarity ? '편관' : '정관';
+        }
+        // 나를 생하는 오행 (인성) → 편인/정인
+        if (ELEMENT_GENERATES[targetElement] === dayElement) {
+            return samePolarity ? '편인' : '정인';
+        }
+        // 이론적으로 도달 불가
+        throw new Error(`Cannot determine ten god: ${dayElement} vs ${targetElement}`);
+    }
+    /**
+     * 사주 전체의 십성을 계산합니다.
+     *
+     * @param dayStem 일간
+     * @param yearStem 년간
+     * @param monthStem 월간
+     * @param hourStem 시간 (optional)
+     * @param yearBranch 년지
+     * @param monthBranch 월지
+     * @param dayBranch 일지
+     * @param hourBranch 시지 (optional)
+     */
+    function calculateAllTenGods(dayStem, yearStem, monthStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        return {
+            stem: {
+                year: getTenGodByStem(dayStem, yearStem),
+                month: getTenGodByStem(dayStem, monthStem),
+                day: '비견', // 일간은 자기 자신
+                hour: hourStem ? getTenGodByStem(dayStem, hourStem) : null,
+            },
+            branch: {
+                year: getTenGodByBranch(dayStem, yearBranch),
+                month: getTenGodByBranch(dayStem, monthBranch),
+                day: getTenGodByBranch(dayStem, dayBranch),
+                hour: hourBranch ? getTenGodByBranch(dayStem, hourBranch) : null,
+            },
+        };
+    }
+
+    /**
+     * 12운성(十二運星) 계산 모듈
+     *
+     * 일간(日干)을 기준으로 각 지지(地支)에서의 12운성을 계산합니다.
+     *
+     * 12운성 순서: 장생 → 목욕 → 관대 → 건록 → 제왕 → 쇠 → 병 → 사 → 묘 → 절 → 태 → 양
+     *
+     * 양간(甲丙戊庚壬)은 순행, 음간(乙丁己辛癸)은 역행합니다.
+     */
+    /**
+     * 각 천간별 장생(長生) 시작 지지 인덱스
+     *
+     * 양간 (순행):
+     * - 갑(甲, 양목): 장생=해(亥, 11)
+     * - 병(丙, 양화): 장생=인(寅, 2)
+     * - 무(戊, 양토): 장생=인(寅, 2)  (병과 동일)
+     * - 경(庚, 양금): 장생=사(巳, 5)
+     * - 임(壬, 양수): 장생=신(申, 8)
+     *
+     * 음간 (역행):
+     * - 을(乙, 음목): 장생=오(午, 6)
+     * - 정(丁, 음화): 장생=유(酉, 9)
+     * - 기(己, 음토): 장생=유(酉, 9)  (정과 동일)
+     * - 신(辛, 음금): 장생=자(子, 0)
+     * - 계(癸, 음수): 장생=묘(卯, 3)
+     */
+    const CHANGSHENG_START = [
+        11, // 갑(甲): 해(亥)
+        6, // 을(乙): 오(午)
+        2, // 병(丙): 인(寅)
+        9, // 정(丁): 유(酉)
+        2, // 무(戊): 인(寅)
+        9, // 기(己): 유(酉)
+        5, // 경(庚): 사(巳)
+        0, // 신(辛): 자(子)
+        8, // 임(壬): 신(申)
+        3, // 계(癸): 묘(卯)
+    ];
+    /**
+     * 일간과 지지로 12운성을 계산합니다.
+     *
+     * @param dayStem 일간 (갑, 을, 병, ...)
+     * @param branch 지지 (자, 축, 인, ...)
+     * @returns 12운성 이름
+     */
+    function getTwelveState(dayStem, branch) {
+        const sIdx = stemIndex(dayStem);
+        const bIdx = branchIndex(branch);
+        const isYang = sIdx % 2 === 0; // 양간
+        const start = CHANGSHENG_START[sIdx];
+        let offset;
+        if (isYang) {
+            // 양간: 순행 (지지 인덱스 증가 방향)
+            offset = (bIdx - start + 12) % 12;
+        }
+        else {
+            // 음간: 역행 (지지 인덱스 감소 방향)
+            offset = (start - bIdx + 12) % 12;
+        }
+        return TWELVE_STATES[offset];
+    }
+    /**
+     * 일간의 전체 12운성 표를 반환합니다.
+     *
+     * @param dayStem 일간
+     * @returns 지지별 12운성 맵
+     */
+    function getAllTwelveStates(dayStem) {
+        const branches = ['자', '축', '인', '묘', '진', '사', '오', '미', '신', '유', '술', '해'];
+        const result = {};
+        for (const branch of branches) {
+            result[branch] = getTwelveState(dayStem, branch);
+        }
+        return result;
+    }
+    /**
+     * 사주 전체의 12운성을 계산합니다.
+     */
+    function calculateAllTwelveStates(dayStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        return {
+            year: getTwelveState(dayStem, yearBranch),
+            month: getTwelveState(dayStem, monthBranch),
+            day: getTwelveState(dayStem, dayBranch),
+            hour: hourBranch ? getTwelveState(dayStem, hourBranch) : null,
+        };
+    }
+
+    /**
+     * 합(合)·충(沖)·형(刑)·파(破)·해(害) 및 공망(空亡)·원진(元嗔) 모듈
+     *
+     * 사주팔자의 천간/지지 관계를 분석합니다.
+     */
+    // ============================================================
+    // 천간합 (天干合)
+    // ============================================================
+    /**
+     * 천간합 쌍 (5조합, 합화 오행)
+     * 갑+기=토, 을+경=금, 병+신=수, 정+임=목, 무+계=화
+     */
+    const STEM_HARMONY_PAIRS = [
+        [0, 5, '토'], // 갑+기 → 토
+        [1, 6, '금'], // 을+경 → 금
+        [2, 7, '수'], // 병+신 → 수
+        [3, 8, '목'], // 정+임 → 목
+        [4, 9, '화'], // 무+계 → 화
+    ];
+    /**
+     * 두 천간이 합(合)인지 확인합니다.
+     * @returns 합화 오행 또는 null
+     */
+    function getStemHarmony(stem1, stem2) {
+        const i1 = stemIndex(stem1);
+        const i2 = stemIndex(stem2);
+        for (const [a, b, element] of STEM_HARMONY_PAIRS) {
+            if ((i1 === a && i2 === b) || (i1 === b && i2 === a)) {
+                return element;
+            }
+        }
+        return null;
+    }
+    // ============================================================
+    // 천간충 (天干沖)
+    // ============================================================
+    /**
+     * 천간충 쌍
+     * 갑↔경, 을↔신, 병↔임, 정↔계 (무↔기는 같은 토이므로 충 없음)
+     */
+    const STEM_CLASH_PAIRS = [
+        [0, 6], // 갑↔경
+        [1, 7], // 을↔신
+        [2, 8], // 병↔임
+        [3, 9], // 정↔계
+    ];
+    /**
+     * 두 천간이 충(沖)인지 확인합니다.
+     */
+    function isStemClash(stem1, stem2) {
+        const i1 = stemIndex(stem1);
+        const i2 = stemIndex(stem2);
+        return STEM_CLASH_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
+    }
+    // ============================================================
+    // 지지육합 (地支六合)
+    // ============================================================
+    /**
+     * 지지육합 쌍 (합화 오행)
+     * 자+축=토, 인+해=목, 묘+술=화, 진+유=금, 사+신=수, 오+미=토
+     */
+    const BRANCH_SIXHARMONY_PAIRS = [
+        [0, 1, '토'], // 자+축 → 토
+        [2, 11, '목'], // 인+해 → 목
+        [3, 10, '화'], // 묘+술 → 화
+        [4, 9, '금'], // 진+유 → 금
+        [5, 8, '수'], // 사+신 → 수
+        [6, 7, '토'], // 오+미 → 토
+    ];
+    /**
+     * 두 지지가 육합(六合)인지 확인합니다.
+     * @returns 합화 오행 또는 null
+     */
+    function getBranchSixHarmony(branch1, branch2) {
+        const i1 = branchIndex(branch1);
+        const i2 = branchIndex(branch2);
+        for (const [a, b, element] of BRANCH_SIXHARMONY_PAIRS) {
+            if ((i1 === a && i2 === b) || (i1 === b && i2 === a)) {
+                return element;
+            }
+        }
+        return null;
+    }
+    // ============================================================
+    // 지지삼합 (地支三合)
+    // ============================================================
+    /**
+     * 지지삼합 (합화 오행)
+     * 신자진=수, 해묘미=목, 인오술=화, 사유축=금
+     */
+    const BRANCH_TRIPLE_HARMONY = [
+        [8, 0, 4, '수'], // 신+자+진 → 수국
+        [11, 3, 7, '목'], // 해+묘+미 → 목국
+        [2, 6, 10, '화'], // 인+오+술 → 화국
+        [5, 9, 1, '금'], // 사+유+축 → 금국
+    ];
+    /**
+     * 세 지지가 삼합(三合)인지 확인합니다.
+     * @returns 합화 오행 또는 null
+     */
+    function getBranchTripleHarmony(b1, b2, b3) {
+        const indices = [branchIndex(b1), branchIndex(b2), branchIndex(b3)].sort((a, b) => a - b);
+        for (const [a, b, c, element] of BRANCH_TRIPLE_HARMONY) {
+            const sorted = [a, b, c].sort((x, y) => x - y);
+            if (indices[0] === sorted[0] && indices[1] === sorted[1] && indices[2] === sorted[2]) {
+                return element;
+            }
+        }
+        return null;
+    }
+    /**
+     * 사주의 지지들에서 삼합 조합을 찾습니다.
+     */
+    function findTripleHarmonies(branches) {
+        const results = [];
+        for (let i = 0; i < branches.length; i++) {
+            for (let j = i + 1; j < branches.length; j++) {
+                for (let k = j + 1; k < branches.length; k++) {
+                    const el = getBranchTripleHarmony(branches[i], branches[j], branches[k]);
+                    if (el) {
+                        results.push({ branches: [branches[i], branches[j], branches[k]], element: el });
+                    }
+                }
+            }
+        }
+        return results;
+    }
+    // ============================================================
+    // 지지방합 (地支方合)
+    // ============================================================
+    /**
+     * 지지방합 (방위 합)
+     * 인묘진=동방목, 사오미=남방화, 신유술=서방금, 해자축=북방수
+     */
+    const BRANCH_DIRECTIONAL_HARMONY = [
+        [2, 3, 4, '목'], // 인+묘+진 → 동방 목
+        [5, 6, 7, '화'], // 사+오+미 → 남방 화
+        [8, 9, 10, '금'], // 신+유+술 → 서방 금
+        [11, 0, 1, '수'], // 해+자+축 → 북방 수
+    ];
+    /**
+     * 세 지지가 방합(方合)인지 확인합니다.
+     */
+    function getBranchDirectionalHarmony(b1, b2, b3) {
+        const indices = [branchIndex(b1), branchIndex(b2), branchIndex(b3)].sort((a, b) => a - b);
+        for (const [a, b, c, element] of BRANCH_DIRECTIONAL_HARMONY) {
+            const sorted = [a, b, c].sort((x, y) => x - y);
+            if (indices[0] === sorted[0] && indices[1] === sorted[1] && indices[2] === sorted[2]) {
+                return element;
+            }
+        }
+        return null;
+    }
+    // ============================================================
+    // 지지충 (地支沖)
+    // ============================================================
+    /**
+     * 지지충 쌍 (6쌍, 인덱스 차이 = 6)
+     * 자↔오, 축↔미, 인↔신, 묘↔유, 진↔술, 사↔해
+     */
+    function isBranchClash(branch1, branch2) {
+        const i1 = branchIndex(branch1);
+        const i2 = branchIndex(branch2);
+        return Math.abs(i1 - i2) === 6;
+    }
+    // ============================================================
+    // 지지형 (地支刑)
+    // ============================================================
+    /**
+     * 지지형 (三刑 + 自刑)
+     * - 인사신 삼형 (무례지형)
+     * - 축술미 삼형 (지세지형)
+     * - 자묘 상형 (무은지형)
+     * - 진진, 오오, 유유, 해해 자형
+     */
+    const BRANCH_PUNISHMENT_PAIRS = [
+        // 인사신 삼형 (양방향 쌍으로 표현)
+        [2, 5], // 인 → 사
+        [5, 8], // 사 → 신
+        [8, 2], // 신 → 인
+        // 축술미 삼형
+        [1, 10], // 축 → 술
+        [10, 7], // 술 → 미
+        [7, 1], // 미 → 축
+        // 자묘 상형
+        [0, 3], // 자 → 묘
+        [3, 0], // 묘 → 자
+        // 자형
+        [4, 4], // 진 → 진
+        [6, 6], // 오 → 오
+        [9, 9], // 유 → 유
+        [11, 11], // 해 → 해
+    ];
+    /**
+     * 두 지지가 형(刑) 관계인지 확인합니다.
+     */
+    function isBranchPunishment(branch1, branch2) {
+        const i1 = branchIndex(branch1);
+        const i2 = branchIndex(branch2);
+        return BRANCH_PUNISHMENT_PAIRS.some(([a, b]) => i1 === a && i2 === b);
+    }
+    // ============================================================
+    // 지지파 (地支破)
+    // ============================================================
+    /**
+     * 지지파 쌍
+     * 자↔유, 축↔진, 인↔해, 묘↔오, 사↔신, 미↔술
+     */
+    const BRANCH_DESTRUCTION_PAIRS = [
+        [0, 9], // 자↔유
+        [1, 4], // 축↔진
+        [2, 11], // 인↔해
+        [3, 6], // 묘↔오
+        [5, 8], // 사↔신
+        [7, 10], // 미↔술
+    ];
+    /**
+     * 두 지지가 파(破) 관계인지 확인합니다.
+     */
+    function isBranchDestruction(branch1, branch2) {
+        const i1 = branchIndex(branch1);
+        const i2 = branchIndex(branch2);
+        return BRANCH_DESTRUCTION_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
+    }
+    // ============================================================
+    // 지지해 (地支害) / 원진 (元嗔)
+    // ============================================================
+    /**
+     * 지지해(害) = 원진(元嗔) 쌍
+     * 자↔미, 축↔오, 인↔사, 묘↔진, 신↔해, 유↔술
+     */
+    const BRANCH_HARM_PAIRS = [
+        [0, 7], // 자↔미
+        [1, 6], // 축↔오
+        [2, 5], // 인↔사
+        [3, 4], // 묘↔진
+        [8, 11], // 신↔해
+        [9, 10], // 유↔술
+    ];
+    /**
+     * 두 지지가 해(害) / 원진(元嗔) 관계인지 확인합니다.
+     */
+    function isBranchHarm(branch1, branch2) {
+        const i1 = branchIndex(branch1);
+        const i2 = branchIndex(branch2);
+        return BRANCH_HARM_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
+    }
+    // ============================================================
+    // 공망 (空亡)
+    // ============================================================
+    /**
+     * 공망 계산
+     *
+     * 공망은 60갑자에서 10간과 12지의 조합에서 빠지는 2개의 지지입니다.
+     * 일주(日柱)의 갑자 순(旬)에 따라 결정됩니다.
+     *
+     * 예: 갑자순 → 술해 공망, 갑술순 → 신유 공망, ...
+     *
+     * @param dayStem 일간
+     * @param dayBranch 일지
+     * @returns 공망 지지 2개
+     */
+    function getGongmang(dayStem, dayBranch) {
+        const sIdx = stemIndex(dayStem);
+        const bIdx = branchIndex(dayBranch);
+        // 60갑자에서의 순(旬) 시작 지지 = (지지인덱스 - 천간인덱스 + 12) % 12
+        // 이 값에서 공망 지지 계산
+        const xunStart = (bIdx - sIdx + 12) % 12;
+        // 공망은 순(旬) 시작 지지의 앞 2개
+        // 예: 갑자순 시작(자=0) → 공망은 술(10), 해(11)
+        const gong1 = (xunStart + 10) % 12;
+        const gong2 = (xunStart + 11) % 12;
+        return [BRANCHES[gong1], BRANCHES[gong2]];
+    }
+    /**
+     * 사주 전체의 합충형파해 관계를 분석합니다.
+     */
+    function analyzeRelations(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        const stems = hourStem
+            ? [yearStem, monthStem, dayStem, hourStem]
+            : [yearStem, monthStem, dayStem];
+        const branches = hourBranch
+            ? [yearBranch, monthBranch, dayBranch, hourBranch]
+            : [yearBranch, monthBranch, dayBranch];
+        const pillarNames = ['년', '월', '일', '시'];
+        // 천간합/충
+        const stemHarmonies = [];
+        const stemClashes = [];
+        for (let i = 0; i < stems.length; i++) {
+            for (let j = i + 1; j < stems.length; j++) {
+                const harmony = getStemHarmony(stems[i], stems[j]);
+                if (harmony) {
+                    stemHarmonies.push({ pillars: [pillarNames[i], pillarNames[j]], element: harmony });
+                }
+                if (isStemClash(stems[i], stems[j])) {
+                    stemClashes.push([pillarNames[i], pillarNames[j]]);
+                }
+            }
+        }
+        // 지지 분석
+        const branchSixHarmonies = [];
+        const branchClashes = [];
+        const branchPunishments = [];
+        const branchDestructions = [];
+        const branchHarms = [];
+        for (let i = 0; i < branches.length; i++) {
+            for (let j = i + 1; j < branches.length; j++) {
+                const sixH = getBranchSixHarmony(branches[i], branches[j]);
+                if (sixH) {
+                    branchSixHarmonies.push({ pillars: [pillarNames[i], pillarNames[j]], element: sixH });
+                }
+                if (isBranchClash(branches[i], branches[j])) {
+                    branchClashes.push([pillarNames[i], pillarNames[j]]);
+                }
+                if (isBranchPunishment(branches[i], branches[j])) {
+                    branchPunishments.push([pillarNames[i], pillarNames[j]]);
+                }
+                if (isBranchDestruction(branches[i], branches[j])) {
+                    branchDestructions.push([pillarNames[i], pillarNames[j]]);
+                }
+                if (isBranchHarm(branches[i], branches[j])) {
+                    branchHarms.push([pillarNames[i], pillarNames[j]]);
+                }
+            }
+        }
+        // 삼합/방합 검색
+        const branchTripleHarmonies = [];
+        const branchDirectionalHarmonies = [];
+        for (let i = 0; i < branches.length; i++) {
+            for (let j = i + 1; j < branches.length; j++) {
+                for (let k = j + 1; k < branches.length; k++) {
+                    const tripleH = getBranchTripleHarmony(branches[i], branches[j], branches[k]);
+                    if (tripleH) {
+                        branchTripleHarmonies.push({
+                            pillars: [pillarNames[i], pillarNames[j], pillarNames[k]],
+                            element: tripleH,
+                        });
+                    }
+                    const dirH = getBranchDirectionalHarmony(branches[i], branches[j], branches[k]);
+                    if (dirH) {
+                        branchDirectionalHarmonies.push({
+                            pillars: [pillarNames[i], pillarNames[j], pillarNames[k]],
+                            element: dirH,
+                        });
+                    }
+                }
+            }
+        }
+        const gongmang = getGongmang(dayStem, dayBranch);
+        return {
+            stemHarmonies,
+            stemClashes,
+            branchSixHarmonies,
+            branchTripleHarmonies,
+            branchDirectionalHarmonies,
+            branchClashes,
+            branchPunishments,
+            branchDestructions,
+            branchHarms,
+            gongmang,
+        };
+    }
+
+    /**
+     * 12신살(十二神殺) 계산 모듈
+     *
+     * 년지(年支) 또는 일지(日支) 기준으로 각 지지의 12신살을 판별합니다.
+     *
+     * 12신살: 겁살, 재살, 천살, 지살, 년살, 월살, 망신살, 장성살, 반안살, 역마살, 육해살, 화개살
+     */
+    /**
+     * 12신살 이름
+     */
+    const TWELVE_SPIRIT_NAMES = [
+        '겁살', '재살', '천살', '지살', '년살', '월살',
+        '망신살', '장성살', '반안살', '역마살', '육해살', '화개살',
+    ];
+    /**
+     * 12신살 기준 테이블
+     *
+     * 기준지지(년지 또는 일지)에 따라 겁살부터 시작하는 12신살이 대응하는 지지
+     *
+     * 삼합 기준:
+     * - 신자진(수국): 겁살=사, 재살=오, 천살=미, ...
+     * - 해묘미(목국): 겁살=신, 재살=유, 천살=술, ...
+     * - 인오술(화국): 겁살=해, 재살=자, 천살=축, ...
+     * - 사유축(금국): 겁살=인, 재살=묘, 천살=진, ...
+     */
+    const SPIRIT_TABLE = {
+        // 신자진(수국) 기준 - 겁살 시작: 사(5)
+        8: [5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4], // 신
+        0: [5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4], // 자
+        4: [5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4], // 진
+        // 해묘미(목국) 기준 - 겁살 시작: 신(8)
+        11: [8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7], // 해
+        3: [8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7], // 묘
+        7: [8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7], // 미
+        // 인오술(화국) 기준 - 겁살 시작: 해(11)
+        2: [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // 인
+        6: [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // 오
+        10: [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // 술
+        // 사유축(금국) 기준 - 겁살 시작: 인(2)
+        5: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1], // 사
+        9: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1], // 유
+        1: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1], // 축
+    };
+    /**
+     * 기준 지지와 대상 지지의 12신살을 판별합니다.
+     *
+     * @param baseBranch 기준 지지 (년지 또는 일지)
+     * @param targetBranch 대상 지지
+     * @returns 12신살 이름 또는 null
+     */
+    function getTwelveSpirit(baseBranch, targetBranch) {
+        const baseIdx = branchIndex(baseBranch);
+        const targetIdx = branchIndex(targetBranch);
+        const table = SPIRIT_TABLE[baseIdx];
+        if (!table)
+            return null;
+        const spiritIdx = table.indexOf(targetIdx);
+        if (spiritIdx === -1)
+            return null;
+        return TWELVE_SPIRIT_NAMES[spiritIdx];
+    }
+    /**
+     * 사주 전체의 12신살을 계산합니다 (년지 기준).
+     */
+    function calculateAllTwelveSpirits(yearBranch, monthBranch, dayBranch, hourBranch) {
+        return {
+            year: getTwelveSpirit(yearBranch, yearBranch),
+            month: getTwelveSpirit(yearBranch, monthBranch),
+            day: getTwelveSpirit(yearBranch, dayBranch),
+            hour: hourBranch ? getTwelveSpirit(yearBranch, hourBranch) : null,
+        };
+    }
+
+    /**
+     * 신살(神殺)과 길성(吉星) 모듈
+     *
+     * PDF에 표시된 신살: 현침살, 천을귀인, 도화살, 태극귀인, 화개살, 천문성, 문곡귀인, 정록
+     */
+    // ============================================================
+    // 도화살 (桃花殺) = 함지살
+    // ============================================================
+    /**
+     * 도화살: 년지 또는 일지 기준
+     * 신자진 → 유, 인오술 → 묘, 사유축 → 오, 해묘미 → 자
+     */
+    const DOWHWA_TABLE = {
+        8: 9, 0: 9, 4: 9, // 신자진 → 유
+        2: 3, 6: 3, 10: 3, // 인오술 → 묘
+        5: 6, 9: 6, 1: 6, // 사유축 → 오
+        11: 0, 3: 0, 7: 0, // 해묘미 → 자
+    };
+    /**
+     * 도화살 확인
+     * @param baseBranch 기준 지지 (년지 또는 일지)
+     * @param targetBranch 확인할 지지
+     */
+    function isDohwaSal(baseBranch, targetBranch) {
+        const baseIdx = branchIndex(baseBranch);
+        const targetIdx = branchIndex(targetBranch);
+        return DOWHWA_TABLE[baseIdx] === targetIdx;
+    }
+    // ============================================================
+    // 화개살 (華蓋殺)
+    // ============================================================
+    /**
+     * 화개살: 년지 또는 일지 기준
+     * 신자진 → 진, 인오술 → 술, 사유축 → 축, 해묘미 → 미
+     */
+    const HWAGAE_TABLE = {
+        8: 4, 0: 4, 4: 4, // 신자진 → 진
+        2: 10, 6: 10, 10: 10, // 인오술 → 술
+        5: 1, 9: 1, 1: 1, // 사유축 → 축
+        11: 7, 3: 7, 7: 7, // 해묘미 → 미
+    };
+    function isHwagaeSal(baseBranch, targetBranch) {
+        const baseIdx = branchIndex(baseBranch);
+        const targetIdx = branchIndex(targetBranch);
+        return HWAGAE_TABLE[baseIdx] === targetIdx;
+    }
+    // ============================================================
+    // 역마살 (驛馬殺)
+    // ============================================================
+    /**
+     * 역마살: 년지 또는 일지 기준
+     * 신자진 → 인, 인오술 → 신, 사유축 → 해, 해묘미 → 사
+     */
+    const YEOKMA_TABLE = {
+        8: 2, 0: 2, 4: 2, // 신자진 → 인
+        2: 8, 6: 8, 10: 8, // 인오술 → 신
+        5: 11, 9: 11, 1: 11, // 사유축 → 해
+        11: 5, 3: 5, 7: 5, // 해묘미 → 사
+    };
+    function isYeokmaSal(baseBranch, targetBranch) {
+        const baseIdx = branchIndex(baseBranch);
+        const targetIdx = branchIndex(targetBranch);
+        return YEOKMA_TABLE[baseIdx] === targetIdx;
+    }
+    // ============================================================
+    // 천을귀인 (天乙貴人)
+    // ============================================================
+    /**
+     * 천을귀인: 일간 기준
+     * 갑무경=축미, 을기=자신, 병정=해유, 임계=묘사, 신=인오
+     */
+    const CHEONUL_TABLE = {
+        0: [1, 7], // 갑 → 축, 미
+        4: [1, 7], // 무 → 축, 미
+        6: [1, 7], // 경 → 축, 미
+        1: [0, 8], // 을 → 자, 신
+        5: [0, 8], // 기 → 자, 신
+        2: [11, 9], // 병 → 해, 유
+        3: [11, 9], // 정 → 해, 유
+        8: [3, 5], // 임 → 묘, 사
+        9: [3, 5], // 계 → 묘, 사
+        7: [2, 6], // 신 → 인, 오
+    };
+    function isCheonulGwiin(dayStem, targetBranch) {
+        const sIdx = stemIndex(dayStem);
+        const bIdx = branchIndex(targetBranch);
+        return CHEONUL_TABLE[sIdx]?.includes(bIdx) ?? false;
+    }
+    // ============================================================
+    // 현침살 (懸針殺)
+    // ============================================================
+    /**
+     * 현침살: 천간이 갑(甲), 신(辛)인 경우
+     * 갑(甲)과 신(辛)은 글자 획이 뾰족하여 현침살이 됨
+     */
+    function isHyeonchimSal(stem) {
+        return stem === '갑' || stem === '신';
+    }
+    // ============================================================
+    // 태극귀인 (太極貴人)
+    // ============================================================
+    /**
+     * 태극귀인: 일간 기준
+     * 갑기=자오, 을경=축미, 병신=인묘, 정임=사유, 무계=사유(또는 진술)
+     * (여러 유파가 있으므로 가장 일반적인 버전 사용)
+     */
+    const TAEGEUK_TABLE = {
+        0: [0, 6], // 갑 → 자, 오
+        5: [0, 6], // 기 → 자, 오
+        1: [1, 7], // 을 → 축, 미
+        6: [1, 7], // 경 → 축, 미
+        2: [2, 3], // 병 → 인, 묘
+        7: [2, 3], // 신 → 인, 묘
+        3: [5, 9], // 정 → 사, 유
+        8: [5, 9], // 임 → 사, 유
+        4: [5, 9], // 무 → 사, 유
+        9: [5, 9], // 계 → 사, 유
+    };
+    function isTaegeukGwiin(dayStem, targetBranch) {
+        const sIdx = stemIndex(dayStem);
+        const bIdx = branchIndex(targetBranch);
+        return TAEGEUK_TABLE[sIdx]?.includes(bIdx) ?? false;
+    }
+    // ============================================================
+    // 천문성 (天門星)
+    // ============================================================
+    /**
+     * 천문성: 일간 기준으로 해(亥)가 사주에 있으면 천문성
+     * (일반적으로 해(亥)궁이 천문에 해당)
+     */
+    function isCheonmunseong(targetBranch) {
+        return targetBranch === '해';
+    }
+    // ============================================================
+    // 문곡귀인 (文曲貴人)
+    // ============================================================
+    /**
+     * 문곡귀인: 일간 기준
+     * 갑기=사, 을경=오, 병신=신, 정임=유, 무계=미
+     * (학문/예술 능력)
+     */
+    const MUNGOK_TABLE = {
+        0: 5, // 갑 → 사
+        5: 5, // 기 → 사
+        1: 6, // 을 → 오
+        6: 6, // 경 → 오
+        2: 8, // 병 → 신
+        7: 8, // 신 → 신
+        3: 9, // 정 → 유
+        8: 9, // 임 → 유
+        4: 7, // 무 → 미
+        9: 7, // 계 → 미
+    };
+    function isMungokGwiin(dayStem, targetBranch) {
+        const sIdx = stemIndex(dayStem);
+        const bIdx = branchIndex(targetBranch);
+        return MUNGOK_TABLE[sIdx] === bIdx;
+    }
+    // ============================================================
+    // 정록 (正祿) = 건록
+    // ============================================================
+    /**
+     * 정록(건록): 일간의 건록 위치
+     * 갑=인, 을=묘, 병=사, 정=오, 무=사, 기=오, 경=신, 신=유, 임=해, 계=자
+     */
+    const JEONGROK_TABLE = [
+        2, // 갑 → 인
+        3, // 을 → 묘
+        5, // 병 → 사
+        6, // 정 → 오
+        5, // 무 → 사
+        6, // 기 → 오
+        8, // 경 → 신
+        9, // 신 → 유
+        11, // 임 → 해
+        0, // 계 → 자
+    ];
+    function isJeongrok(dayStem, targetBranch) {
+        const sIdx = stemIndex(dayStem);
+        const bIdx = branchIndex(targetBranch);
+        return JEONGROK_TABLE[sIdx] === bIdx;
+    }
+    /**
+     * 사주 전체의 신살/길성을 분석합니다.
+     */
+    function analyzeSpecialStars(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        const results = [];
+        const stems = [yearStem, monthStem, dayStem, ...(hourStem ? [hourStem] : [])];
+        const branches = [yearBranch, monthBranch, dayBranch, ...(hourBranch ? [hourBranch] : [])];
+        const positions = ['년', '월', '일', '시'];
+        // 천간 신살
+        stems.forEach((stem, i) => {
+            if (isHyeonchimSal(stem)) {
+                results.push({ name: '현침살', nameHanja: '懸針殺', type: 'hyungsal', position: positions[i] });
+            }
+        });
+        // 지지 신살 (년지 기준 + 일지 기준 + 일간 기준)
+        branches.forEach((branch, i) => {
+            // 년지 기준 도화살
+            if (isDohwaSal(yearBranch, branch)) {
+                results.push({ name: '도화살', nameHanja: '桃花殺', type: 'hyungsal', position: positions[i] });
+            }
+            // 일지 기준 도화살도 체크
+            if (dayBranch !== yearBranch && isDohwaSal(dayBranch, branch)) {
+                results.push({ name: '도화살', nameHanja: '桃花殺', type: 'hyungsal', position: positions[i] });
+            }
+            // 화개살 (년지 기준)
+            if (isHwagaeSal(yearBranch, branch)) {
+                results.push({ name: '화개살', nameHanja: '華蓋殺', type: 'gilseong', position: positions[i] });
+            }
+            // 역마살 (년지 기준)
+            if (isYeokmaSal(yearBranch, branch)) {
+                results.push({ name: '역마살', nameHanja: '驛馬殺', type: 'hyungsal', position: positions[i] });
+            }
+            // 천을귀인 (일간 기준)
+            if (isCheonulGwiin(dayStem, branch)) {
+                results.push({ name: '천을귀인', nameHanja: '天乙貴人', type: 'gilseong', position: positions[i] });
+            }
+            // 태극귀인 (일간 기준)
+            if (isTaegeukGwiin(dayStem, branch)) {
+                results.push({ name: '태극귀인', nameHanja: '太極貴人', type: 'gilseong', position: positions[i] });
+            }
+            // 천문성
+            if (isCheonmunseong(branch)) {
+                results.push({ name: '천문성', nameHanja: '天門星', type: 'gilseong', position: positions[i] });
+            }
+            // 문곡귀인 (일간 기준)
+            if (isMungokGwiin(dayStem, branch)) {
+                results.push({ name: '문곡귀인', nameHanja: '文曲貴人', type: 'gilseong', position: positions[i] });
+            }
+            // 정록 (일간 기준)
+            if (isJeongrok(dayStem, branch)) {
+                results.push({ name: '정록', nameHanja: '正祿', type: 'gilseong', position: positions[i] });
+            }
+        });
+        return results;
+    }
+
+    /**
+     * 오행(五行) / 십성(十神) 비율 분석 모듈
+     *
+     * PDF 출력 형식:
+     * - 오행 분석: 목37.5%, 화12.5%, 토25.0%, 금12.5%, 수12.5%
+     * - 십성 분석: 편관12.5%, 정관25.0%, 편인12.5%, 비견12.5%, 겁재12.5%, 상관12.5%, 편재12.5%
+     *
+     * 계산 방식: 사주 8글자(천간4 + 지지4)의 오행/십성을 동일 비중으로 카운팅
+     * (지장간 가중치 방식이 아닌 단순 카운팅 방식)
+     */
+    /**
+     * 오행 비율 판정 기준
+     * - 과다: 37.5% 이상 (3개 이상)
+     * - 발달: 25.0% (2개)
+     * - 적정: 12.5% (1개)
+     * - 부족: 0% 미만 = 없음 (0개)
+     */
+    function getElementLevel(ratio) {
+        if (ratio === 0)
+            return '없음';
+        if (ratio >= 0.375)
+            return '과다';
+        if (ratio >= 0.25)
+            return '발달';
+        if (ratio >= 0.125)
+            return '적정';
+        return '부족';
+    }
+    /**
+     * 사주 8글자의 오행 비율을 분석합니다.
+     *
+     * 천간 4글자 + 지지 4글자 = 8글자의 오행을 동일 비중으로 카운팅합니다.
+     *
+     * @param yearStem 년간
+     * @param monthStem 월간
+     * @param dayStem 일간
+     * @param hourStem 시간 (null 가능)
+     * @param yearBranch 년지
+     * @param monthBranch 월지
+     * @param dayBranch 일지
+     * @param hourBranch 시지 (null 가능)
+     */
+    function analyzeFiveElements(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        const counts = {
+            목: 0, 화: 0, 토: 0, 금: 0, 수: 0,
+        };
+        // 천간 오행 카운팅
+        const stems = [yearStem, monthStem, dayStem, ...(hourStem ? [hourStem] : [])];
+        for (const stem of stems) {
+            const idx = stemIndex(stem);
+            counts[STEM_ELEMENT[idx]]++;
+        }
+        // 지지 오행 카운팅
+        const branches = [yearBranch, monthBranch, dayBranch, ...(hourBranch ? [hourBranch] : [])];
+        for (const branch of branches) {
+            const idx = branchIndex(branch);
+            counts[BRANCH_ELEMENT[idx]]++;
+        }
+        const total = stems.length + branches.length;
+        // 비율 계산
+        const ratios = {};
+        const percentages = {};
+        const levels = {};
+        for (const el of ['목', '화', '토', '금', '수']) {
+            ratios[el] = total > 0 ? counts[el] / total : 0;
+            percentages[el] = (ratios[el] * 100).toFixed(1) + '%';
+            levels[el] = getElementLevel(ratios[el]);
+        }
+        return { counts, ratios, percentages, levels, total };
+    }
+    /**
+     * 사주의 십성 비율을 분석합니다.
+     *
+     * 일간(日干)은 기준이므로 제외하고 나머지 7글자(천간3+지지4)의 십성을 분석합니다.
+     *
+     * @param dayStem 일간
+     * @param yearStem 년간
+     * @param monthStem 월간
+     * @param hourStem 시간 (null 가능)
+     * @param yearBranch 년지
+     * @param monthBranch 월지
+     * @param dayBranch 일지
+     * @param hourBranch 시지 (null 가능)
+     */
+    function analyzeTenGods(dayStem, yearStem, monthStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
+        const allTenGods = [
+            '비견', '겁재', '식신', '상관',
+            '편재', '정재', '편관', '정관',
+            '편인', '정인',
+        ];
+        const counts = {};
+        for (const tg of allTenGods)
+            counts[tg] = 0;
+        const details = [];
+        // 천간 십성 (일간 제외)
+        const stemPairs = [
+            [yearStem, '년간'],
+            [monthStem, '월간'],
+        ];
+        if (hourStem)
+            stemPairs.push([hourStem, '시간']);
+        for (const [stem, position] of stemPairs) {
+            const tg = getTenGodByStem(dayStem, stem);
+            counts[tg]++;
+            details.push({ position, tenGod: tg });
+        }
+        // 지지 십성
+        const branchPairs = [
+            [yearBranch, '년지'],
+            [monthBranch, '월지'],
+            [dayBranch, '일지'],
+        ];
+        if (hourBranch)
+            branchPairs.push([hourBranch, '시지']);
+        for (const [branch, position] of branchPairs) {
+            const tg = getTenGodByBranch(dayStem, branch);
+            counts[tg]++;
+            details.push({ position, tenGod: tg });
+        }
+        const total = details.length;
+        const ratios = {};
+        const percentages = {};
+        for (const tg of allTenGods) {
+            ratios[tg] = total > 0 ? counts[tg] / total : 0;
+            percentages[tg] = (ratios[tg] * 100).toFixed(1) + '%';
+        }
+        return { counts, ratios, percentages, total, details };
+    }
+
+    /**
+     * 궁성(宮星) 및 육친(六親) 매핑 모듈
+     *
+     * 사주의 네 기둥(年柱·月柱·日柱·時柱)은 각각 인생의 특정 영역을 상징합니다.
+     *
+     * 궁성 구조:
+     * ┌─────────┬──────────────────────────────────────┐
+     * │ 시주(時) │ 자녀운, 결실, 노년기 (49세~)          │
+     * │ 일주(日) │ 정체성, 자아, 배우자, 중년기 (36~48세)  │
+     * │ 월주(月) │ 부모/사회운, 청년기 (18~35세)           │
+     * │ 년주(年) │ 조상운, 시대상, 유년기 (~17세)          │
+     * └─────────┴──────────────────────────────────────┘
+     *
+     * 육친 매핑:
+     * 남성 기준 (일간 기준 십성):
+     * - 비견/겁재 = 형제
+     * - 정재 = 아내
+     * - 편관 = 아들
+     * - 정관 = 딸
+     * - 편인 = 편모/계모
+     * - 정인 = 어머니
+     * - 편재 = 아버지
+     * - 식신 = 장모
+     * - 상관 = 조모
+     *
+     * 여성 기준 (일간 기준 십성):
+     * - 비견/겁재 = 형제/자매
+     * - 정관 = 남편
+     * - 편관 = 연인/내연남
+     * - 식신 = 아들
+     * - 상관 = 딸
+     * - 정인 = 어머니
+     * - 편인 = 편모/계모
+     * - 편재 = 아버지
+     * - 정재 = 시어머니
+     */
+    /**
+     * 사주 네 기둥의 궁성 정보를 반환합니다.
+     */
+    function getPalaces() {
+        return {
+            year: {
+                name: '년주(年柱)',
+                description: '조상궁 - 조상/시대/뿌리',
+                period: '유년기',
+                ageRange: '0~17세',
+            },
+            month: {
+                name: '월주(月柱)',
+                description: '부모궁/사회궁 - 부모/사회운/직업',
+                period: '청년기',
+                ageRange: '18~35세',
+            },
+            day: {
+                name: '일주(日柱)',
+                description: '자아궁/배우자궁 - 정체성/배우자',
+                period: '중년기',
+                ageRange: '36~48세',
+            },
+            hour: {
+                name: '시주(時柱)',
+                description: '자녀궁/결실궁 - 자녀/노후/결실',
+                period: '노년기',
+                ageRange: '49세~',
+            },
+        };
+    }
+    /**
+     * 남성 기준 십성 → 육친 매핑
+     */
+    const MALE_RELATION_MAP = {
+        비견: '형제',
+        겁재: '형제',
+        식신: '장모',
+        상관: '조모',
+        편재: '아버지',
+        정재: '아내',
+        편관: '아들',
+        정관: '딸',
+        편인: '편모',
+        정인: '어머니',
+    };
+    /**
+     * 여성 기준 십성 → 육친 매핑
+     */
+    const FEMALE_RELATION_MAP = {
+        비견: '자매',
+        겁재: '자매',
+        식신: '아들',
+        상관: '딸',
+        편재: '아버지',
+        정재: '시어머니',
+        편관: '연인',
+        정관: '남편',
+        편인: '편모',
+        정인: '어머니',
+    };
+    /**
+     * 십성으로부터 육친을 결정합니다.
+     *
+     * @param tenGod 십성
+     * @param isMale 남성 여부
+     * @returns 육친 이름
+     */
+    function getSixRelation(tenGod, isMale) {
+        return isMale ? MALE_RELATION_MAP[tenGod] : FEMALE_RELATION_MAP[tenGod];
+    }
+    /**
+     * 사주 전체의 육친을 분석합니다.
+     *
+     * @param stemTenGods 천간 십성 {year, month, hour}
+     * @param branchTenGods 지지 십성 {year, month, day, hour}
+     * @param isMale 남성 여부
+     */
+    function analyzeSixRelations(stemTenGods, branchTenGods, isMale) {
+        return {
+            stem: {
+                year: getSixRelation(stemTenGods.year, isMale),
+                month: getSixRelation(stemTenGods.month, isMale),
+                day: '자기자신',
+                hour: stemTenGods.hour ? getSixRelation(stemTenGods.hour, isMale) : null,
+            },
+            branch: {
+                year: getSixRelation(branchTenGods.year, isMale),
+                month: getSixRelation(branchTenGods.month, isMale),
+                day: getSixRelation(branchTenGods.day, isMale),
+                hour: branchTenGods.hour ? getSixRelation(branchTenGods.hour, isMale) : null,
+            },
+        };
+    }
+
+    /**
+     * 통합 만세력(萬歲曆) 분석 함수
+     *
+     * 사주팔자를 기반으로 모든 분석 결과를 한 번에 계산합니다.
+     *
+     * 포함 분석:
+     * - 사주팔자 (년주, 월주, 일주, 시주)
+     * - 십성 (천간/지지)
+     * - 지장간
+     * - 12운성
+     * - 12신살
+     * - 신살/길성
+     * - 합충형파해, 공망
+     * - 오행/십성 비율 분석
+     * - 신강/신약 판정
+     * - 용신
+     * - 대운
+     * - 궁성/육친
+     */
+    // ============================================================
+    // 통합 계산 함수
+    // ============================================================
+    /**
+     * 통합 만세력 분석을 수행합니다.
+     *
+     * @param solarYear 양력 년
+     * @param solarMonth 양력 월 (1~12)
+     * @param solarDay 양력 일 (1~31)
+     * @param solarHour 양력 시 (0~23, 선택)
+     * @param solarMinute 양력 분 (0~59, 기본값: 0)
+     * @param options 옵션 (경도, 시간보정, 성별 등)
+     * @returns 통합 만세력 분석 결과
+     */
+    function calculateManseryeok(solarYear, solarMonth, solarDay, solarHour, solarMinute = 0, options = {}) {
+        const { isMale = null, fortuneCount = 10, ...sajuOptions } = options;
+        // 1. 사주팔자 계산
+        const saju = calculateSaju(solarYear, solarMonth, solarDay, solarHour, solarMinute, sajuOptions);
+        // 2. 기둥 분해
+        const [yearStem, yearBranch] = splitPillar(saju.yearPillar);
+        const [monthStem, monthBranch] = splitPillar(saju.monthPillar);
+        const [dayStem, dayBranch] = splitPillar(saju.dayPillar);
+        let hourStem = null;
+        let hourBranch = null;
+        if (saju.hourPillar) {
+            [hourStem, hourBranch] = splitPillar(saju.hourPillar);
+        }
+        const pillars = {
+            year: { stem: yearStem, branch: yearBranch },
+            month: { stem: monthStem, branch: monthBranch },
+            day: { stem: dayStem, branch: dayBranch },
+            hour: hourStem && hourBranch ? { stem: hourStem, branch: hourBranch } : null,
+        };
+        // 3. 십성
+        const tenGods = calculateAllTenGods(dayStem, yearStem, monthStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        // 4. 지장간
+        const hiddenStems = {
+            year: {
+                stems: getHiddenStems(yearBranch),
+                string: getHiddenStemsString(yearBranch),
+                hanjaString: getHiddenStemsHanjaString(yearBranch),
+            },
+            month: {
+                stems: getHiddenStems(monthBranch),
+                string: getHiddenStemsString(monthBranch),
+                hanjaString: getHiddenStemsHanjaString(monthBranch),
+            },
+            day: {
+                stems: getHiddenStems(dayBranch),
+                string: getHiddenStemsString(dayBranch),
+                hanjaString: getHiddenStemsHanjaString(dayBranch),
+            },
+            hour: hourBranch ? {
+                stems: getHiddenStems(hourBranch),
+                string: getHiddenStemsString(hourBranch),
+                hanjaString: getHiddenStemsHanjaString(hourBranch),
+            } : null,
+        };
+        // 5. 12운성
+        const twelveStates = calculateAllTwelveStates(dayStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        // 6. 12신살
+        const twelveSpirits = calculateAllTwelveSpirits(yearBranch, monthBranch, dayBranch, hourBranch);
+        // 7. 신살/길성
+        const specialStars = analyzeSpecialStars(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        // 8. 합충형파해, 공망
+        const relations = analyzeRelations(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        // 9. 오행 비율 분석
+        const fiveElements = analyzeFiveElements(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        // 10. 십성 비율 분석
+        const tenGodAnalysis = analyzeTenGods(dayStem, yearStem, monthStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        // 11. 신강/신약
+        const bodyStrengthBase = calculateBodyStrength(yearStem, monthStem, dayStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch);
+        const bodyStrength = {
+            ...bodyStrengthBase,
+            level: getBodyStrengthLevel(bodyStrengthBase.selfRatio),
+        };
+        // 12. 용신
+        const usefulGod = determineUsefulGod(dayStem, bodyStrengthBase);
+        // 13. 대운 (성별 필요)
+        let majorFortune = null;
+        if (isMale !== null && isMale !== undefined) {
+            const monthStemIdx = stemIndex(monthStem);
+            const monthBranchIdx = branchIndex(monthBranch);
+            // 시간 보정 적용된 시간 사용
+            const effectiveHour = saju.correctedTime?.hour ?? solarHour ?? 0;
+            const effectiveMinute = saju.correctedTime?.minute ?? solarMinute;
+            majorFortune = calculateMajorFortune(isMale, solarYear, solarMonth, solarDay, effectiveHour, effectiveMinute, monthStemIdx, monthBranchIdx, yearStem, fortuneCount);
+        }
+        // 14. 궁성
+        const palaces = getPalaces();
+        // 15. 육친 (성별 필요)
+        let sixRelations = null;
+        if (isMale !== null && isMale !== undefined) {
+            sixRelations = analyzeSixRelations({ year: tenGods.stem.year, month: tenGods.stem.month, hour: tenGods.stem.hour }, { year: tenGods.branch.year, month: tenGods.branch.month, day: tenGods.branch.day, hour: tenGods.branch.hour }, isMale);
+        }
+        return {
+            saju,
+            pillars,
+            tenGods,
+            hiddenStems,
+            twelveStates,
+            twelveSpirits,
+            specialStars,
+            relations,
+            fiveElements,
+            tenGodAnalysis,
+            bodyStrength,
+            usefulGod,
+            majorFortune,
+            palaces,
+            sixRelations,
+        };
+    }
+
+    exports.BRANCHES = BRANCHES;
+    exports.BRANCHES_HANJA = BRANCHES_HANJA;
+    exports.BRANCH_ANIMALS = BRANCH_ANIMALS;
+    exports.BRANCH_ELEMENT = BRANCH_ELEMENT;
+    exports.BRANCH_YINYANG = BRANCH_YINYANG;
+    exports.ELEMENT_CONTROLS = ELEMENT_CONTROLS;
+    exports.ELEMENT_ENGLISH = ELEMENT_ENGLISH;
+    exports.ELEMENT_GENERATES = ELEMENT_GENERATES;
+    exports.ELEMENT_HANJA = ELEMENT_HANJA;
+    exports.HIDDEN_STEMS = HIDDEN_STEMS;
+    exports.HIDDEN_STEMS_HANJA = HIDDEN_STEMS_HANJA;
+    exports.HIDDEN_STEM_SCORES = HIDDEN_STEM_SCORES;
     exports.InvalidDateError = InvalidDateError;
     exports.OutOfRangeError = OutOfRangeError;
     exports.SIXTY_PILLARS = SIXTY_PILLARS;
     exports.SOLAR_TERMS_DATA = SOLAR_TERMS_DATA;
     exports.SOLAR_TERM_NAMES = SOLAR_TERM_NAMES;
     exports.SOLAR_TO_LUNAR_INDEX = SOLAR_TO_LUNAR_INDEX;
+    exports.STEMS = STEMS;
+    exports.STEMS_HANJA = STEMS_HANJA;
+    exports.STEM_ELEMENT = STEM_ELEMENT;
+    exports.STEM_YINYANG = STEM_YINYANG;
     exports.SUPPORTED_SOLAR_TERM_YEARS = SUPPORTED_SOLAR_TERM_YEARS;
+    exports.TEN_GOD_HANJA = TEN_GOD_HANJA;
+    exports.TWELVE_SPIRIT_NAMES = TWELVE_SPIRIT_NAMES;
+    exports.TWELVE_STATES = TWELVE_STATES;
+    exports.TWELVE_STATES_HANJA = TWELVE_STATES_HANJA;
+    exports.analyzeFiveElements = analyzeFiveElements;
+    exports.analyzeRelations = analyzeRelations;
+    exports.analyzeSixRelations = analyzeSixRelations;
+    exports.analyzeSpecialStars = analyzeSpecialStars;
+    exports.analyzeTenGods = analyzeTenGods;
+    exports.branchIndex = branchIndex;
+    exports.calculateAllTenGods = calculateAllTenGods;
+    exports.calculateAllTwelveSpirits = calculateAllTwelveSpirits;
+    exports.calculateAllTwelveStates = calculateAllTwelveStates;
+    exports.calculateBodyStrength = calculateBodyStrength;
+    exports.calculateElementScores = calculateElementScores;
+    exports.calculateMajorFortune = calculateMajorFortune;
+    exports.calculateManseryeok = calculateManseryeok;
     exports.calculateSaju = calculateSaju;
     exports.calculateSajuSimple = calculateSajuSimple;
+    exports.calculateStemScores = calculateStemScores;
+    exports.classifyElement = classifyElement;
+    exports.controls = controls;
+    exports.determineUsefulGod = determineUsefulGod;
+    exports.findTripleHarmonies = findTripleHarmonies;
+    exports.generates = generates;
     exports.getAllSolarTerms = getAllSolarTerms;
+    exports.getAllTwelveStates = getAllTwelveStates;
+    exports.getBodyStrengthLevel = getBodyStrengthLevel;
+    exports.getBranchDirectionalHarmony = getBranchDirectionalHarmony;
+    exports.getBranchSixHarmony = getBranchSixHarmony;
+    exports.getBranchTripleHarmony = getBranchTripleHarmony;
+    exports.getCurrentFortune = getCurrentFortune;
+    exports.getElementGroup = getElementGroup;
+    exports.getElementGroupMap = getElementGroupMap;
     exports.getGapja = getGapja;
+    exports.getGongmang = getGongmang;
+    exports.getHiddenStems = getHiddenStems;
+    exports.getHiddenStemsHanjaString = getHiddenStemsHanjaString;
+    exports.getHiddenStemsString = getHiddenStemsString;
+    exports.getMainStem = getMainStem;
     exports.getMonthlyIndex = getMonthlyIndex;
+    exports.getPalaces = getPalaces;
     exports.getPillarByHangul = getPillarByHangul;
     exports.getPillarById = getPillarById;
     exports.getSajuMonth = getSajuMonth;
+    exports.getSixRelation = getSixRelation;
     exports.getSolarTermForDate = getSolarTermForDate;
     exports.getSolarTermInfoByIndex = getSolarTermInfoByIndex;
     exports.getSolarTermInfoByName = getSolarTermInfoByName;
     exports.getSolarTermsByMonth = getSolarTermsByMonth;
     exports.getSolarTermsBySajuMonth = getSolarTermsBySajuMonth;
     exports.getSolarTermsByYear = getSolarTermsByYear;
+    exports.getStemHarmony = getStemHarmony;
     exports.getSupportedRange = getSupportedRange;
     exports.getSupportedSolarTermYears = getSupportedSolarTermYears;
+    exports.getTenGodByBranch = getTenGodByBranch;
+    exports.getTenGodByStem = getTenGodByStem;
+    exports.getTwelveSpirit = getTwelveSpirit;
+    exports.getTwelveState = getTwelveState;
     exports.isBeforeLichun = isBeforeLichun;
+    exports.isBranchClash = isBranchClash;
+    exports.isBranchDestruction = isBranchDestruction;
+    exports.isBranchHarm = isBranchHarm;
+    exports.isBranchPunishment = isBranchPunishment;
+    exports.isCheonmunseong = isCheonmunseong;
+    exports.isCheonulGwiin = isCheonulGwiin;
+    exports.isDohwaSal = isDohwaSal;
+    exports.isHwagaeSal = isHwagaeSal;
+    exports.isHyeonchimSal = isHyeonchimSal;
+    exports.isJeongrok = isJeongrok;
+    exports.isMungokGwiin = isMungokGwiin;
+    exports.isStemClash = isStemClash;
     exports.isSupportedYear = isSupportedYear;
+    exports.isTaegeukGwiin = isTaegeukGwiin;
+    exports.isYeokmaSal = isYeokmaSal;
     exports.lunarToSolar = lunarToSolar;
+    exports.makePillar = makePillar;
+    exports.makePillarHanja = makePillarHanja;
     exports.solarToLunar = solarToLunar;
+    exports.splitPillar = splitPillar;
+    exports.stemIndex = stemIndex;
 
     return exports;
 

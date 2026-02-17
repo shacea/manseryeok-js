@@ -75,3 +75,178 @@ export type { SolarTermWithDate } from './core/solar-term';
 // ============================================
 export { SIXTY_PILLARS, getPillarById, getPillarByHangul } from './data/sixty-pillars';
 export { SOLAR_TO_LUNAR_INDEX, getMonthlyIndex } from './data/date-index';
+
+// ============================================
+// Body Strength (신강/신약)
+// ============================================
+export {
+  calculateBodyStrength,
+  calculateElementScores,
+  calculateStemScores,
+  getBodyStrengthLevel,
+  HIDDEN_STEM_SCORES,
+  type BodyStrengthResult,
+  type BodyStrengthLevel,
+} from './core/body-strength';
+
+// ============================================
+// Major Fortune (대운수)
+// ============================================
+export {
+  calculateMajorFortune,
+  getCurrentFortune,
+  type MajorFortune,
+  type MajorFortuneResult,
+} from './core/major-fortune';
+
+// ============================================
+// Useful God (용신)
+// ============================================
+export {
+  determineUsefulGod,
+  getElementGroup,
+  getElementGroupMap,
+  classifyElement,
+  type UsefulGodResult,
+  type TenGodGroup,
+  type GodType,
+} from './core/useful-god';
+
+// ============================================
+// Ten Gods (십성)
+// ============================================
+export {
+  getTenGodByStem,
+  getTenGodByBranch,
+  calculateAllTenGods,
+} from './core/ten-gods';
+
+// ============================================
+// Twelve States (12운성)
+// ============================================
+export {
+  getTwelveState,
+  getAllTwelveStates,
+  calculateAllTwelveStates,
+} from './core/twelve-states';
+
+// ============================================
+// Hidden Stems (지장간)
+// ============================================
+export {
+  getHiddenStems,
+  getMainStem,
+  getHiddenStemsString,
+  getHiddenStemsHanjaString,
+  HIDDEN_STEMS,
+  HIDDEN_STEMS_HANJA,
+} from './core/hidden-stems';
+
+// ============================================
+// Relations (합충형파해/공망)
+// ============================================
+export {
+  getStemHarmony,
+  isStemClash,
+  getBranchSixHarmony,
+  getBranchTripleHarmony,
+  findTripleHarmonies,
+  getBranchDirectionalHarmony,
+  isBranchClash,
+  isBranchPunishment,
+  isBranchDestruction,
+  isBranchHarm,
+  getGongmang,
+  analyzeRelations,
+  type PillarRelations,
+} from './core/relations';
+
+// ============================================
+// Twelve Spirits (12신살)
+// ============================================
+export {
+  getTwelveSpirit,
+  calculateAllTwelveSpirits,
+  TWELVE_SPIRIT_NAMES,
+  type TwelveSpirit,
+} from './core/twelve-spirits';
+
+// ============================================
+// Special Stars (신살/길성)
+// ============================================
+export {
+  isDohwaSal,
+  isHwagaeSal,
+  isYeokmaSal,
+  isCheonulGwiin,
+  isHyeonchimSal,
+  isTaegeukGwiin,
+  isCheonmunseong,
+  isMungokGwiin,
+  isJeongrok,
+  analyzeSpecialStars,
+  type SpecialStarResult,
+} from './core/special-stars';
+
+// ============================================
+// Five Elements Analysis (오행/십성 비율)
+// ============================================
+export {
+  analyzeFiveElements,
+  analyzeTenGods,
+  type FiveElementAnalysis,
+  type TenGodAnalysis,
+  type ElementLevel,
+} from './core/five-elements-analysis';
+
+// ============================================
+// Palace (궁성/육친)
+// ============================================
+export {
+  getPalaces,
+  getSixRelation,
+  analyzeSixRelations,
+  type PalaceInfo,
+  type SixRelation,
+} from './core/palace';
+
+// ============================================
+// Integrated Manseryeok (통합 만세력)
+// ============================================
+export {
+  calculateManseryeok,
+  type ManseryeokResult,
+  type ManseryeokOptions,
+} from './core/manseryeok';
+
+// ============================================
+// Stem-Branch Data (천간/지지 기초 데이터)
+// ============================================
+export {
+  STEMS,
+  STEMS_HANJA,
+  BRANCHES,
+  BRANCHES_HANJA,
+  BRANCH_ANIMALS,
+  STEM_ELEMENT,
+  STEM_YINYANG,
+  BRANCH_ELEMENT,
+  BRANCH_YINYANG,
+  ELEMENT_HANJA,
+  ELEMENT_ENGLISH,
+  ELEMENT_GENERATES,
+  ELEMENT_CONTROLS,
+  generates,
+  controls,
+  stemIndex,
+  branchIndex,
+  splitPillar,
+  makePillar,
+  makePillarHanja,
+  TWELVE_STATES,
+  TWELVE_STATES_HANJA,
+  TEN_GOD_HANJA,
+  type FiveElement,
+  type TenGod,
+  type TwelveState,
+} from './data/stem-branch-data';
