@@ -2371,6 +2371,32 @@
         document.getElementById('sj-monthly').innerHTML = html;
       }
 
+      function computeDailyFortune(dayStem, yearBranch, yr, mo) {
+        var days = [];
+        var dim = new Date(yr, mo, 0).getDate();
+        for (var d = 1; d <= dim; d++) {
+          try {
+            var r = M.solarToLunar(yr, mo, d);
+            var dp = r.gapja.dayPillar;
+            var dpH = r.gapja.dayPillarHanja;
+            var dStem = dp.charAt(0);
+            var dBranch = dp.charAt(1);
+            var stg = M.getTenGodByStem ? M.getTenGodByStem(dayStem, dStem) : '';
+            var btg = M.getTenGodByBranch ? M.getTenGodByBranch(dayStem, dBranch) : '';
+            var ts = M.getTwelveState ? M.getTwelveState(dayStem, dBranch) : '';
+            days.push({
+              day: d,
+              pillar: dp,
+              pillarHanja: dpH,
+              stemTenGod: stg,
+              branchTenGod: btg,
+              twelveState: ts,
+            });
+          } catch (e) {}
+        }
+        return days;
+      }
+
       function renderDaily(saju) {
         var dayStem = saju.dayPillar.charAt(0);
         var yearBranch = saju.yearPillar.charAt(1);
@@ -2379,7 +2405,7 @@
         var todayM = today.getMonth() + 1;
         var todayD = today.getDate();
         document.getElementById('sj-daily-label').textContent = dailyViewYear + '년 ' + dailyViewMonth + '월';
-        var days = M.calculateDailyFortune(dayStem, yearBranch, dailyViewYear, dailyViewMonth);
+        var days = computeDailyFortune(dayStem, yearBranch, dailyViewYear, dailyViewMonth);
         if (!days || !days.length) {
           document.getElementById('sj-daily').innerHTML = '';
           return;
@@ -2389,7 +2415,7 @@
         days.forEach(function (f) {
           var stem = f.pillar.charAt(0);
           var el = STEM_EL[si(stem)];
-          var isToday = f.year === todayY && f.month === todayM && f.day === todayD;
+          var isToday = dailyViewYear === todayY && dailyViewMonth === todayM && f.day === todayD;
           html +=
             '<tr class="' +
             (isToday ? 'current' : '') +
@@ -2831,7 +2857,7 @@
           md += '\n';
         }
 
-        var dfArr = M.calculateDailyFortune(dayStem, s.yearPillar.charAt(1), curY, new Date().getMonth() + 1);
+        var dfArr = computeDailyFortune(dayStem, s.yearPillar.charAt(1), curY, new Date().getMonth() + 1);
         if (dfArr && dfArr.length) {
           md += '## 일운 (' + curY + '년 ' + (new Date().getMonth() + 1) + '월)\n';
           dfArr.forEach(function (f) {
