@@ -84,7 +84,34 @@ export function getAllTwelveStates(dayStem: string): Record<string, TwelveState>
 }
 
 /**
- * 사주 전체의 12운성을 계산합니다.
+ * 거법(去法) 12운성: 각 기둥의 천간을 기준으로 자신의 지지에서 12운성을 계산합니다.
+ * (봉법은 일간 기준, 거법은 각 기둥 천간 기준)
+ */
+export function calculateGeobeop12States(
+  yearStem: string,
+  yearBranch: string,
+  monthStem: string,
+  monthBranch: string,
+  dayStem: string,
+  dayBranch: string,
+  hourStem: string | null,
+  hourBranch: string | null,
+): {
+  year: TwelveState;
+  month: TwelveState;
+  day: TwelveState;
+  hour: TwelveState | null;
+} {
+  return {
+    year: getTwelveState(yearStem, yearBranch),
+    month: getTwelveState(monthStem, monthBranch),
+    day: getTwelveState(dayStem, dayBranch),
+    hour: hourStem && hourBranch ? getTwelveState(hourStem, hourBranch) : null,
+  };
+}
+
+/**
+ * 사주 전체의 12운성을 계산합니다. (봉법 — 일간 기준)
  */
 export function calculateAllTwelveStates(
   dayStem: string,

@@ -25,7 +25,7 @@ import {
   ELEMENT_GENERATES,
   ELEMENT_CONTROLS,
 } from '../data/stem-branch-data';
-import { getMainStem } from './hidden-stems';
+import { getMainStem, getHiddenStems } from './hidden-stems';
 
 /**
  * 두 천간 사이의 십성 관계를 계산합니다.
@@ -98,6 +98,27 @@ function determineTenGod(dayElement: FiveElement, targetElement: FiveElement, sa
 
   // 이론적으로 도달 불가
   throw new Error(`Cannot determine ten god: ${dayElement} vs ${targetElement}`);
+}
+
+/**
+ * 지지의 모든 지장간에 대한 십성 목록을 반환합니다.
+ * (본기뿐 아니라 여기·중기 포함)
+ *
+ * @param dayStem 일간
+ * @param targetBranch 대상 지지
+ * @returns 십성 배열 (지장간 순서: 여기, [중기], 본기)
+ */
+export function getAllTenGodsByBranch(dayStem: string, targetBranch: string): TenGod[] {
+  const dayIdx = stemIndex(dayStem);
+  const dayElement = STEM_ELEMENT[dayIdx];
+  const hiddenStems = getHiddenStems(targetBranch);
+
+  return hiddenStems.map((hs: string) => {
+    const hsIdx = stemIndex(hs);
+    const targetElement = STEM_ELEMENT[hsIdx];
+    const samePolarity = STEM_YINYANG[dayIdx] === STEM_YINYANG[hsIdx];
+    return determineTenGod(dayElement, targetElement, samePolarity);
+  });
 }
 
 /**

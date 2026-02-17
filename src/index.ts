@@ -95,6 +95,16 @@ export {
 } from './core/major-fortune';
 
 // ============================================
+// Annual Fortune (세운)
+// ============================================
+export { calculateAnnualFortune, getAnnualFortune, type AnnualFortune } from './core/annual-fortune';
+
+// ============================================
+// Monthly Fortune (월운)
+// ============================================
+export { calculateMonthlyFortune, type MonthlyFortune } from './core/monthly-fortune';
+
+// ============================================
 // Useful God (용신)
 // ============================================
 export {
@@ -110,12 +120,17 @@ export {
 // ============================================
 // Ten Gods (십성)
 // ============================================
-export { getTenGodByStem, getTenGodByBranch, calculateAllTenGods } from './core/ten-gods';
+export { getTenGodByStem, getTenGodByBranch, calculateAllTenGods, getAllTenGodsByBranch } from './core/ten-gods';
 
 // ============================================
 // Twelve States (12운성)
 // ============================================
-export { getTwelveState, getAllTwelveStates, calculateAllTwelveStates } from './core/twelve-states';
+export {
+  getTwelveState,
+  getAllTwelveStates,
+  calculateAllTwelveStates,
+  calculateGeobeop12States,
+} from './core/twelve-states';
 
 // ============================================
 // Hidden Stems (지장간)
@@ -139,11 +154,14 @@ export {
   getBranchTripleHarmony,
   findTripleHarmonies,
   getBranchDirectionalHarmony,
+  getBranchHalfHarmony,
+  getBranchHiddenHarmony,
   isBranchClash,
   isBranchPunishment,
   isBranchDestruction,
   isBranchHarm,
   isBranchWonjin,
+  isBranchGwimun,
   getGongmang,
   analyzeRelations,
   type PillarRelations,
@@ -172,6 +190,16 @@ export {
   isCheonmunseong,
   isMungokGwiin,
   isJeongrok,
+  isCheondeokGwiin,
+  isWoldeokGwiin,
+  isJangseong,
+  isGwimunGwansal,
+  isCheonbokGwiin,
+  isCheonuiSeong,
+  isGosin,
+  isJimang,
+  isGwanGwiHakGwan,
+  isGanYeoJiDong,
   analyzeSpecialStars,
   type SpecialStarResult,
 } from './core/special-stars';

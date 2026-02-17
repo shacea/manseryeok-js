@@ -290,6 +290,102 @@ export function isBranchWonjin(branch1: string, branch2: string): boolean {
 }
 
 // ============================================================
+// 반합 (半合) — 삼합의 부분 조합
+// ============================================================
+
+/**
+ * 삼합에서 두 글자만 모인 반합 쌍
+ * 삼합: 신자진=수, 해묘미=목, 인오술=화, 사유축=금
+ */
+const HALF_HARMONY_PAIRS: [number, number, FiveElement][] = [
+  // 신자진(수)
+  [8, 0, '수'],
+  [0, 4, '수'],
+  [8, 4, '수'],
+  // 해묘미(목)
+  [11, 3, '목'],
+  [3, 7, '목'],
+  [11, 7, '목'],
+  // 인오술(화)
+  [2, 6, '화'],
+  [6, 10, '화'],
+  [2, 10, '화'],
+  // 사유축(금)
+  [5, 9, '금'],
+  [9, 1, '금'],
+  [5, 1, '금'],
+];
+
+export function getBranchHalfHarmony(branch1: string, branch2: string): FiveElement | null {
+  const i1 = branchIndex(branch1);
+  const i2 = branchIndex(branch2);
+  for (const [a, b, element] of HALF_HARMONY_PAIRS) {
+    if ((i1 === a && i2 === b) || (i1 === b && i2 === a)) {
+      return element;
+    }
+  }
+  return null;
+}
+
+// ============================================================
+// 암합 (暗合) — 지지 속 지장간끼리의 천간합
+// ============================================================
+
+import { getHiddenStems } from './hidden-stems';
+
+const STEM_HARMONY_MAP: Record<number, number> = {
+  0: 5,
+  5: 0, // 갑↔기
+  1: 6,
+  6: 1, // 을↔경
+  2: 7,
+  7: 2, // 병↔신
+  3: 8,
+  8: 3, // 정↔임
+  4: 9,
+  9: 4, // 무↔계
+};
+
+export function getBranchHiddenHarmony(branch1: string, branch2: string): string[] {
+  const stems1 = getHiddenStems(branch1);
+  const stems2 = getHiddenStems(branch2);
+  const results: string[] = [];
+
+  for (const s1 of stems1) {
+    for (const s2 of stems2) {
+      const i1 = stemIndex(s1);
+      const i2 = stemIndex(s2);
+      if (STEM_HARMONY_MAP[i1] === i2) {
+        const STEMS_HANJA_LOCAL = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+        results.push(`${STEMS_HANJA_LOCAL[i1]}${STEMS_HANJA_LOCAL[i2]}`);
+      }
+    }
+  }
+  return results;
+}
+
+// ============================================================
+// 귀문 (鬼門)
+// ============================================================
+
+const BRANCH_GWIMUN_PAIRS: [number, number][] = [
+  [0, 9], // 자↔유
+  [2, 7], // 인↔미
+  [3, 6], // 묘↔오
+  [4, 5], // 진↔사
+  [5, 11], // 사↔해
+  [8, 1], // 신↔축
+  [9, 10], // 유↔술
+  [10, 3], // 술↔묘
+];
+
+export function isBranchGwimun(branch1: string, branch2: string): boolean {
+  const i1 = branchIndex(branch1);
+  const i2 = branchIndex(branch2);
+  return BRANCH_GWIMUN_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
+}
+
+// ============================================================
 // 공망 (空亡)
 // ============================================================
 
@@ -326,27 +422,19 @@ export function getGongmang(dayStem: string, dayBranch: string): [string, string
 // ============================================================
 
 export interface PillarRelations {
-  /** 천간합 */
   stemHarmonies: { pillars: [string, string]; element: FiveElement }[];
-  /** 천간충 */
   stemClashes: [string, string][];
-  /** 지지육합 */
   branchSixHarmonies: { pillars: [string, string]; element: FiveElement }[];
-  /** 지지삼합 */
   branchTripleHarmonies: { pillars: [string, string, string]; element: FiveElement }[];
-  /** 지지방합 */
   branchDirectionalHarmonies: { pillars: [string, string, string]; element: FiveElement }[];
-  /** 지지충 */
+  branchHalfHarmonies: { pillars: [string, string]; element: FiveElement }[];
+  branchHiddenHarmonies: { pillars: [string, string]; pairs: string[] }[];
   branchClashes: [string, string][];
-  /** 지지형 */
   branchPunishments: [string, string][];
-  /** 지지파 */
   branchDestructions: [string, string][];
-  /** 지지해(六害) */
   branchHarms: [string, string][];
-  /** 원진(怨嗔) */
   branchWonjin: [string, string][];
-  /** 공망 */
+  branchGwimun: [string, string][];
   gongmang: [string, string];
 }
 
@@ -391,11 +479,23 @@ export function analyzeRelations(
   const branchHarms: [string, string][] = [];
   const branchWonjin: [string, string][] = [];
 
+  const branchHalfHarmonies: PillarRelations['branchHalfHarmonies'] = [];
+  const branchHiddenHarmonies: PillarRelations['branchHiddenHarmonies'] = [];
+  const branchGwimun: [string, string][] = [];
+
   for (let i = 0; i < branches.length; i++) {
     for (let j = i + 1; j < branches.length; j++) {
       const sixH = getBranchSixHarmony(branches[i], branches[j]);
       if (sixH) {
         branchSixHarmonies.push({ pillars: [pillarNames[i], pillarNames[j]], element: sixH });
+      }
+      const halfH = getBranchHalfHarmony(branches[i], branches[j]);
+      if (halfH) {
+        branchHalfHarmonies.push({ pillars: [pillarNames[i], pillarNames[j]], element: halfH });
+      }
+      const hiddenH = getBranchHiddenHarmony(branches[i], branches[j]);
+      if (hiddenH.length > 0) {
+        branchHiddenHarmonies.push({ pillars: [pillarNames[i], pillarNames[j]], pairs: hiddenH });
       }
       if (isBranchClash(branches[i], branches[j])) {
         branchClashes.push([pillarNames[i], pillarNames[j]]);
@@ -411,6 +511,9 @@ export function analyzeRelations(
       }
       if (isBranchWonjin(branches[i], branches[j])) {
         branchWonjin.push([pillarNames[i], pillarNames[j]]);
+      }
+      if (isBranchGwimun(branches[i], branches[j])) {
+        branchGwimun.push([pillarNames[i], pillarNames[j]]);
       }
     }
   }
@@ -448,11 +551,14 @@ export function analyzeRelations(
     branchSixHarmonies,
     branchTripleHarmonies,
     branchDirectionalHarmonies,
+    branchHalfHarmonies,
+    branchHiddenHarmonies,
     branchClashes,
     branchPunishments,
     branchDestructions,
     branchHarms,
     branchWonjin,
+    branchGwimun,
     gongmang,
   };
 }

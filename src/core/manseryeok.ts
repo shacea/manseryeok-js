@@ -20,9 +20,9 @@
 
 import { calculateSaju, type SajuResult, type SajuOptions } from './saju';
 import { splitPillar, stemIndex, branchIndex } from '../data/stem-branch-data';
-import { calculateAllTenGods } from './ten-gods';
+import { calculateAllTenGods, getAllTenGodsByBranch } from './ten-gods';
 import { getHiddenStems, getHiddenStemsString, getHiddenStemsHanjaString } from './hidden-stems';
-import { calculateAllTwelveStates } from './twelve-states';
+import { calculateAllTwelveStates, calculateGeobeop12States } from './twelve-states';
 import { calculateAllTwelveSpirits } from './twelve-spirits';
 import { analyzeSpecialStars, type SpecialStarResult } from './special-stars';
 import { analyzeRelations, type PillarRelations } from './relations';
@@ -36,6 +36,8 @@ import { calculateBodyStrength, type BodyStrengthResult } from './body-strength'
 import { determineUsefulGod, type UsefulGodResult } from './useful-god';
 import { calculateMajorFortune, type MajorFortuneResult } from './major-fortune';
 import { getPalaces, analyzeSixRelations, type PalaceInfo, type SixRelation } from './palace';
+import { calculateAnnualFortune, type AnnualFortune } from './annual-fortune';
+import { calculateMonthlyFortune, type MonthlyFortune } from './monthly-fortune';
 
 import type { TenGod, TwelveState } from '../data/stem-branch-data';
 
@@ -58,10 +60,10 @@ export interface ManseryeokResult {
     hour: { stem: string; branch: string } | null;
   };
 
-  /** 십성 (천간/지지별) */
   tenGods: {
     stem: { year: TenGod; month: TenGod; day: '비견'; hour: TenGod | null };
     branch: { year: TenGod; month: TenGod; day: TenGod; hour: TenGod | null };
+    branchAll: { year: TenGod[]; month: TenGod[]; day: TenGod[]; hour: TenGod[] | null };
   };
 
   /** 지장간 */
@@ -72,8 +74,14 @@ export interface ManseryeokResult {
     hour: { stems: readonly string[]; string: string; hanjaString: string } | null;
   };
 
-  /** 12운성 */
   twelveStates: {
+    year: TwelveState;
+    month: TwelveState;
+    day: TwelveState;
+    hour: TwelveState | null;
+  };
+
+  twelveStatesGeobeop: {
     year: TwelveState;
     month: TwelveState;
     day: TwelveState;
@@ -106,8 +114,11 @@ export interface ManseryeokResult {
   /** 용신 */
   usefulGod: UsefulGodResult;
 
-  /** 대운 */
   majorFortune: MajorFortuneResult | null;
+
+  annualFortune: AnnualFortune[] | null;
+
+  monthlyFortune: MonthlyFortune[] | null;
 
   /** 궁성 */
   palaces: {
@@ -192,6 +203,13 @@ export function calculateManseryeok(
     hourBranch,
   );
 
+  const branchAll = {
+    year: getAllTenGodsByBranch(dayStem, yearBranch),
+    month: getAllTenGodsByBranch(dayStem, monthBranch),
+    day: getAllTenGodsByBranch(dayStem, dayBranch),
+    hour: hourBranch ? getAllTenGodsByBranch(dayStem, hourBranch) : null,
+  };
+
   // 4. 지장간
   const hiddenStems = {
     year: {
@@ -218,8 +236,20 @@ export function calculateManseryeok(
       : null,
   };
 
-  // 5. 12운성
+  // 5-1. 12운성 (봉법 — 일간 기준)
   const twelveStates = calculateAllTwelveStates(dayStem, yearBranch, monthBranch, dayBranch, hourBranch);
+
+  // 5-2. 12운성 (거법 — 각 기둥 천간 기준)
+  const twelveStatesGeobeop = calculateGeobeop12States(
+    yearStem,
+    yearBranch,
+    monthStem,
+    monthBranch,
+    dayStem,
+    dayBranch,
+    hourStem,
+    hourBranch,
+  );
 
   // 6. 12신살
   const twelveSpirits = calculateAllTwelveSpirits(yearBranch, monthBranch, dayBranch, hourBranch);
@@ -309,6 +339,8 @@ export function calculateManseryeok(
       monthBranchIdx,
       yearStem,
       fortuneCount,
+      dayStem,
+      yearBranch,
     );
   }
 
@@ -325,12 +357,23 @@ export function calculateManseryeok(
     );
   }
 
+  // 16. 세운 (현재 연도 기준 ±5년)
+  const currentYear = new Date().getFullYear();
+  const annualFortune = calculateAnnualFortune(dayStem, yearBranch, currentYear, 10);
+
+  // 17. 월운 (현재 연도 기준)
+  const monthlyFortune = calculateMonthlyFortune(dayStem, yearBranch, currentYear);
+
   return {
     saju,
     pillars,
-    tenGods,
+    tenGods: {
+      ...tenGods,
+      branchAll,
+    },
     hiddenStems,
     twelveStates,
+    twelveStatesGeobeop,
     twelveSpirits,
     specialStars,
     relations,
@@ -339,6 +382,8 @@ export function calculateManseryeok(
     bodyStrength,
     usefulGod,
     majorFortune,
+    annualFortune,
+    monthlyFortune,
     palaces,
     sixRelations,
   };

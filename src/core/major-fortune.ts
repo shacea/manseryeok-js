@@ -16,7 +16,19 @@
  * 절기 데이터 없는 연도: 평균 절기 날짜로 근사 계산
  */
 
-import { STEM_YINYANG, stemIndex, makePillar, makePillarHanja } from '../data/stem-branch-data';
+import {
+  STEM_YINYANG,
+  STEMS,
+  BRANCHES,
+  stemIndex,
+  makePillar,
+  makePillarHanja,
+  type TenGod,
+  type TwelveState,
+} from '../data/stem-branch-data';
+import { getTenGodByStem, getTenGodByBranch } from './ten-gods';
+import { getTwelveState } from './twelve-states';
+import { getTwelveSpirit, type TwelveSpirit } from './twelve-spirits';
 import { SOLAR_TERMS_DATA } from '../data/solar-terms-data';
 
 // ============================================================
@@ -115,16 +127,15 @@ function findNearestJeolgi(
  * 대운 정보
  */
 export interface MajorFortune {
-  /** 대운 순서 (1부터 시작) */
   index: number;
-  /** 대운 간지 (한글) */
   pillar: string;
-  /** 대운 간지 (한자) */
   pillarHanja: string;
-  /** 대운 시작 나이 */
   startAge: number;
-  /** 대운 종료 나이 */
   endAge: number;
+  stemTenGod: TenGod;
+  branchTenGod: TenGod;
+  twelveSpirit: TwelveSpirit | null;
+  twelveState: TwelveState;
 }
 
 /**
@@ -170,6 +181,8 @@ export function calculateMajorFortune(
   monthBranchIdx: number,
   yearStem: string,
   count: number = 10,
+  dayStem: string = '갑',
+  yearBranch: string = '자',
 ): MajorFortuneResult {
   // 1. 순행/역행 결정
   // 양남음녀 = 순행, 음남양녀 = 역행
@@ -197,12 +210,18 @@ export function calculateMajorFortune(
     const sIdx = (((monthStemIdx + offset) % 10) + 10) % 10;
     const bIdx = (((monthBranchIdx + offset) % 12) + 12) % 12;
 
+    const fStem = STEMS[sIdx];
+    const fBranch = BRANCHES[bIdx];
     fortunes.push({
       index: i + 1,
       pillar: makePillar(sIdx, bIdx),
       pillarHanja: makePillarHanja(sIdx, bIdx),
       startAge: startAge + i * 10,
       endAge: startAge + (i + 1) * 10 - 1,
+      stemTenGod: getTenGodByStem(dayStem, fStem),
+      branchTenGod: getTenGodByBranch(dayStem, fBranch),
+      twelveSpirit: getTwelveSpirit(yearBranch, fBranch),
+      twelveState: getTwelveState(dayStem, fBranch),
     });
   }
 
