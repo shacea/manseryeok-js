@@ -105,6 +105,11 @@ export { calculateAnnualFortune, getAnnualFortune, type AnnualFortune } from './
 export { calculateMonthlyFortune, type MonthlyFortune } from './core/monthly-fortune';
 
 // ============================================
+// Daily Fortune (일운)
+// ============================================
+export { calculateDailyFortune, getDailyFortune, type DailyFortune } from './core/daily-fortune';
+
+// ============================================
 // Useful God (용신)
 // ============================================
 export {

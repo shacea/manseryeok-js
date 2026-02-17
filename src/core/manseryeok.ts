@@ -38,6 +38,7 @@ import { calculateMajorFortune, type MajorFortuneResult } from './major-fortune'
 import { getPalaces, analyzeSixRelations, type PalaceInfo, type SixRelation } from './palace';
 import { calculateAnnualFortune, type AnnualFortune } from './annual-fortune';
 import { calculateMonthlyFortune, type MonthlyFortune } from './monthly-fortune';
+import { calculateDailyFortune, type DailyFortune } from './daily-fortune';
 
 import type { TenGod, TwelveState } from '../data/stem-branch-data';
 
@@ -119,6 +120,8 @@ export interface ManseryeokResult {
   annualFortune: AnnualFortune[] | null;
 
   monthlyFortune: MonthlyFortune[] | null;
+
+  dailyFortune: DailyFortune[] | null;
 
   /** 궁성 */
   palaces: {
@@ -364,6 +367,10 @@ export function calculateManseryeok(
   // 17. 월운 (현재 연도 기준)
   const monthlyFortune = calculateMonthlyFortune(dayStem, yearBranch, currentYear);
 
+  // 18. 일운 (현재 월 기준)
+  const currentMonth = new Date().getMonth() + 1;
+  const dailyFortune = calculateDailyFortune(dayStem, yearBranch, currentYear, currentMonth);
+
   return {
     saju,
     pillars,
@@ -384,6 +391,7 @@ export function calculateManseryeok(
     majorFortune,
     annualFortune,
     monthlyFortune,
+    dailyFortune,
     palaces,
     sixRelations,
   };
