@@ -1980,9 +1980,6 @@
             p.label +
             '</td><td>' +
             pal.name +
-            ' (' +
-            pal.nameHanja +
-            ')' +
             '<div style="font-size:.75rem;color:var(--fg2)">' +
             pal.description +
             '</div></td>' +
@@ -2517,7 +2514,7 @@
         var palNames = { year: '년주', month: '월주', day: '일주', hour: '시주' };
         palArr.forEach(function (pos) {
           var pal = R.palaces[pos];
-          md += '- ' + palNames[pos] + ': ' + pal.name + ' (' + pal.nameHanja + ') - ' + pal.description + '\n';
+          md += '- ' + palNames[pos] + ': ' + pal.name + ' - ' + pal.description + '\n';
         });
         md += '\n';
 
