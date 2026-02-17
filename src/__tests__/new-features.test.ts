@@ -247,4 +247,46 @@ describe('calculateManseryeok integration', () => {
     expect(jan.pillar).toBeDefined();
     expect(jan.stemTenGod).toBeDefined();
   });
+
+  test('specialStars에 source 필드 존재 (천간/지지)', () => {
+    expect(result.specialStars.length).toBeGreaterThan(0);
+    result.specialStars.forEach((star) => {
+      expect(star.source).toBeDefined();
+      expect(['천간', '지지']).toContain(star.source);
+    });
+  });
+
+  test('천간 기반 신살의 source가 천간', () => {
+    const cheonganStars = result.specialStars.filter((s) => s.source === '천간');
+    expect(cheonganStars.length).toBeGreaterThan(0);
+    // 천간 기반: 현침살, 천덕귀인, 월덕귀인, 간여지동, 정록, 문곡귀인
+    const cheonganNames = ['현침살', '천덕귀인', '월덕귀인', '간여지동', '정록', '문곡귀인'];
+    cheonganStars.forEach((star) => {
+      expect(cheonganNames).toContain(star.name);
+    });
+  });
+
+  test('지지 기반 신살의 source가 지지', () => {
+    const jijiStars = result.specialStars.filter((s) => s.source === '지지');
+    expect(jijiStars.length).toBeGreaterThan(0);
+    // 지지 기반: 도화살, 화개살, 장성, 역마살 등
+    const jijiNames = [
+      '도화살',
+      '화개살',
+      '장성',
+      '역마살',
+      '귀문관살',
+      '고신',
+      '지망',
+      '천을귀인',
+      '천복귀인',
+      '천의성',
+      '태극귀인',
+      '천문성',
+      '관귀학관',
+    ];
+    jijiStars.forEach((star) => {
+      expect(jijiNames).toContain(star.name);
+    });
+  });
 });

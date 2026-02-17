@@ -4728,91 +4728,145 @@ var manseryeok = (function (exports) {
         // 천간 신살
         stems.forEach((stem, i) => {
             if (isHyeonchimSal(stem)) {
-                results.push({ name: '현침살', nameHanja: '懸針殺', type: 'hyungsal', position: positions[i] });
+                results.push({ name: '현침살', nameHanja: '懸針殺', type: 'hyungsal', source: '천간', position: positions[i] });
             }
             // 천덕귀인 (월지 기준)
             if (isCheondeokGwiin(monthBranch, stem)) {
-                results.push({ name: '천덕귀인', nameHanja: '天德貴人', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '천덕귀인',
+                    nameHanja: '天德貴人',
+                    type: 'gilseong',
+                    source: '천간',
+                    position: positions[i],
+                });
             }
             // 월덕귀인 (월지 기준)
             if (isWoldeokGwiin(monthBranch, stem)) {
-                results.push({ name: '월덕귀인', nameHanja: '月德貴人', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '월덕귀인',
+                    nameHanja: '月德貴人',
+                    type: 'gilseong',
+                    source: '천간',
+                    position: positions[i],
+                });
             }
             // 간여지동 (기둥 기준)
             const branch = branches[i];
             if (branch && isGanYeoJiDong(stem, branch)) {
-                results.push({ name: '간여지동', nameHanja: '干與支同', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '간여지동',
+                    nameHanja: '干與支同',
+                    type: 'gilseong',
+                    source: '천간',
+                    position: positions[i],
+                });
             }
         });
         // 지지 신살 (년지 기준 + 일지 기준 + 일간 기준)
         branches.forEach((branch, i) => {
             // 년지 기준 도화살
             if (isDohwaSal(yearBranch, branch)) {
-                results.push({ name: '도화살', nameHanja: '桃花殺', type: 'hyungsal', position: positions[i] });
+                results.push({ name: '도화살', nameHanja: '桃花殺', type: 'hyungsal', source: '지지', position: positions[i] });
             }
             // 일지 기준 도화살도 체크
             if (dayBranch !== yearBranch && isDohwaSal(dayBranch, branch)) {
-                results.push({ name: '도화살', nameHanja: '桃花殺', type: 'hyungsal', position: positions[i] });
+                results.push({ name: '도화살', nameHanja: '桃花殺', type: 'hyungsal', source: '지지', position: positions[i] });
             }
             // 화개살 (년지 기준)
             if (isHwagaeSal(yearBranch, branch)) {
-                results.push({ name: '화개살', nameHanja: '華蓋殺', type: 'gilseong', position: positions[i] });
+                results.push({ name: '화개살', nameHanja: '華蓋殺', type: 'gilseong', source: '지지', position: positions[i] });
             }
             // 장성 (년지 기준)
             if (isJangseong(yearBranch, branch)) {
-                results.push({ name: '장성', nameHanja: '將星', type: 'gilseong', position: positions[i] });
+                results.push({ name: '장성', nameHanja: '將星', type: 'gilseong', source: '지지', position: positions[i] });
             }
             // 일지 기준 장성도 체크
             if (dayBranch !== yearBranch && isJangseong(dayBranch, branch)) {
-                results.push({ name: '장성', nameHanja: '將星', type: 'gilseong', position: positions[i] });
+                results.push({ name: '장성', nameHanja: '將星', type: 'gilseong', source: '지지', position: positions[i] });
             }
             // 역마살 (년지 기준)
             if (isYeokmaSal(yearBranch, branch)) {
-                results.push({ name: '역마살', nameHanja: '驛馬殺', type: 'hyungsal', position: positions[i] });
+                results.push({ name: '역마살', nameHanja: '驛馬殺', type: 'hyungsal', source: '지지', position: positions[i] });
             }
             // 귀문관살 (일지 기준)
             if (isGwimunGwansal(dayBranch, branch)) {
-                results.push({ name: '귀문관살', nameHanja: '鬼門關殺', type: 'hyungsal', position: positions[i] });
+                results.push({
+                    name: '귀문관살',
+                    nameHanja: '鬼門關殺',
+                    type: 'hyungsal',
+                    source: '지지',
+                    position: positions[i],
+                });
             }
             // 고신 (년지 기준)
             if (isGosin(yearBranch, branch)) {
-                results.push({ name: '고신', nameHanja: '孤辰', type: 'hyungsal', position: positions[i] });
+                results.push({ name: '고신', nameHanja: '孤辰', type: 'hyungsal', source: '지지', position: positions[i] });
             }
             // 지망 (년지 기준)
             if (isJimang(yearBranch, branch)) {
-                results.push({ name: '지망', nameHanja: '寡宿', type: 'hyungsal', position: positions[i] });
+                results.push({ name: '지망', nameHanja: '寡宿', type: 'hyungsal', source: '지지', position: positions[i] });
             }
             // 천을귀인 (일간 기준)
             if (isCheonulGwiin(dayStem, branch)) {
-                results.push({ name: '천을귀인', nameHanja: '天乙貴人', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '천을귀인',
+                    nameHanja: '天乙貴人',
+                    type: 'gilseong',
+                    source: '지지',
+                    position: positions[i],
+                });
             }
             // 천복귀인 (일간 기준)
             if (isCheonbokGwiin(dayStem, branch)) {
-                results.push({ name: '천복귀인', nameHanja: '天福貴人', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '천복귀인',
+                    nameHanja: '天福貴人',
+                    type: 'gilseong',
+                    source: '지지',
+                    position: positions[i],
+                });
             }
             // 천의성 (월지 기준)
             if (isCheonuiSeong(monthBranch, branch)) {
-                results.push({ name: '천의성', nameHanja: '天醫星', type: 'gilseong', position: positions[i] });
+                results.push({ name: '천의성', nameHanja: '天醫星', type: 'gilseong', source: '지지', position: positions[i] });
             }
             // 태극귀인 (일간 기준)
             if (isTaegeukGwiin(dayStem, branch)) {
-                results.push({ name: '태극귀인', nameHanja: '太極貴人', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '태극귀인',
+                    nameHanja: '太極貴人',
+                    type: 'gilseong',
+                    source: '지지',
+                    position: positions[i],
+                });
             }
             // 천문성
             if (isCheonmunseong(branch)) {
-                results.push({ name: '천문성', nameHanja: '天門星', type: 'gilseong', position: positions[i] });
+                results.push({ name: '천문성', nameHanja: '天門星', type: 'gilseong', source: '지지', position: positions[i] });
             }
             // 문곡귀인 (일간 기준)
             if (isMungokGwiin(dayStem, branch)) {
-                results.push({ name: '문곡귀인', nameHanja: '文曲貴人', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '문곡귀인',
+                    nameHanja: '文曲貴人',
+                    type: 'gilseong',
+                    source: '천간',
+                    position: positions[i],
+                });
             }
             // 정록 (일간 기준)
             if (isJeongrok(dayStem, branch)) {
-                results.push({ name: '정록', nameHanja: '正祿', type: 'gilseong', position: positions[i] });
+                results.push({ name: '정록', nameHanja: '正祿', type: 'gilseong', source: '천간', position: positions[i] });
             }
             // 관귀학관 (일간 기준)
             if (isGwanGwiHakGwan(dayStem, branch)) {
-                results.push({ name: '관귀학관', nameHanja: '官貴學館', type: 'gilseong', position: positions[i] });
+                results.push({
+                    name: '관귀학관',
+                    nameHanja: '官貴學館',
+                    type: 'gilseong',
+                    source: '지지',
+                    position: positions[i],
+                });
             }
         });
         return results;
