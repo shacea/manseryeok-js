@@ -1088,6 +1088,19 @@
               <table class="data-table" id="sj-yearly"></table>
             </div>
             <div class="card">
+              <h3>월운 (月運)</h3>
+              <table class="data-table" id="sj-monthly"></table>
+            </div>
+            <div class="card">
+              <h3>일운 (日運)</h3>
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.6rem">
+                <button class="btn btn-sm" onclick="dailyNav(-1)">&larr; 이전달</button>
+                <span id="sj-daily-label" style="font-weight: 600; font-size: 0.9rem"></span>
+                <button class="btn btn-sm" onclick="dailyNav(1)">다음달 &rarr;</button>
+              </div>
+              <table class="data-table" id="sj-daily"></table>
+            </div>
+            <div class="card">
               <h3>절기 정보 (節氣)</h3>
               <div id="sj-terms"></div>
             </div>
@@ -1381,6 +1394,8 @@
       var lastSaju = null,
         lastInput = null,
         lastResult = null;
+      var dailyViewYear = new Date().getFullYear();
+      var dailyViewMonth = new Date().getMonth() + 1;
 
       function calcSaju() {
         hideErr('sj-error');
@@ -1494,6 +1509,10 @@
             renderCorr(saju, solarY, solarM, solarD, h, min, lng);
             renderMajor(result, gender, solarY);
             renderYearly(solarY, saju, result);
+            renderMonthly(saju, result);
+            dailyViewYear = new Date().getFullYear();
+            dailyViewMonth = new Date().getMonth() + 1;
+            renderDaily(saju);
             renderSajuTerms(solarY, solarM, solarD);
           }
 
@@ -1587,6 +1606,8 @@
         document.getElementById('sj-corr-card').style.display = 'none';
         renderMajor(result, inp.gender, inp.y);
         renderYearly(inp.y, saju, result);
+        renderMonthly(saju, result);
+        renderDaily(saju);
         renderSajuTerms(inp.y, inp.m, inp.d);
       }
 
@@ -2312,6 +2333,101 @@
         document.getElementById('sj-yearly').innerHTML = html;
       }
 
+      function renderMonthly(saju, result) {
+        var dayStem = saju.dayPillar.charAt(0);
+        var mf = result.monthlyFortune;
+        if (!mf || !mf.length) {
+          document.getElementById('sj-monthly').innerHTML = '';
+          return;
+        }
+        var curM = new Date().getMonth() + 1;
+        var html =
+          '<thead><tr><th>월</th><th>월운</th><th>오행</th><th>천간십성</th><th>지지십성</th><th>12운성</th></tr></thead><tbody>';
+        mf.forEach(function (f) {
+          var stem = f.pillar.charAt(0);
+          var el = STEM_EL[si(stem)];
+          html +=
+            '<tr class="' +
+            (f.month === curM ? 'current' : '') +
+            '"><td>' +
+            f.month +
+            '월</td><td>' +
+            f.pillar +
+            ' <span class="hanja" style="opacity:.6">(' +
+            f.pillarHanja +
+            ')</span></td><td><span class="element-badge ' +
+            elCls(el) +
+            '">' +
+            el +
+            '</span></td><td>' +
+            f.stemTenGod +
+            '</td><td>' +
+            f.branchTenGod +
+            '</td><td>' +
+            f.twelveState +
+            '</td></tr>';
+        });
+        html += '</tbody>';
+        document.getElementById('sj-monthly').innerHTML = html;
+      }
+
+      function renderDaily(saju) {
+        var dayStem = saju.dayPillar.charAt(0);
+        var yearBranch = saju.yearPillar.charAt(1);
+        var today = new Date();
+        var todayY = today.getFullYear();
+        var todayM = today.getMonth() + 1;
+        var todayD = today.getDate();
+        document.getElementById('sj-daily-label').textContent = dailyViewYear + '년 ' + dailyViewMonth + '월';
+        var days = M.calculateDailyFortune(dayStem, yearBranch, dailyViewYear, dailyViewMonth);
+        if (!days || !days.length) {
+          document.getElementById('sj-daily').innerHTML = '';
+          return;
+        }
+        var html =
+          '<thead><tr><th>일</th><th>일운</th><th>오행</th><th>천간십성</th><th>지지십성</th><th>12운성</th></tr></thead><tbody>';
+        days.forEach(function (f) {
+          var stem = f.pillar.charAt(0);
+          var el = STEM_EL[si(stem)];
+          var isToday = f.year === todayY && f.month === todayM && f.day === todayD;
+          html +=
+            '<tr class="' +
+            (isToday ? 'current' : '') +
+            '"><td>' +
+            f.day +
+            '일</td><td>' +
+            f.pillar +
+            ' <span class="hanja" style="opacity:.6">(' +
+            f.pillarHanja +
+            ')</span></td><td><span class="element-badge ' +
+            elCls(el) +
+            '">' +
+            el +
+            '</span></td><td>' +
+            f.stemTenGod +
+            '</td><td>' +
+            f.branchTenGod +
+            '</td><td>' +
+            f.twelveState +
+            '</td></tr>';
+        });
+        html += '</tbody>';
+        document.getElementById('sj-daily').innerHTML = html;
+      }
+
+      function dailyNav(dir) {
+        if (!lastSaju) return;
+        dailyViewMonth += dir;
+        if (dailyViewMonth > 12) {
+          dailyViewMonth = 1;
+          dailyViewYear++;
+        } else if (dailyViewMonth < 1) {
+          dailyViewMonth = 12;
+          dailyViewYear--;
+        }
+        renderDaily(lastSaju);
+      }
+
       function renderSajuTerms(y, m, d) {
         var html = '';
         var sm = M.getSajuMonth(m, d);
@@ -2692,6 +2808,50 @@
           } catch (e) {}
         }
         md += '\n';
+
+        var mfArr = R.monthlyFortune;
+        if (mfArr && mfArr.length) {
+          md += '## 월운\n';
+          mfArr.forEach(function (f) {
+            md +=
+              '- ' +
+              f.month +
+              '월: ' +
+              f.pillar +
+              '(' +
+              f.pillarHanja +
+              ') ' +
+              f.stemTenGod +
+              '/' +
+              f.branchTenGod +
+              ' ' +
+              f.twelveState +
+              '\n';
+          });
+          md += '\n';
+        }
+
+        var dfArr = M.calculateDailyFortune(dayStem, s.yearPillar.charAt(1), curY, new Date().getMonth() + 1);
+        if (dfArr && dfArr.length) {
+          md += '## 일운 (' + curY + '년 ' + (new Date().getMonth() + 1) + '월)\n';
+          dfArr.forEach(function (f) {
+            md +=
+              '- ' +
+              f.day +
+              '일: ' +
+              f.pillar +
+              '(' +
+              f.pillarHanja +
+              ') ' +
+              f.stemTenGod +
+              '/' +
+              f.branchTenGod +
+              ' ' +
+              f.twelveState +
+              '\n';
+          });
+          md += '\n';
+        }
 
         md += '## 절기\n';
         md += '- 사주 월: ' + sm + '월 (' + (MONTH_NAMES[sm] || '') + ')\n';

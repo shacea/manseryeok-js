@@ -51,7 +51,7 @@ var manseryeok = (function (exports) {
      */
     // 상수
     const BASE_JD = 2415021;
-    const DAY_PILLAR_EPOCH = 2415011;
+    const DAY_PILLAR_EPOCH$1 = 2415011;
     const START_YEAR = 1900;
     const END_YEAR = 2050;
     const TOTAL_MONTHS = 1812;
@@ -115,7 +115,7 @@ var manseryeok = (function (exports) {
             gapja: {
                 yearPillarId: (packed >> 12) & 0x3f,
                 monthPillarId: (packed >> 18) & 0x3f,
-                dayPillarId: (jd - DAY_PILLAR_EPOCH) % 60,
+                dayPillarId: (jd - DAY_PILLAR_EPOCH$1) % 60,
             },
         };
     }
@@ -3616,6 +3616,89 @@ var manseryeok = (function (exports) {
     }
 
     /**
+     * 일운(日運) 계산 모듈
+     *
+     * 특정 월의 매일 일운 간지와 십성, 12신살, 12운성을 계산합니다.
+     */
+    /** 일주 기원일의 JD (갑자일) */
+    const DAY_PILLAR_EPOCH = 2415011;
+    /**
+     * 양력 날짜를 율리우스 일수(Julian Day Number)로 변환합니다.
+     */
+    function toJulianDay(year, month, day) {
+        const a = Math.floor((14 - month) / 12);
+        const y = year + 4800 - a;
+        const m = month + 12 * a - 3;
+        return (day +
+            Math.floor((153 * m + 2) / 5) +
+            365 * y +
+            Math.floor(y / 4) -
+            Math.floor(y / 100) +
+            Math.floor(y / 400) -
+            32045);
+    }
+    /**
+     * 특정 날짜의 일주 간지 인덱스를 계산합니다.
+     */
+    function getDayPillarIndices(year, month, day) {
+        const jd = toJulianDay(year, month, day);
+        const pillarId = (((jd - DAY_PILLAR_EPOCH) % 60) + 60) % 60;
+        return {
+            stemIdx: pillarId % 10,
+            branchIdx: pillarId % 12,
+        };
+    }
+    /**
+     * 특정 월의 일운을 계산합니다.
+     *
+     * @param dayStem 일간 (사주의 일주 천간)
+     * @param yearBranch 사주의 년지 (12신살 기준)
+     * @param targetYear 대상 연도
+     * @param targetMonth 대상 월 (1~12)
+     * @returns 일운 목록
+     */
+    function calculateDailyFortune(dayStem, yearBranch, targetYear, targetMonth) {
+        const results = [];
+        const daysInMonth = new Date(targetYear, targetMonth, 0).getDate();
+        for (let d = 1; d <= daysInMonth; d++) {
+            const { stemIdx, branchIdx } = getDayPillarIndices(targetYear, targetMonth, d);
+            const fStem = STEMS[stemIdx];
+            const fBranch = BRANCHES[branchIdx];
+            results.push({
+                year: targetYear,
+                month: targetMonth,
+                day: d,
+                pillar: fStem + fBranch,
+                pillarHanja: STEMS_HANJA[stemIdx] + BRANCHES_HANJA[branchIdx],
+                stemTenGod: getTenGodByStem(dayStem, fStem),
+                branchTenGod: getTenGodByBranch(dayStem, fBranch),
+                twelveSpirit: getTwelveSpirit(yearBranch, fBranch),
+                twelveState: getTwelveState(dayStem, fBranch),
+            });
+        }
+        return results;
+    }
+    /**
+     * 특정 날짜의 일운을 단건 계산합니다.
+     */
+    function getDailyFortune(dayStem, yearBranch, targetYear, targetMonth, targetDay) {
+        const { stemIdx, branchIdx } = getDayPillarIndices(targetYear, targetMonth, targetDay);
+        const fStem = STEMS[stemIdx];
+        const fBranch = BRANCHES[branchIdx];
+        return {
+            year: targetYear,
+            month: targetMonth,
+            day: targetDay,
+            pillar: fStem + fBranch,
+            pillarHanja: STEMS_HANJA[stemIdx] + BRANCHES_HANJA[branchIdx],
+            stemTenGod: getTenGodByStem(dayStem, fStem),
+            branchTenGod: getTenGodByBranch(dayStem, fBranch),
+            twelveSpirit: getTwelveSpirit(yearBranch, fBranch),
+            twelveState: getTwelveState(dayStem, fBranch),
+        };
+    }
+
+    /**
      * 억부용신(抑扶用神) 결정 모듈
      *
      * 신강/신약에 따라 용신(用神)과 기신(忌神)을 결정합니다.
@@ -5245,6 +5328,9 @@ var manseryeok = (function (exports) {
         const annualFortune = calculateAnnualFortune(dayStem, yearBranch, currentYear, 10);
         // 17. 월운 (현재 연도 기준)
         const monthlyFortune = calculateMonthlyFortune(dayStem, yearBranch, currentYear);
+        // 18. 일운 (현재 월 기준)
+        const currentMonth = new Date().getMonth() + 1;
+        const dailyFortune = calculateDailyFortune(dayStem, yearBranch, currentYear, currentMonth);
         return {
             saju,
             pillars,
@@ -5265,6 +5351,7 @@ var manseryeok = (function (exports) {
             majorFortune,
             annualFortune,
             monthlyFortune,
+            dailyFortune,
             palaces,
             sixRelations,
         };
@@ -5308,6 +5395,7 @@ var manseryeok = (function (exports) {
     exports.calculateAllTwelveStates = calculateAllTwelveStates;
     exports.calculateAnnualFortune = calculateAnnualFortune;
     exports.calculateBodyStrength = calculateBodyStrength;
+    exports.calculateDailyFortune = calculateDailyFortune;
     exports.calculateElementScores = calculateElementScores;
     exports.calculateGeobeop12States = calculateGeobeop12States;
     exports.calculateMajorFortune = calculateMajorFortune;
@@ -5332,6 +5420,7 @@ var manseryeok = (function (exports) {
     exports.getBranchSixHarmony = getBranchSixHarmony;
     exports.getBranchTripleHarmony = getBranchTripleHarmony;
     exports.getCurrentFortune = getCurrentFortune;
+    exports.getDailyFortune = getDailyFortune;
     exports.getElementGroup = getElementGroup;
     exports.getElementGroupMap = getElementGroupMap;
     exports.getGapja = getGapja;
