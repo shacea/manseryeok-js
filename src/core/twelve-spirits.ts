@@ -72,7 +72,10 @@ export function getTwelveSpirit(baseBranch: string, targetBranch: string): Twelv
 }
 
 /**
- * 사주 전체의 12신살을 계산합니다 (년지 기준).
+ * 사주 전체의 12신살을 계산합니다.
+ *
+ * - 년주: 일지(日支) 기준
+ * - 월주/일주/시주: 년지(年支) 기준
  */
 export function calculateAllTwelveSpirits(
   yearBranch: string,
@@ -86,7 +89,7 @@ export function calculateAllTwelveSpirits(
   hour: TwelveSpirit | null;
 } {
   return {
-    year: getTwelveSpirit(yearBranch, yearBranch),
+    year: getTwelveSpirit(dayBranch, yearBranch),
     month: getTwelveSpirit(yearBranch, monthBranch),
     day: getTwelveSpirit(yearBranch, dayBranch),
     hour: hourBranch ? getTwelveSpirit(yearBranch, hourBranch) : null,
