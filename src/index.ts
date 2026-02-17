@@ -156,6 +156,7 @@ export {
   isBranchPunishment,
   isBranchDestruction,
   isBranchHarm,
+  isBranchWonjin,
   getGongmang,
   analyzeRelations,
   type PillarRelations,

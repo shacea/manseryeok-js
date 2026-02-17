@@ -298,6 +298,8 @@ footer a{color:var(--gold)}
         </div>
         <div class="card"><h3>기본 정보</h3><dl class="info-grid" id="sj-basic"></dl></div>
         <div class="card"><h3>사주팔자 (四柱八字)</h3><div style="overflow-x:auto"><table class="saju-table" id="sj-table"></table></div></div>
+        <div class="card"><h3>합충형파해 / 원진 / 공망 (合沖刑破害 / 怨嗔 / 空亡)</h3><div id="sj-relations"></div></div>
+        <div class="card"><h3>궁성 (宮星)</h3><div id="sj-palaces"></div></div>
         <div class="card"><h3>오행 분석 (五行)</h3><div id="sj-oh"></div></div>
         <div class="card"><h3>십성 분석 (十星)</h3><div id="sj-tengod"></div></div>
         <div class="card"><h3>신강/신약 (身强身弱)</h3><div id="sj-strength"></div></div>
@@ -576,6 +578,8 @@ function calcSaju(){
 
       renderBasic(solarY,solarM,solarD,h,min,lunar,saju,gender,calType,lunarInput);
       renderSajuTable(saju,true,result);
+      renderRelations(result);
+      renderPalaceInfo(result);
       renderOh(result,true);
       renderTenGodAnalysis(result);
       renderStrength(result);
@@ -648,6 +652,8 @@ function displaySlotResult(idx){
 
   renderBasic(inp.y,inp.m,inp.d,inp.h,0,inp.lunar,saju,inp.gender,inp.calType,inp.lunarInput);
   renderSajuTable(saju,true,result);
+  renderRelations(result);
+  renderPalaceInfo(result);
   renderOh(result,true);
   renderTenGodAnalysis(result);
   renderStrength(result);
@@ -754,6 +760,121 @@ function renderSajuTable(saju,hasH,result){
   spR+='</tr>';
 
   document.getElementById('sj-table').innerHTML=head+stemR+brR+tgStemR+tgBrR+hsR+tsR+spR;
+}
+
+function renderRelations(result){
+  var rel=result.relations;
+  var pillars=result.pillars;
+  var branches={};
+  ['year','month','day','hour'].forEach(function(pos){
+    if(pillars[pos])branches[pos]=pillars[pos].branch;
+  });
+  var stems={};
+  ['year','month','day','hour'].forEach(function(pos){
+    if(pillars[pos])stems[pos]=pillars[pos].stem;
+  });
+  var pName={'년':'년주','월':'월주','일':'일주','시':'시주'};
+
+  function pairLabel(pair,branches){
+    var p0=pair[0], p1=pair[1];
+    var b0=branches[{년:'year',월:'month',일:'day',시:'hour'}[p0]];
+    var b1=branches[{년:'year',월:'month',일:'day',시:'hour'}[p1]];
+    return pName[p0]+'('+b0+')↔'+pName[p1]+'('+b1+')';
+  }
+  function stemPairLabel(pair,stems){
+    var p0=pair[0], p1=pair[1];
+    var s0=stems[{년:'year',월:'month',일:'day',시:'hour'}[p0]];
+    var s1=stems[{년:'year',월:'month',일:'day',시:'hour'}[p1]];
+    return pName[p0]+'('+s0+')↔'+pName[p1]+'('+s1+')';
+  }
+  function triplePairLabel(pair,branches){
+    var items=[];
+    pair.forEach(function(p){
+      var b=branches[{년:'year',월:'month',일:'day',시:'hour'}[p]];
+      items.push(pName[p]+'('+b+')');
+    });
+    return items.join('+');
+  }
+
+  var sections=[];
+
+  if(rel.stemHarmonies.length){
+    sections.push({name:'천간합 (天干合)',items:rel.stemHarmonies.map(function(h){return stemPairLabel(h.pillars,stems)+' → '+h.element+'('+EL_HANJA[h.element]+')'})});
+  }
+  if(rel.stemClashes.length){
+    sections.push({name:'천간충 (天干沖)',items:rel.stemClashes.map(function(p){return stemPairLabel(p,stems)})});
+  }
+  if(rel.branchSixHarmonies.length){
+    sections.push({name:'지지육합 (地支六合)',items:rel.branchSixHarmonies.map(function(h){return pairLabel(h.pillars,branches)+' → '+h.element+'('+EL_HANJA[h.element]+')'})});
+  }
+  if(rel.branchTripleHarmonies.length){
+    sections.push({name:'지지삼합 (地支三合)',items:rel.branchTripleHarmonies.map(function(h){return triplePairLabel(h.pillars,branches)+' → '+h.element+'('+EL_HANJA[h.element]+')'})});
+  }
+  if(rel.branchDirectionalHarmonies.length){
+    sections.push({name:'지지방합 (地支方合)',items:rel.branchDirectionalHarmonies.map(function(h){return triplePairLabel(h.pillars,branches)+' → '+h.element+'('+EL_HANJA[h.element]+')'})});
+  }
+  if(rel.branchClashes.length){
+    sections.push({name:'지지충 (地支沖)',items:rel.branchClashes.map(function(p){return pairLabel(p,branches)})});
+  }
+  if(rel.branchPunishments.length){
+    sections.push({name:'지지형 (地支刑)',items:rel.branchPunishments.map(function(p){return pairLabel(p,branches)})});
+  }
+  if(rel.branchDestructions.length){
+    sections.push({name:'지지파 (地支破)',items:rel.branchDestructions.map(function(p){return pairLabel(p,branches)})});
+  }
+  if(rel.branchHarms.length){
+    sections.push({name:'지지해 (地支害)',items:rel.branchHarms.map(function(p){return pairLabel(p,branches)})});
+  }
+  if(rel.branchWonjin&&rel.branchWonjin.length){
+    sections.push({name:'원진 (怨嗔)',items:rel.branchWonjin.map(function(p){return pairLabel(p,branches)})});
+  }
+
+  sections.push({name:'공망 (空亡)',items:['일주 기준: '+rel.gongmang[0]+'('+BRANCHES_H[bi(rel.gongmang[0])]+'), '+rel.gongmang[1]+'('+BRANCHES_H[bi(rel.gongmang[1])]+')']});
+
+  var html='<table class="data-table"><tbody>';
+  sections.forEach(function(sec){
+    html+='<tr><td style="font-weight:700;white-space:nowrap;width:140px;vertical-align:top">'+sec.name+'</td><td>'+sec.items.join('<br>')+'</td></tr>';
+  });
+  if(sections.length===1){
+    html+='<tr><td colspan="2" style="color:var(--fg2);font-size:.82rem">해당하는 합충형파해가 없습니다.</td></tr>';
+  }
+  html+='</tbody></table>';
+  document.getElementById('sj-relations').innerHTML=html;
+}
+
+function renderPalaceInfo(result){
+  var palaces=result.palaces;
+  var sixRel=result.sixRelations;
+  var html='<table class="data-table"><thead><tr><th>궁</th><th>의미</th><th>육친</th></tr></thead><tbody>';
+  var pOrder=[
+    {key:'year',label:'년주 (年柱)',palace:palaces.year},
+    {key:'month',label:'월주 (月柱)',palace:palaces.month},
+    {key:'day',label:'일주 (日柱)',palace:palaces.day},
+    {key:'hour',label:'시주 (時柱)',palace:palaces.hour}
+  ];
+  pOrder.forEach(function(p){
+    var pal=p.palace;
+    var yukChinStem='', yukChinBranch='';
+    if(sixRel){
+      if(p.key==='day'){
+        yukChinStem='자기자신';
+        yukChinBranch=sixRel.branch[p.key]||'';
+      }else{
+        yukChinStem=sixRel.stem[p.key]||'';
+        yukChinBranch=sixRel.branch[p.key]||'';
+      }
+    }
+    var yukChinStr='';
+    if(yukChinStem||yukChinBranch){
+      if(yukChinStem===yukChinBranch)yukChinStr=yukChinStem;
+      else yukChinStr=[yukChinStem,yukChinBranch].filter(Boolean).join(' / ');
+    }
+    html+='<tr><td style="font-weight:700">'+p.label+'</td><td>'+pal.name+' ('+pal.nameHanja+')'+
+      '<div style="font-size:.75rem;color:var(--fg2)">'+pal.description+'</div></td>'+
+      '<td>'+(yukChinStr||'-')+'</td></tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('sj-palaces').innerHTML=html;
 }
 
 function renderOh(result,hasH){
@@ -1013,6 +1134,29 @@ function copyMarkdown(){
   md+='| 12신살 |';
   poss.forEach(function(pos){md+=' '+(R.twelveSpirits[pos]||'-')+' |'});
   md+='\n\n';
+
+  md+='## 합충형파해 / 원진 / 공망\n';
+  var rr=R.relations;
+  if(rr.stemHarmonies.length)rr.stemHarmonies.forEach(function(h){md+='- 천간합: '+h.pillars.join('↔')+' → '+h.element+'\n'});
+  if(rr.stemClashes.length)rr.stemClashes.forEach(function(p){md+='- 천간충: '+p.join('↔')+'\n'});
+  if(rr.branchSixHarmonies.length)rr.branchSixHarmonies.forEach(function(h){md+='- 지지육합: '+h.pillars.join('↔')+' → '+h.element+'\n'});
+  if(rr.branchTripleHarmonies.length)rr.branchTripleHarmonies.forEach(function(h){md+='- 지지삼합: '+h.pillars.join('+')+' → '+h.element+'\n'});
+  if(rr.branchDirectionalHarmonies.length)rr.branchDirectionalHarmonies.forEach(function(h){md+='- 지지방합: '+h.pillars.join('+')+' → '+h.element+'\n'});
+  if(rr.branchClashes.length)rr.branchClashes.forEach(function(p){md+='- 지지충: '+p.join('↔')+'\n'});
+  if(rr.branchPunishments.length)rr.branchPunishments.forEach(function(p){md+='- 지지형: '+p.join('↔')+'\n'});
+  if(rr.branchDestructions.length)rr.branchDestructions.forEach(function(p){md+='- 지지파: '+p.join('↔')+'\n'});
+  if(rr.branchHarms.length)rr.branchHarms.forEach(function(p){md+='- 지지해: '+p.join('↔')+'\n'});
+  if(rr.branchWonjin&&rr.branchWonjin.length)rr.branchWonjin.forEach(function(p){md+='- 원진: '+p.join('↔')+'\n'});
+  md+='- 공망: '+rr.gongmang[0]+', '+rr.gongmang[1]+'\n\n';
+
+  md+='## 궁성\n';
+  var palArr=['year','month','day','hour'];
+  var palNames={year:'년주',month:'월주',day:'일주',hour:'시주'};
+  palArr.forEach(function(pos){
+    var pal=R.palaces[pos];
+    md+='- '+palNames[pos]+': '+pal.name+' ('+pal.nameHanja+') - '+pal.description+'\n';
+  });
+  md+='\n';
 
   // 오행
   md+='## 오행 분석\n';

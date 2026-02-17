@@ -67,7 +67,7 @@ export function isStemClash(stem1: string, stem2: string): boolean {
 
 /**
  * 지지육합 쌍 (합화 오행)
- * 자+축=토, 인+해=목, 묘+술=화, 진+유=금, 사+신=수, 오+미=토
+ * 자+축=토, 인+해=목, 묘+술=화, 진+유=금, 사+신=수, 오+미=화
  */
 const BRANCH_SIXHARMONY_PAIRS: [number, number, FiveElement][] = [
   [0, 1, '토'],   // 자+축 → 토
@@ -75,7 +75,7 @@ const BRANCH_SIXHARMONY_PAIRS: [number, number, FiveElement][] = [
   [3, 10, '화'],  // 묘+술 → 화
   [4, 9, '금'],   // 진+유 → 금
   [5, 8, '수'],   // 사+신 → 수
-  [6, 7, '토'],   // 오+미 → 토
+  [6, 7, '화'],   // 오+미 → 화 (午未合化火)
 ];
 
 /**
@@ -250,13 +250,9 @@ export function isBranchDestruction(branch1: string, branch2: string): boolean {
 }
 
 // ============================================================
-// 지지해 (地支害) / 원진 (元嗔)
+// 지지해 (地支害/六害)
 // ============================================================
 
-/**
- * 지지해(害) = 원진(元嗔) 쌍
- * 자↔미, 축↔오, 인↔사, 묘↔진, 신↔해, 유↔술
- */
 const BRANCH_HARM_PAIRS: [number, number][] = [
   [0, 7],   // 자↔미
   [1, 6],   // 축↔오
@@ -266,13 +262,29 @@ const BRANCH_HARM_PAIRS: [number, number][] = [
   [9, 10],  // 유↔술
 ];
 
-/**
- * 두 지지가 해(害) / 원진(元嗔) 관계인지 확인합니다.
- */
 export function isBranchHarm(branch1: string, branch2: string): boolean {
   const i1 = branchIndex(branch1);
   const i2 = branchIndex(branch2);
   return BRANCH_HARM_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
+}
+
+// ============================================================
+// 원진 (怨嗔) — 해(害)와는 다른 별도의 관계
+// ============================================================
+
+const BRANCH_WONJIN_PAIRS: [number, number][] = [
+  [0, 7],   // 자↔미
+  [1, 6],   // 축↔오
+  [2, 9],   // 인↔유
+  [3, 8],   // 묘↔신
+  [4, 11],  // 진↔해
+  [5, 10],  // 사↔술
+];
+
+export function isBranchWonjin(branch1: string, branch2: string): boolean {
+  const i1 = branchIndex(branch1);
+  const i2 = branchIndex(branch2);
+  return BRANCH_WONJIN_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
 }
 
 // ============================================================
@@ -328,8 +340,10 @@ export interface PillarRelations {
   branchPunishments: [string, string][];
   /** 지지파 */
   branchDestructions: [string, string][];
-  /** 지지해(원진) */
+  /** 지지해(六害) */
   branchHarms: [string, string][];
+  /** 원진(怨嗔) */
+  branchWonjin: [string, string][];
   /** 공망 */
   gongmang: [string, string];
 }
@@ -371,6 +385,7 @@ export function analyzeRelations(
   const branchPunishments: [string, string][] = [];
   const branchDestructions: [string, string][] = [];
   const branchHarms: [string, string][] = [];
+  const branchWonjin: [string, string][] = [];
 
   for (let i = 0; i < branches.length; i++) {
     for (let j = i + 1; j < branches.length; j++) {
@@ -389,6 +404,9 @@ export function analyzeRelations(
       }
       if (isBranchHarm(branches[i], branches[j])) {
         branchHarms.push([pillarNames[i], pillarNames[j]]);
+      }
+      if (isBranchWonjin(branches[i], branches[j])) {
+        branchWonjin.push([pillarNames[i], pillarNames[j]]);
       }
     }
   }
@@ -430,6 +448,7 @@ export function analyzeRelations(
     branchPunishments,
     branchDestructions,
     branchHarms,
+    branchWonjin,
     gongmang,
   };
 }

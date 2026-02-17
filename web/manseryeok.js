@@ -3494,7 +3494,7 @@ var manseryeok = (function (exports) {
     // ============================================================
     /**
      * 지지육합 쌍 (합화 오행)
-     * 자+축=토, 인+해=목, 묘+술=화, 진+유=금, 사+신=수, 오+미=토
+     * 자+축=토, 인+해=목, 묘+술=화, 진+유=금, 사+신=수, 오+미=화
      */
     const BRANCH_SIXHARMONY_PAIRS = [
         [0, 1, '토'], // 자+축 → 토
@@ -3502,7 +3502,7 @@ var manseryeok = (function (exports) {
         [3, 10, '화'], // 묘+술 → 화
         [4, 9, '금'], // 진+유 → 금
         [5, 8, '수'], // 사+신 → 수
-        [6, 7, '토'], // 오+미 → 토
+        [6, 7, '화'], // 오+미 → 화 (午未合化火)
     ];
     /**
      * 두 지지가 육합(六合)인지 확인합니다.
@@ -3660,12 +3660,8 @@ var manseryeok = (function (exports) {
         return BRANCH_DESTRUCTION_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
     }
     // ============================================================
-    // 지지해 (地支害) / 원진 (元嗔)
+    // 지지해 (地支害/六害)
     // ============================================================
-    /**
-     * 지지해(害) = 원진(元嗔) 쌍
-     * 자↔미, 축↔오, 인↔사, 묘↔진, 신↔해, 유↔술
-     */
     const BRANCH_HARM_PAIRS = [
         [0, 7], // 자↔미
         [1, 6], // 축↔오
@@ -3674,13 +3670,26 @@ var manseryeok = (function (exports) {
         [8, 11], // 신↔해
         [9, 10], // 유↔술
     ];
-    /**
-     * 두 지지가 해(害) / 원진(元嗔) 관계인지 확인합니다.
-     */
     function isBranchHarm(branch1, branch2) {
         const i1 = branchIndex(branch1);
         const i2 = branchIndex(branch2);
         return BRANCH_HARM_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
+    }
+    // ============================================================
+    // 원진 (怨嗔) — 해(害)와는 다른 별도의 관계
+    // ============================================================
+    const BRANCH_WONJIN_PAIRS = [
+        [0, 7], // 자↔미
+        [1, 6], // 축↔오
+        [2, 9], // 인↔유
+        [3, 8], // 묘↔신
+        [4, 11], // 진↔해
+        [5, 10], // 사↔술
+    ];
+    function isBranchWonjin(branch1, branch2) {
+        const i1 = branchIndex(branch1);
+        const i2 = branchIndex(branch2);
+        return BRANCH_WONJIN_PAIRS.some(([a, b]) => (i1 === a && i2 === b) || (i1 === b && i2 === a));
     }
     // ============================================================
     // 공망 (空亡)
@@ -3740,6 +3749,7 @@ var manseryeok = (function (exports) {
         const branchPunishments = [];
         const branchDestructions = [];
         const branchHarms = [];
+        const branchWonjin = [];
         for (let i = 0; i < branches.length; i++) {
             for (let j = i + 1; j < branches.length; j++) {
                 const sixH = getBranchSixHarmony(branches[i], branches[j]);
@@ -3757,6 +3767,9 @@ var manseryeok = (function (exports) {
                 }
                 if (isBranchHarm(branches[i], branches[j])) {
                     branchHarms.push([pillarNames[i], pillarNames[j]]);
+                }
+                if (isBranchWonjin(branches[i], branches[j])) {
+                    branchWonjin.push([pillarNames[i], pillarNames[j]]);
                 }
             }
         }
@@ -3794,6 +3807,7 @@ var manseryeok = (function (exports) {
             branchPunishments,
             branchDestructions,
             branchHarms,
+            branchWonjin,
             gongmang,
         };
     }
@@ -4576,6 +4590,7 @@ var manseryeok = (function (exports) {
     exports.isBranchDestruction = isBranchDestruction;
     exports.isBranchHarm = isBranchHarm;
     exports.isBranchPunishment = isBranchPunishment;
+    exports.isBranchWonjin = isBranchWonjin;
     exports.isCheonmunseong = isCheonmunseong;
     exports.isCheonulGwiin = isCheonulGwiin;
     exports.isDohwaSal = isDohwaSal;
