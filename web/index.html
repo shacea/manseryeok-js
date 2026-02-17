@@ -1795,8 +1795,11 @@
         if (result.specialStars) {
           result.specialStars.forEach(function (s) {
             var eng = posMap[s.position];
-            if (!eng) return;
-            var bucket = starsBySourcePos[s.source][s.type];
+            if (!eng || !s.source) return;
+            var sourceGroup = starsBySourcePos[s.source];
+            if (!sourceGroup) return;
+            var bucket = sourceGroup[s.type];
+            if (!bucket) return;
             if (!bucket[eng]) bucket[eng] = [];
             bucket[eng].push(s.name);
           });
@@ -2497,8 +2500,11 @@
           var mdStars = { 천간: { gilseong: {}, hyungsal: {} }, 지지: { gilseong: {}, hyungsal: {} } };
           R.specialStars.forEach(function (s) {
             var eng = mdPosMap[s.position];
-            if (!eng) return;
-            var b = mdStars[s.source][s.type];
+            if (!eng || !s.source) return;
+            var sg = mdStars[s.source];
+            if (!sg) return;
+            var b = sg[s.type];
+            if (!b) return;
             if (!b[eng]) b[eng] = [];
             b[eng].push(s.name);
           });
