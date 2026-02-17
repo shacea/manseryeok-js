@@ -773,7 +773,7 @@ function renderOh(result,hasH){
   html+='</tr><tr><td style="font-weight:600">판정</td>';
   EL_NAMES.forEach(function(el){
     var lv=fe.levels[el];
-    var c=lv==='과다'?'var(--fire)':lv==='없음'?'var(--fire)':lv==='부족'?'var(--earth)':'var(--fg)';
+    var c=lv==='과다'?'var(--fire)':lv==='부족'?'var(--earth)':'var(--fg)';
     html+='<td style="color:'+c+'">'+lv+'</td>';
   });
   html+='</tr></tbody></table>';

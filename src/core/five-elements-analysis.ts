@@ -26,7 +26,7 @@ import { getTenGodByStem, getTenGodByBranch } from './ten-gods';
 /**
  * 오행 비율 판정
  */
-export type ElementLevel = '과다' | '발달' | '적정' | '부족' | '없음';
+export type ElementLevel = '과다' | '발달' | '적정' | '부족';
 
 /**
  * 오행 분석 결과
@@ -49,10 +49,9 @@ export interface FiveElementAnalysis {
  * - 과다: 37.5% 이상 (3개 이상)
  * - 발달: 25.0% (2개)
  * - 적정: 12.5% (1개)
- * - 부족: 0% 미만 = 없음 (0개)
+ * - 부족: 12.5% 미만 (0~1개)
  */
 function getElementLevel(ratio: number): ElementLevel {
-  if (ratio === 0) return '없음';
   if (ratio >= 0.375) return '과다';
   if (ratio >= 0.25) return '발달';
   if (ratio >= 0.125) return '적정';
@@ -121,39 +120,17 @@ export function analyzeFiveElements(
 // 십성 비율 분석
 // ============================================================
 
-/**
- * 십성 분석 결과
- */
 export interface TenGodAnalysis {
-  /** 십성별 개수 (일간 제외 7글자 기준) */
   counts: Record<TenGod, number>;
-  /** 십성별 비율 (0~1) */
   ratios: Record<TenGod, number>;
-  /** 십성별 백분율 문자열 */
   percentages: Record<TenGod, string>;
-  /** 총 글자 수 (일간 제외) */
   total: number;
-  /** 모든 십성 결과 (위치별) */
   details: {
     position: string;
     tenGod: TenGod;
   }[];
 }
 
-/**
- * 사주의 십성 비율을 분석합니다.
- *
- * 일간(日干)은 기준이므로 제외하고 나머지 7글자(천간3+지지4)의 십성을 분석합니다.
- *
- * @param dayStem 일간
- * @param yearStem 년간
- * @param monthStem 월간
- * @param hourStem 시간 (null 가능)
- * @param yearBranch 년지
- * @param monthBranch 월지
- * @param dayBranch 일지
- * @param hourBranch 시지 (null 가능)
- */
 export function analyzeTenGods(
   dayStem: string,
   yearStem: string,
@@ -175,7 +152,11 @@ export function analyzeTenGods(
 
   const details: { position: string; tenGod: TenGod }[] = [];
 
-  // 천간 십성 (일간 제외)
+  // 천간 십성 (일간 포함 — 일간 자신 = 비견)
+  const dayStemTg = getTenGodByStem(dayStem, dayStem);
+  counts[dayStemTg]++;
+  details.push({ position: '일간', tenGod: dayStemTg });
+
   const stemPairs: [string, string][] = [
     [yearStem, '년간'],
     [monthStem, '월간'],
