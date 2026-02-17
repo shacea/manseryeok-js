@@ -149,7 +149,7 @@ describe('PDF 검증: 신승욱 1984/10/12 12:05 남 부산(129°)', () => {
     });
 
     test('통합 결과 일치', () => {
-      expect(result.twelveSpirits.year).toBe('장성살');
+      expect(result.twelveSpirits.year).toBe('년살');
       expect(result.twelveSpirits.month).toBe('월살');
       expect(result.twelveSpirits.day).toBe('육해살');
       expect(result.twelveSpirits.hour).toBe('재살');
@@ -197,17 +197,18 @@ describe('PDF 검증: 신승욱 1984/10/12 12:05 남 부산(129°)', () => {
   });
 
   describe('십성 비율', () => {
-    test('십성 카운팅 (7글자)', () => {
-      // 년간 갑=정관, 월간 갑=정관, 시간 경=상관
+    test('십성 카운팅 (8글자, 일간 비견 포함)', () => {
+      // 일간 기=비견, 년간 갑=정관, 월간 갑=정관, 시간 경=상관
       // 년지 자(수)=편재, 월지 술(토)=겁재, 일지 묘(목)=편관, 시지 오(화)=편인
       const tga = result.tenGodAnalysis;
+      expect(tga.counts.비견).toBe(1);
       expect(tga.counts.정관).toBe(2);
       expect(tga.counts.상관).toBe(1);
       expect(tga.counts.편재).toBe(1);
       expect(tga.counts.겁재).toBe(1);
       expect(tga.counts.편관).toBe(1);
       expect(tga.counts.편인).toBe(1);
-      expect(tga.total).toBe(7);
+      expect(tga.total).toBe(8);
     });
   });
 

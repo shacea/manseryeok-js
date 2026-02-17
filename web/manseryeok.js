@@ -3860,11 +3860,14 @@ var manseryeok = (function (exports) {
         return TWELVE_SPIRIT_NAMES[spiritIdx];
     }
     /**
-     * 사주 전체의 12신살을 계산합니다 (년지 기준).
+     * 사주 전체의 12신살을 계산합니다.
+     *
+     * - 년주: 일지(日支) 기준
+     * - 월주/일주/시주: 년지(年支) 기준
      */
     function calculateAllTwelveSpirits(yearBranch, monthBranch, dayBranch, hourBranch) {
         return {
-            year: getTwelveSpirit(yearBranch, yearBranch),
+            year: getTwelveSpirit(dayBranch, yearBranch),
             month: getTwelveSpirit(yearBranch, monthBranch),
             day: getTwelveSpirit(yearBranch, dayBranch),
             hour: hourBranch ? getTwelveSpirit(yearBranch, hourBranch) : null,
@@ -4124,11 +4127,9 @@ var manseryeok = (function (exports) {
      * - 과다: 37.5% 이상 (3개 이상)
      * - 발달: 25.0% (2개)
      * - 적정: 12.5% (1개)
-     * - 부족: 0% 미만 = 없음 (0개)
+     * - 부족: 12.5% 미만 (0~1개)
      */
     function getElementLevel(ratio) {
-        if (ratio === 0)
-            return '없음';
         if (ratio >= 0.375)
             return '과다';
         if (ratio >= 0.25)
@@ -4179,20 +4180,6 @@ var manseryeok = (function (exports) {
         }
         return { counts, ratios, percentages, levels, total };
     }
-    /**
-     * 사주의 십성 비율을 분석합니다.
-     *
-     * 일간(日干)은 기준이므로 제외하고 나머지 7글자(천간3+지지4)의 십성을 분석합니다.
-     *
-     * @param dayStem 일간
-     * @param yearStem 년간
-     * @param monthStem 월간
-     * @param hourStem 시간 (null 가능)
-     * @param yearBranch 년지
-     * @param monthBranch 월지
-     * @param dayBranch 일지
-     * @param hourBranch 시지 (null 가능)
-     */
     function analyzeTenGods(dayStem, yearStem, monthStem, hourStem, yearBranch, monthBranch, dayBranch, hourBranch) {
         const allTenGods = [
             '비견', '겁재', '식신', '상관',
@@ -4203,7 +4190,10 @@ var manseryeok = (function (exports) {
         for (const tg of allTenGods)
             counts[tg] = 0;
         const details = [];
-        // 천간 십성 (일간 제외)
+        // 천간 십성 (일간 포함 — 일간 자신 = 비견)
+        const dayStemTg = getTenGodByStem(dayStem, dayStem);
+        counts[dayStemTg]++;
+        details.push({ position: '일간', tenGod: dayStemTg });
         const stemPairs = [
             [yearStem, '년간'],
             [monthStem, '월간'],
