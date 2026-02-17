@@ -1790,7 +1790,37 @@
         });
         spR += '</tr>';
 
-        document.getElementById('sj-table').innerHTML = head + stemR + brR + tgStemR + tgBrR + hsR + tsR + spR;
+        var posMap = { 시: 'hour', 일: 'day', 월: 'month', 년: 'year' };
+        var starsBySourcePos = { 천간: { gilseong: {}, hyungsal: {} }, 지지: { gilseong: {}, hyungsal: {} } };
+        if (result.specialStars) {
+          result.specialStars.forEach(function (s) {
+            var eng = posMap[s.position];
+            if (!eng) return;
+            var bucket = starsBySourcePos[s.source][s.type];
+            if (!bucket[eng]) bucket[eng] = [];
+            bucket[eng].push(s.name);
+          });
+        }
+
+        function starRow(label, data) {
+          var r = '<tr class="extra-row"><th>' + label + '</th>';
+          ps.forEach(function (p) {
+            if (!p.ok) {
+              r += '<td style="opacity:.4">-</td>';
+              return;
+            }
+            var names = data[p.pos];
+            r += '<td>' + (names && names.length ? names.join(', ') : '-') + '</td>';
+          });
+          return r + '</tr>';
+        }
+
+        var ssR = starRow('천간 길성', starsBySourcePos['천간'].gilseong);
+        ssR += starRow('천간 흉살', starsBySourcePos['천간'].hyungsal);
+        ssR += starRow('지지 길성', starsBySourcePos['지지'].gilseong);
+        ssR += starRow('지지 흉살', starsBySourcePos['지지'].hyungsal);
+
+        document.getElementById('sj-table').innerHTML = head + stemR + brR + tgStemR + tgBrR + hsR + tsR + spR + ssR;
       }
 
       function renderRelations(result) {
@@ -2460,7 +2490,33 @@
         poss.forEach(function (pos) {
           md += ' ' + (R.twelveSpirits[pos] || '-') + ' |';
         });
-        md += '\n\n';
+        md += '\n';
+
+        if (R.specialStars) {
+          var mdPosMap = { 시: 'hour', 일: 'day', 월: 'month', 년: 'year' };
+          var mdStars = { 천간: { gilseong: {}, hyungsal: {} }, 지지: { gilseong: {}, hyungsal: {} } };
+          R.specialStars.forEach(function (s) {
+            var eng = mdPosMap[s.position];
+            if (!eng) return;
+            var b = mdStars[s.source][s.type];
+            if (!b[eng]) b[eng] = [];
+            b[eng].push(s.name);
+          });
+          [
+            ['천간 길성', '천간', 'gilseong'],
+            ['천간 흉살', '천간', 'hyungsal'],
+            ['지지 길성', '지지', 'gilseong'],
+            ['지지 흉살', '지지', 'hyungsal'],
+          ].forEach(function (cfg) {
+            md += '| ' + cfg[0] + ' |';
+            poss.forEach(function (pos) {
+              var names = mdStars[cfg[1]][cfg[2]][pos];
+              md += ' ' + (names && names.length ? names.join(', ') : '-') + ' |';
+            });
+            md += '\n';
+          });
+        }
+        md += '\n';
 
         md += '## 합충형파해 / 원진 / 공망\n';
         var rr = R.relations;
