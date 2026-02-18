@@ -203,7 +203,7 @@
       .form-row-3 {
         grid-template-columns: 1fr 1fr 1fr;
       }
-      @media (max-width: 500px) {
+      @media (max-width: 480px) {
         .form-grid,
         .form-row-3 {
           grid-template-columns: 1fr;
@@ -885,6 +885,408 @@
       }
       footer a {
         color: var(--gold);
+      }
+
+      /* ===== MOBILE RESPONSIVE ===== */
+
+      /* Tablet (768px) */
+      @media (max-width: 768px) {
+        header {
+          padding: 1.5rem 1rem 0.8rem;
+        }
+        header h1 {
+          font-size: 1.5rem;
+        }
+        header h1 .sub {
+          font-size: 0.78rem;
+        }
+        .container {
+          padding: 0 0.75rem 1.5rem;
+        }
+        .card {
+          padding: 1rem;
+        }
+        .panel {
+          padding: 1rem;
+        }
+        .pillars-grid {
+          grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        }
+        .data-table {
+          font-size: 0.78rem;
+        }
+        .data-table th,
+        .data-table td {
+          padding: 0.3rem 0.35rem;
+        }
+      }
+
+      /* Mobile (480px) */
+      @media (max-width: 480px) {
+        header {
+          padding: 1.2rem 0.8rem 0.6rem;
+        }
+        header h1 {
+          font-size: 1.4rem;
+          letter-spacing: 0.02em;
+        }
+        header h1 .sub {
+          font-size: 0.72rem;
+          letter-spacing: 0.1em;
+        }
+        header p {
+          font-size: 0.7rem;
+        }
+        .container {
+          padding: 0 0.5rem 1.2rem;
+        }
+        .tabs {
+          gap: 1px;
+          padding: 3px 3px 0;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar {
+          display: none;
+        }
+        .tabs button {
+          flex: 0 0 auto;
+          padding: 0.55rem 0.6rem;
+          font-size: 0.75rem;
+          min-width: 0;
+        }
+        .panel {
+          padding: 0.8rem;
+          border-radius: 0 0 10px 10px;
+        }
+        .card {
+          padding: 0.8rem;
+          margin-bottom: 0.8rem;
+        }
+        .card h3 {
+          font-size: 0.9rem;
+          padding-bottom: 0.3rem;
+          margin-bottom: 0.6rem;
+        }
+        .btn {
+          padding: 0.55rem 1rem;
+          font-size: 0.85rem;
+          min-height: 44px;
+        }
+        .btn-sm {
+          padding: 0.4rem 0.7rem;
+          font-size: 0.78rem;
+          min-height: 36px;
+        }
+        .form-group select,
+        .form-group input {
+          padding: 0.5rem;
+          font-size: 0.85rem;
+          min-height: 44px;
+        }
+        .saju-table td {
+          min-width: 48px;
+          padding: 0.3rem 0.15rem;
+        }
+        .stem-cell,
+        .branch-cell {
+          font-size: 1.1rem;
+        }
+        .stem-hanja,
+        .branch-hanja {
+          font-size: 0.72rem;
+        }
+        .element-badge {
+          font-size: 0.6rem;
+          padding: 0.08rem 0.3rem;
+        }
+        .yinyang-text {
+          font-size: 0.65rem;
+        }
+        .saju-table th {
+          font-size: 0.65rem;
+          padding: 0.15rem;
+        }
+        .extra-row th {
+          font-size: 0.6rem;
+          min-width: 38px;
+          padding: 0.2rem 0.15rem;
+        }
+        .extra-row td {
+          font-size: 0.68rem;
+          padding: 0.2rem 0.15rem;
+        }
+        .tengod-grid {
+          grid-template-columns: repeat(5, 1fr);
+          gap: 0.3rem;
+        }
+        .tengod-item {
+          padding: 0.3rem 0.2rem;
+          font-size: 0.72rem;
+        }
+        .tengod-item .tg-count {
+          font-size: 1rem;
+        }
+        .tengod-item .tg-pct {
+          font-size: 0.62rem;
+        }
+        .strength-grid {
+          grid-template-columns: repeat(5, 1fr);
+          gap: 0.2rem;
+        }
+        .strength-item {
+          padding: 0.25rem 0.15rem;
+          font-size: 0.7rem;
+        }
+        .strength-item .si-label {
+          font-size: 0.6rem;
+        }
+        .strength-item .si-score {
+          font-size: 0.85rem;
+        }
+        .yongshin-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 0.4rem;
+        }
+        .yongshin-item {
+          padding: 0.4rem 0.3rem;
+        }
+        .yongshin-item .ys-label {
+          font-size: 0.65rem;
+        }
+        .yongshin-item .ys-value {
+          font-size: 1rem;
+        }
+        .correction-info {
+          gap: 0.5rem;
+        }
+        .fortune-scroll {
+          gap: 0.3rem;
+        }
+        .fortune-item {
+          min-width: 58px;
+          padding: 0.35rem 0.45rem;
+          font-size: 0.72rem;
+        }
+        .fortune-item .age {
+          font-size: 0.6rem;
+        }
+        .fortune-item .pillar {
+          font-size: 0.88rem;
+        }
+        .fortune-item .pillar-hanja {
+          font-size: 0.65rem;
+        }
+        .time-slot-tabs {
+          gap: 3px;
+        }
+        .time-slot-tab {
+          min-width: 58px;
+          padding: 0.3rem 0.4rem;
+          font-size: 0.7rem;
+        }
+        .time-slot-tab .ts-name {
+          font-size: 0.75rem;
+        }
+        .time-slot-tab .ts-pillar {
+          font-size: 0.85rem;
+        }
+        .time-slot-tab .ts-range {
+          font-size: 0.52rem;
+        }
+        .cal-grid {
+          gap: 1px;
+        }
+        .cal-cell {
+          padding: 0.2rem 0.1rem;
+          min-height: 44px;
+        }
+        .cal-cell .solar {
+          font-size: 0.78rem;
+        }
+        .cal-cell .lunar {
+          font-size: 0.52rem;
+        }
+        .cal-cell .gapja {
+          font-size: 0.5rem;
+        }
+        .cal-header {
+          font-size: 0.65rem;
+          padding: 0.2rem;
+        }
+        .pillars-grid {
+          grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+          gap: 0.3rem;
+        }
+        .pillar-card {
+          padding: 0.35rem 0.2rem;
+          font-size: 0.72rem;
+        }
+        .pillar-card .phangul {
+          font-size: 1rem;
+        }
+        .pillar-card .phanja {
+          font-size: 0.72rem;
+        }
+        .pillar-card .pid {
+          font-size: 0.55rem;
+        }
+        .pillar-card .panimal {
+          font-size: 0.58rem;
+        }
+        .data-table {
+          font-size: 0.75rem;
+        }
+        .data-table th {
+          font-size: 0.68rem;
+          padding: 0.25rem 0.3rem;
+          white-space: nowrap;
+        }
+        .data-table td {
+          padding: 0.25rem 0.3rem;
+        }
+        .oh-chart {
+          height: 65px;
+        }
+        .oh-bar-label {
+          font-size: 0.6rem;
+        }
+        .oh-bar-count {
+          font-size: 0.7rem;
+        }
+        .oh-table {
+          font-size: 0.75rem;
+        }
+        .oh-table th,
+        .oh-table td {
+          padding: 0.2rem;
+        }
+        .filter-row {
+          gap: 0.4rem;
+        }
+        .filter-row select {
+          font-size: 0.75rem;
+          min-height: 36px;
+        }
+        .info-grid {
+          gap: 0.2rem 0.5rem;
+        }
+        .info-grid dt {
+          font-size: 0.75rem;
+        }
+        .info-grid dd {
+          font-size: 0.82rem;
+        }
+        .checkbox-row label {
+          font-size: 0.78rem;
+        }
+        .toast {
+          bottom: 1.5rem;
+          font-size: 0.8rem;
+          padding: 0.6rem 1.2rem;
+        }
+        footer {
+          padding: 1.5rem 0.8rem;
+          font-size: 0.68rem;
+        }
+      }
+
+      /* Small Mobile (360px - iPhone SE) */
+      @media (max-width: 360px) {
+        header {
+          padding: 1rem 0.6rem 0.5rem;
+        }
+        header h1 {
+          font-size: 1.2rem;
+        }
+        header h1 .sub {
+          font-size: 0.65rem;
+          letter-spacing: 0.05em;
+        }
+        header p {
+          font-size: 0.65rem;
+        }
+        .container {
+          padding: 0 0.4rem 1rem;
+        }
+        .tabs button {
+          padding: 0.5rem 0.45rem;
+          font-size: 0.7rem;
+        }
+        .panel {
+          padding: 0.6rem;
+        }
+        .card {
+          padding: 0.6rem;
+          border-radius: 10px;
+        }
+        .card h3 {
+          font-size: 0.82rem;
+        }
+        .saju-table td {
+          min-width: 42px;
+        }
+        .stem-cell,
+        .branch-cell {
+          font-size: 1rem;
+        }
+        .tengod-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .strength-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .yongshin-grid {
+          grid-template-columns: 1fr;
+        }
+        .correction-info {
+          grid-template-columns: 1fr;
+          gap: 0.4rem;
+        }
+        .cal-cell {
+          min-height: 38px;
+          padding: 0.15rem 0.05rem;
+        }
+        .cal-cell .solar {
+          font-size: 0.72rem;
+        }
+        .cal-cell .lunar {
+          font-size: 0.48rem;
+        }
+        .cal-cell .gapja {
+          font-size: 0.45rem;
+        }
+        .pillars-grid {
+          grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+        }
+        .fortune-item {
+          min-width: 52px;
+          padding: 0.3rem 0.35rem;
+        }
+        .time-slot-tab {
+          min-width: 52px;
+          padding: 0.25rem 0.3rem;
+        }
+        .data-table {
+          font-size: 0.7rem;
+        }
+        .info-grid {
+          grid-template-columns: 1fr;
+          gap: 0.15rem;
+        }
+        .info-grid dt {
+          margin-top: 0.3rem;
+        }
+      }
+
+      /* Ensure tables scroll horizontally on mobile */
+      @media (max-width: 480px) {
+        .card > div[style*='overflow-x'],
+        .card > table {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
       }
     </style>
   </head>
